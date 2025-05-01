@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shreyanshi Satodia</title>
+
+  <!-- Load Oswald Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background: #3E4E79;
+      font-family: 'Oswald', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .content {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2vw;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      margin: auto;
+      color: rgb(169, 162, 162);
+    }
+
+    h1 {
+      font-size: 19.5vw;
+      color: rgb(228, 225, 225);
+      position: absolute;
+      bottom: 2vw;
+      left: 2vw;
+      right: 2vw;
+      transform: translateY(30%);
+      font-weight: 500;
+      margin: 0;
+      text-align: center;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .scroll-section {
+      height: 102%;
+      background-color: #3E4E79;
+      padding: 0vw;
+      font-family: 'Oswald', sans-serif;
+      color: #333;
+      text-align: center;
+      z-index: 11;
+      position: relative;
+    }
+
+    #scroll-top {
+      height: 400px;
+      margin-top: 100vh;
+      
+      }
+
+    .header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      padding: 0.1rem 0.1vw;
+    }
+
+    header.header { 
+      background-color: rgb(62, 78, 121) !important; /* Force override */     /* Target both <header> tag and .header class */
+     
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2vw;
+      font-family: 'Oswald', sans-serif;
+      box-sizing: border-box; /* Ensures padding is included in width */
+    } 
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      width: 95%; /* Crucial for spacing */
+      margin: 0;
+      padding: 0;
+      justify-content: space-between;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: rgb(250, 250, 247);;
+      font-size: 1.5rem;
+      transition: color 0.3s ease;  
+    } 
+
+    .nav-links a:hover {
+      color: #000;
+    } 
+
+    .contact-section {
+          position: relative;
+          height: 100%;
+          width: 100%;
+          overflow: hidden;
+        }
+
+    .top-blue {
+      background-color: #ffffff;
+      height: 200px;
+      position: relative; /* Add this */
+      border-top-left-radius: 100% 30%;
+      border-top-right-radius: 100% 30%;
+      z-index: -2;
+    }
+
+    .bottom-white {
+      background-color: white;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+      height: 50px;
+      z-index: 13;
+      overflow: visible;
+    }
+
+    .center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      color: black;
+      text-align: center;
+      width: 100%;
+    }
+
+    .contact-info {
+      position: relative;
+      right: 10px;
+      bottom: 30px;
+      font-size: 1rem;
+      text-align: right;
+      color: #333;
+      width: 100%;
+      background-color: white;
+     height: 200px;
+     z-index: 13;
+    }
+
+    .contact-info span {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .contact-info .greeting {
+      font-weight: bold;
+      font-style: italic;
+      color: #007BFF;
+    }
+
+      .hero.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="AboutMe.html">About Me</a></li>
+        <li><a href="#scroll-section">Work</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+ 
+  
+
+  <!-- SCROLLABLE SECTION -->
+  <div class="scroll-section" id="scroll-top"></div>
+  <section class="scroll-section" id="scroll-section">
+    
+   
+    <div class="contact-section">
+      <div class="top-blue">
+
+        <div class="center-text">Get in touch</div>
+
+      </div>
+      <div class="bottom-white">
+
+        <div class="contact-info">
+          <span class="greeting">(say Hi!)</span>
+          <span>email@example.com</span>
+          <span>+1 (555) 123-4567</span>
+        </div>
+
+      </div>
+      
+      
+    </div>
+  </section>
+
+  
+  <script>
+    const header = document.querySelector('.header');
+    const hero = document.querySelector('.hero');
+    const heroHeight = hero.offsetHeight; // Get the height of the hero section
+  
+    
+    window.addEventListener('scroll', () => {
+  const hero = document.querySelector('.hero');
+  if (window.scrollY >= window.innerHeight) {
+    hero.classList.add('hidden');
+  } else {
+    hero.classList.remove('hidden');
+  }
+});
+  </script>
+</body>
+</html>

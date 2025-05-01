@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shreyanshi Satodia</title>
+
+  <!-- Load Oswald Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta+Mahee:wght@800;&display=swap" rel="stylesheet">
+
+
+  <style>
+
+    
+    body {
+      margin: 0;
+      background: #729ed4;
+      font-family: "avenir-book", sans-serif;
+    
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #fcfdf5;;
+    }
+
+    h1 {
+      font-size: 23vw;
+      transform: scaleX(0.8) scaleY(1.2); /* Narrower and taller */
+      color: rgb(228, 225, 225);
+      position: absolute;
+      bottom: -11vw;
+      left: 0vw;
+      right: 2vw;
+      font-weight: 600;
+      margin: 0;
+      text-align: center;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    h2 {
+      font-size: 2.5vw;
+      
+    }
+
+    h3 {
+  font-family: 'Avenir Bold', sans-serif; /* Use Avenir Bold for the title */
+  font-weight: bold; /* Ensure the title is bold */
+}
+
+    .content {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2vw;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      margin: auto;
+      color: rgb(169, 162, 162);
+    }
+
+    .header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      padding: 0.1rem 0.1vw;
+    }
+
+    header.header { 
+      background-color: #729ed4 !important; /* Force override */     /* Target both <header> tag and .header class */
+     
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2vw;
+      font-family: 'Oswald', sans-serif;
+      box-sizing: border-box; /* Ensures padding is included in width */
+    } 
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      width: 95%; /* Crucial for spacing */
+      margin: 0;
+      padding: 0;
+      justify-content: space-between;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #fcfdf5;
+      font-size: 1.5rem;
+      transition: color 0.3s ease;  
+    } 
+
+    .nav-links a:hover {
+      color: #000;
+    } 
+
+    .contact-section {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    
+ 
+    .top-blue {
+      background-color: #fcfdf5;
+      height: 400px;
+      position: relative;
+      clip-path: ellipse(60% 100% at 50% 100%);
+      z-index: -2;
+    }
+
+.bottom-white {
+      background-color: #fcfdf5;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+      height: 50px;
+      z-index: 13;
+      overflow: visible;
+    }
+
+    .center-text {
+      position: absolute;
+      bottom: 1%;
+      right: 5%;
+      transform: scaleX(0.8) scaleY(1.2); /* Narrower and taller */
+      font-size: 18vw;
+      font-weight: 600;
+      color: rgb(228, 225, 225);
+      text-align: center;
+      width: 100%;
+      white-space: nowrap;
+      font-family: "Mukta Mahee", sans-serif;
+
+    }
+
+
+    .contact-info {
+  position: relative;
+  left: 63%; /* Move it from the left instead of using right */
+  bottom: 90px;
+  font-size: 1.5rem;
+  text-align: left; /* Align text to the left */
+  color: #333;
+  background-color: #fcfdf5;
+  height: 200px;
+  z-index: 13;
+}
+
+  .contact-info span {
+  display: block;
+  margin-bottom: 2px; /* or 0 for no space */
+  line-height: 1.2; /* optional: also controls vertical spacing */
+}
+
+    .contact-info .greeting {
+      font-weight: bold;
+      font-style: italic;
+      color: #729ed4;
+    }
+    .hero.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+  .full-page {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: auto;
+
+    }
+
+   
+    .left-column {
+      padding: 4vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; /* Align items to the top */
+      align-items: flex-start;     /* Align items to the left */
+    }
+
+    .left-column h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    
+
+    .left-column p {
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+      /* No color override — inherit from body */
+    }
+
+    .left-column ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+    }
+
+    .left-column ul li {
+      margin-bottom: 0.3rem;
+    }
+    .list-row {
+      display: flex;
+      gap: 0rem;
+      flex-wrap: wrap;
+    }
+
+    .list-group {
+      flex: 1;
+      min-width: 200px;
+      list-style-type: none;
+    }
+
+    .right-column {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-container {
+      height: 75%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-container img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    @font-face {
+      font-family: 'avenir-book';
+      src: url('Fonts/avenir-book.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    #list-1,
+    #list-2 {
+      margin-left: -20px; /* Negative value moves it left */
+    }
+
+    #list-2 {
+      margin-top: 3.6rem; /* Or adjust as needed */
+    }
+
+
+
+    
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="AboutMe.html">About Me</a></li>
+        <li><a href="#scroll-section">Work</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+ 
+  
+
+  <!-- SCROLLABLE SECTION -->
+  <div class="scroll-section" id="scroll-top"></div>
+  <section class="scroll-section" id="scroll-section">
+    
+    <div class="full-page">
+      <!-- LEFT COLUMN -->
+      <div class="left-column">
+        <h2>I'm Shreyanshi Satodia</h2>
+        <p>A Graphic Designer based in Dallas, Texas, bringing bold ideas to life through colour, typography, and thoughtful design. I believe great design moves, it grabs attention, tells a story, and leaves an impression that lingers long after the first glance.</p>
+        <p>My work blends creativity with strategy, balancing vibrant visual language with clear communication.
+          Whether it's branding, editorial layouts, packaging, or digital experiences, I build designs that feel alive, intuitive, and full of character.</p>
+        <p>I'm endlessly curious, always exploring new ways to connect ideas and people through design.
+          When I'm not creating, you'll find me chasing inspiration in everyday moments, and usually saying hi to every dog along the way.</p>
+        <p>Let’s create work that moves people.</p>
+  
+        <div class="list-row">
+          <div class="list-group">
+            <h3 id="listTitle">Area of Focus</h3>
+            <ul style="list-style-type: none;" id="list-1">
+              <li>Branding & Strategy</li>
+              <li>Print Design</li>
+              <li>UI-UX Design</li>
+              <li>Art Direction</li>
+            </ul>
+          </div>
+          <div class="list-group" >
+            <ul style="list-style-type: none;" id="list-2">
+              <li>Motion Graphics</li>
+              <li>Illustrations</li>
+              <li>Typography</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <!-- RIGHT COLUMN -->
+      <div class="right-column">
+        <div class="image-container">
+          <img src="Screenshot 2025-04-29 at 9.08.13 PM-Photoroom.png" alt="Placeholder Image" />
+        </div>
+      </div>
+    </div>
+    <div class="contact-section">
+      <div class="top-blue">
+        <div style="word-spacing: 4px;" class="center-text">GET IN TOUCH</div>
+      </div>
+      <div class="bottom-white">
+
+        <div class="contact-info">
+          <span class="greeting">(Say hi!)</span>
+          <span>email@example.com</span>
+          <span>+1 (555) 123-4567</span>
+        </div>
+
+      </div>
+      
+      
+    </div>
+  </section>
+
+  
+  <script>
+    const header = document.querySelector('.header');
+    const hero = document.querySelector('.hero');
+    const heroHeight = hero.offsetHeight; // Get the height of the hero section
+  
+    
+    window.addEventListener('scroll', () => {
+  const hero = document.querySelector('.hero');
+  if (window.scrollY >= window.innerHeight) {
+    hero.classList.add('hidden');
+  } else {
+    hero.classList.remove('hidden');
+  }
+});
+  </script>
+</body>
+</html>
