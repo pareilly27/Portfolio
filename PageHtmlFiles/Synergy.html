@@ -5,13 +5,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-          body {
-          font-family: 'Satoshi', sans-serif;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
-          text-align: center;
-        }
+         body {
+      margin: 0;
+      background: linear-gradient(135deg, #fefefe, #fefefe, #fefefe);
+      font-family: "avenir-book", sans-serif;
+      font-stretch: ultra-condensed;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @font-face {
+      font-family: 'avenir-book';
+      src: url('Fonts/avenir-book.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
         h1 {
           font-size: 100px;
       color: rgb(228, 225, 225);
@@ -42,9 +50,73 @@
           display: block;
           margin: 20px auto;
         }
+
+        .header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      padding: 0.1rem 0.1vw;
+
+    }
+
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2vw;
+  font-family: 'Oswald', sans-serif;
+  background-color: transparent; /* Makes navbar transparent */
+  color: #fcfdf5; /* Ensures text is visible on a transparent background */
+  box-sizing: border-box;
+}
+
+  
+
+  
+
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  width: 95%; /* Crucial for spacing */
+  margin: 0;
+  padding: 0;
+  justify-content: space-between;
+
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #729ed4;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+ 
+}
+
+.nav-links a:hover {
+  color: #000;
+}
     </style>
 </head>
 <body>
+
+  <header class="header">
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="AboutMe.html">About Me</a></li>
+        <li><a href="#scroll-section">Work</a></li>
+      </ul>
+    </nav>
+  </header>
     <h1>SYNERGY</h1>
     <p class="description">When Synergy Restaurant Consultants approached me, they sought a brand as dynamic and forward-thinking as their hospitality consulting expertise. This comprehensive rebrand delivered a modern, bold identity, and a state-of-the-art website. The design reflects Synergy’s unparalleled industry expertise and commitment to enhancing client experiences, positioning them as leaders in global restaurant consulting. The creative concept highlights how chefs design menus and bring them to life through illustrations of kitchen scenes intertwined with photography. This transformation ensures Synergy’s brand speaks to the excellence and innovation they bring to every project.
         Explore more at www.synergyconsultants.com.</p>

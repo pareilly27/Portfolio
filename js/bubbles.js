@@ -14,11 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Store the current section top position
     let sectionTop = sectionTitle.getBoundingClientRect().top;
 
-    // Update the section top position on window scroll
-    window.addEventListener('scroll', () => {
-      sectionTop = sectionTitle.getBoundingClientRect().top + window.scrollY;
-      console.log("Updated Section Top Position:", sectionTop);
-    });
+  
   
     // Handle window resizing for the canvas
     window.addEventListener("resize", () => {
@@ -26,11 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       canvas.height = window.innerHeight;
     });
 
-    window.addEventListener('scroll', () => {
-        const rectTop = sectionTitle.getBoundingClientRect().top;
-        const adjustedTop = rectTop - 200;
-        console.log(`Adjusted Top:`, adjustedTop);
-    });
+  
     
     // Mouse handling
     const mouse = { x: null, y: null, isDown: false };
@@ -213,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     
     const bubbles = [];
-    const radius = 60;
+    const radius = 50;
     
     // Create 1 green bubble
     bubbles.push(new Bubble(
@@ -268,10 +260,5 @@ document.addEventListener('DOMContentLoaded', () => {
   
     // Start the animation
     animate();
-    const firstBubble = bubbles[0];
-    window.addEventListener('scroll', () => {
-        if (bubbles.length > 0) {
-            console.log(`First bubble - Y:`,firstBubble.y - canvas.getBoundingClientRect().top);
-        }
-    });
+    
 });

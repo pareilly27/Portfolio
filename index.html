@@ -15,10 +15,17 @@
     body {
       margin: 0;
       background: linear-gradient(135deg, #fefefe, #fefefe, #fefefe);
-      font-family: "Mukta Mahee", sans-serif;
+      font-family: "avenir-book", sans-serif;
       font-stretch: ultra-condensed;
       min-height: 100vh;
       overflow-x: hidden;
+    }
+
+    @font-face {
+      font-family: 'avenir-book';
+      src: url('Fonts/avenir-book.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
     }
  
     
@@ -67,13 +74,15 @@
       text-align: center;
       white-space: nowrap;
       user-select: none;
+      font-family: "Mukta Mahee", sans-serif;
+
     }
 
     .subtitle {
       position: absolute;
-      bottom: 6vw;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 23vw;
+      left: 2vw;
+      width: 60vw;
       font-size: 2vw;
       font-weight: 400;
       color: #555;
@@ -141,7 +150,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2vw;
-  font-family: 'Oswald', sans-serif;
+  
   background-color: transparent; /* Makes navbar transparent */
   color: #fcfdf5; /* Ensures text is visible on a transparent background */
   box-sizing: border-box;
@@ -250,6 +259,16 @@
   pointer-events: none;
   transition: opacity 0.5s ease;
 }
+
+.left-text {
+      position: absolute;
+      top: 15vh;       /* Adjust vertical position */
+      left: 2vw;       /* Push it in from the left edge */
+      font-size: 2vw;
+      color: #888;     /* Light gray or pick a brand color */
+      z-index: 20;      /* Ensure it sits above the canvas */
+      max-width: 20vw; /* Optional: limit width */
+    }
   </style>
 </head>
 <body>
@@ -269,7 +288,9 @@
 
     <div class="content">
       <h1>SHREYANSHI</h1>
-      <p class="subtitle"></p>
+      <p class="subtitle">Throw an idea hard enough and it'll bounce into something better.
+        That's the theory. This portfolio is the proof.</p>
+
     </div>
   </div>
   
@@ -282,23 +303,23 @@
       <!-- Generate 20 squares with background images -->
 
       <a href="PageHtmlFiles/RockEnrollment.html">
-        <div class="square" style="background-image: url('ProjectPics/RockEnrollment.png');"></div>
+        <div class="square" style="background-image: url('ProjectPics/RockEnrollment.avif');"></div>
       </a>   
 
-      <a href="PageHtmlFiles/Synergy.html">
-         <div class="square" style="background-image: url('ProjectPics/Synergy.png');"></div>
+      <a href="PageHtmlFiles/Synergy.html"> 
+         <div class="square" style="background-image: url('ProjectPics/Synergy.avif');"></div>
       </a>   
 
       <a href="PageHtmlFiles/Ignite.html">
-          <div class="square" style="background-image: url('ProjectPics/Ignite.png');"></div>
+          <div class="square" style="background-image: url('ProjectPics/Ignite.avif');"></div>
       </a>   
 
       <a href="PageHtmlFiles/NCCIL.html">
-            <div class="square" style="background-image: url('ProjectPics/NCIIL.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/NCIIL.avif');"></div>
        </a>   
 
       <a href="PageHtmlFiles/DirtyDrinkers.html">
-            <div class="square" style="background-image: url('ProjectPics/DIrtyDrinkers.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/DIrtyDrinkers.avif');"></div>
       </a>   
 
       <a href="PageHtmlFiles/WhatIf.html">
@@ -306,58 +327,58 @@
       </a>   
 
       <a href="PageHtmlFiles/RPG.html">
-            <div class="square" style="background-image: url('ProjectPics/RPG Homes.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/RPG Homes.avif');"></div>
       </a>   
 
-      <a href="PageHtmlFiles/TBM.html">
-            <div class="square" style="background-image: url('ProjectPics/TBM.png');"></div>
+      <a href="PageHtmlFiles/TBM.html"> 
+            <div class="square" style="background-image: url('ProjectPics/TBM.avif');"></div>
       </a>   
 
       <a href="PageHtmlFiles/West.html">
-            <div class="square" style="background-image: url('ProjectPics/West One.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/West One.avif');"></div>
       </a>   
 
       <a href="PageHtmlFiles/Brutiful.html">
-            <div class="square" style="background-image: url('ProjectPics/Brutiful.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/Brutiful.avif');"></div>
       </a>   
  
        <a href="PageHtmlFiles/MFA.html">
-            <div class="square" style="background-image: url('ProjectPics/MFA.jpg');"></div>
+            <div class="square" style="background-image: url('ProjectPics/MFA.avif');"></div>
       </a>   
 
       <a href="PageHtmlFiles/Soulful.html">
-            <div class="square" style="background-image: url('ProjectPics/Soulful.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/Soulful.avif');"></div>
       </a>   
 
-      <a href="PageHtmlFiles/350.html">
-            <div class="square" style="background-image: url(ProjectPics/350.jpeg);"></div>
+      <a href="PageHtmlFiles/350.html"> 
+            <div class="square" style="background-image: url(ProjectPics/350.avif);"></div>
       </a>   
 
       <a href="PageHtmlFiles/PRJCT.html">
-            <div class="square" style="background-image: url('ProjectPics/PRJCT_WNDW.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/PRJCT_WNDW.avif');"></div>
        </a>   
 
       <a href="PageHtmlFiles/Bindaas.html">
-            <div class="square" style="background-image: url('ProjectPics/Bindas.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/Bindas.avif');"></div>
       </a>   
 
        <a href="PageHtmlFiles/Terrible.html">
-            <div class="square" style="background-image: url('ProjectPics/Terrible.jpg');"></div>
+            <div class="square" style="background-image: url('ProjectPics/Terrible.avif');"></div>
        </a>   
 
        <a href="PageHtmlFiles/Switch.html">
-            <div class="square" style="background-image: url('ProjectPics/SwitchGlitch.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/SwitchGlitch.avif');"></div>
        </a>   
 
         <a href="PageHtmlFiles/Raghu.html">
-            <div class="square" style="background-image: url('ProjectPics/Raghu.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/Raghu.avif');"></div>
         </a>   
 
         <a href="PageHtmlFiles/Karma.html">
-            <div class="square" style="background-image: url('ProjectPics/Karma.png');"></div>
+            <div class="square" style="background-image: url('ProjectPics/Karma.avif');"></div>
         </a>   
 
-        <a href="PageHtmlFiles/Synergy.html">
+        <a href="PageHtmlFiles/Synergy.html"> <!-- keep -->
             <div class="square" style="background-image: url('');">20</div>
         </a>   
 
@@ -380,8 +401,7 @@
     </div>
   </section>
 
-  <script src="js/bubbles.js"></script>
-  <script src="js/scroll.js"></script>
-  
+  <script src="js/bubbles.js" defer></script>
+  <script src="js/scroll.js" defer></script>
 </body>
 </html>
