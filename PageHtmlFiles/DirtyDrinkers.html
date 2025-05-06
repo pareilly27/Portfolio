@@ -6,15 +6,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
        body {
-          font-family: 'Satoshi', sans-serif;
+          font-family: 'avenir-book', sans-serif;
           max-width: 1200px;
           margin: 0 auto;
           padding: 20px;
           text-align: center;
+          background-color: #fcfdf5;
         }
+
+        @font-face {
+          font-family: 'avenir-book';
+          src: url('Fonts/avenir-book.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+        }
+
+        .header {
+          position: fixed;
+          width: 100%;
+          top: 0;
+          left: 0;
+          z-index: 100;
+          padding: 0.1rem 0.1vw;
+          background-color: rgba(252, 253, 245); /* semi-transparent */
+        }
+
+        .navbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 2vw;
+          
+         
+          color: #fcfdf5; /* Ensures text is visible on a transparent background */
+          box-sizing: border-box;
+        }
+
+        .nav-logo {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: #333;
+        }
+
+        .nav-links {
+          list-style: none;
+          display: flex;
+          width: 95%; /* Crucial for spacing */
+          margin: 0;
+          padding: 0;
+          justify-content: space-between;
+
+        }
+
+        .nav-links a {
+          text-decoration: none;
+          color: #729ed4;
+          font-size: 1.2rem;
+          transition: color 0.3s ease;
+        
+        }
+
+        .nav-links a:hover {
+          color: #000;
+        }
+
         h1 {
-          margin-bottom: 10px;
+          font-size: 5vw;
+          transform: scaleX(0.8) scaleY(1.2); /* Narrower and taller */
+          color: rgb(228, 225, 225);
+          font-weight: 600;
+          margin: 0;
+          margin-top: 3vw;
+          text-align: center;
+          white-space: nowrap;
+          user-select: none;
+          font-family: "Mukta Mahee", sans-serif;
         }
+
         .description {
           margin-bottom: 30px;
           max-width: 60ch;    /* constrain width */
@@ -22,20 +90,26 @@
           margin: 0 auto 2rem; /* center it */
           line-height: 1.3;
           font-size: 18px;
-          color: rgb(159, 158, 158);
-          
-
-   
+          color: rgb(1, 1, 1);
             }
+
         img {
           max-width: 100%;
           height: auto;
           display: block;
           margin: 20px auto;
-        }  
+        }
     </style>
 </head>
 <body>
+  <header class="header">
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="../AboutMe.html">About Me</a></li>
+        <li><a href="../index.html#scroll-section">Work</a></li>
+      </ul>
+    </nav>
+  </header>
     <h1>Dirty Drinkers</h1>
     <p class="description">Dirty Drinkers is a vibrant soda and beverage shop that thrives on bold flavors and an equally bold brand identity. The client envisioned a playful and memorable mascot, inspiring the transformation of a soda glass into an engaging character. We paired it with custom typography and a retro-inspired, eye-catching color palette, exuding a fun, nostalgic vibe. The branding elements, from a striking logo and whimsical illustrations to immersive packaging, were meticulously designed to enhance the brand's energetic and unique identity. Together, these elements invite customers to enjoy a refreshing and memorable experience.</p>
     
