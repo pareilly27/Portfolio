@@ -83,9 +83,10 @@
       bottom: 23vw;
       left: 2vw;
       width: 60vw;
-      font-size: 2vw;
+      font-size: 1.5vw;
       font-weight: 400;
       color: #555;
+      user-select: none;
     }
 
     .scroll-section {
@@ -103,20 +104,20 @@
     }
 
     #scroll-top {
-  height: 400px;
-  margin-top: 100vh;
-  background: linear-gradient(
-    to bottom,
-    rgba(114, 158, 212, 0) 0%,     /* #729ed4 with 0 opacity */
-    rgba(114, 158, 212, 0.3) 30%,  /* 30% opacity */
-    rgba(114, 158, 212, 0.7) 70%,  /* 70% opacity */
-    rgba(114, 158, 212, 1) 100%    /* Fully solid */
-  );
-}
+      height: 400px;
+      margin-top: 100vh;
+      background: linear-gradient(
+        to bottom,
+        rgba(114, 158, 212, 0) 0%,     /* #729ed4 with 0 opacity */
+        rgba(114, 158, 212, 0.3) 30%,  /* 30% opacity */
+        rgba(114, 158, 212, 0.7) 70%,  /* 70% opacity */
+        rgba(114, 158, 212, 1) 100%    /* Fully solid */
+      );
+    }
 
     .grid-container {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 3 columns per row */
+      grid-template-columns: repeat(2, 1fr); /* 3 columns per row */
       gap: 0.5vw;
       padding: 2vw;
     }
@@ -133,6 +134,40 @@
       background-size: cover;
       background-position: center;
     }
+
+    .square-wrapper {
+  position: relative;
+  display: block;
+  text-decoration: none;
+}
+
+.square {
+  position: relative;
+  overflow: hidden; /* so the overlay doesn't spill out */
+}
+
+.overlay {
+  position: absolute;
+  top: 0;            /* Start at top */
+  left: 0;           /* Start at left */
+  width: 100%;       /* Full width */
+  height: 100%;      /* Full height */
+  background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  color: #fff;
+  display: flex;     /* Center text */
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.square:hover .overlay {
+  opacity: 1;
+}
 
     .header {
       position: fixed;
@@ -199,49 +234,50 @@
     
  
     .top-blue {
-  background-color: #fcfdf5;
-  height: 400px;
-  position: relative;
-  clip-path: ellipse(60% 100% at 50% 100%);
-  z-index: -2;
-}
+      background-color: #fcfdf5;
+      height: 30vw;
+      position: relative;
+      clip-path: ellipse(60% 100% at 50% 100%);
+      z-index: -2;
+    }
 
     .bottom-white {
       background-color: #fcfdf5;
       position: relative;
       bottom: 0;
       width: 100%;
-      height: 50px;
+      height: auto;
       z-index: 13;
-      overflow: visible;
+      
     }
 
     .center-text {
       position: absolute;
-      top: 10%;
-      right: 7%;
+      bottom: 1%;
+      right: 5%;
       transform: scaleX(0.8) scaleY(1.2); /* Narrower and taller */
-      font-size: 16vw;
+      font-size: 18vw;
       font-weight: 600;
       color: rgb(228, 225, 225);
       text-align: center;
       width: 100%;
       white-space: nowrap;
+      font-family: "Mukta Mahee", sans-serif;
     }
 
 
 
     .contact-info {
-  position: relative;
-  left: 63%; /* Move it from the left instead of using right */
-  bottom: 90px;
-  font-size: 1.5rem;
-  text-align: left; /* Align text to the left */
-  color: #333;
-  background-color: #fcfdf5;
-  height: 200px;
-  z-index: 13;
-}
+      position: relative;
+      left: 63%; /* Move it from the left instead of using right */
+      bottom: 5vw;
+      font-size: 1.5rem;
+      text-align: left; /* Align text to the left */
+      color: #333;
+      background-color: #fcfdf5;
+      height: auto;
+      z-index: 13;
+    }
 
     .contact-info span {
       display: block;
@@ -254,11 +290,13 @@
       color: #729ed4;
     }
 
+   
+
     .hero.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-}
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
 
 .left-text {
       position: absolute;
@@ -288,8 +326,8 @@
 
     <div class="content">
       <h1>SHREYANSHI</h1>
-      <p class="subtitle">Throw an idea hard enough and it'll bounce into something better.
-        That's the theory. This portfolio is the proof.</p>
+      <p class="subtitle">Throw an idea hard enough and it’ll bounce into something better. That’s the theory. This portfolio is the proof. 
+        (go ahead, drag any circle and bounce it into others.)</p>
 
     </div>
   </div>
@@ -302,87 +340,191 @@
     <div class="grid-container" id="grid-container">
       <!-- Generate 20 squares with background images -->
 
-      <a href="PageHtmlFiles/RockEnrollment.html">
-        <div class="square" style="background-image: url('ProjectPics/RockEnrollment.avif');"></div>
-      </a>   
+      <a href="PageHtmlFiles/RockEnrollment.html" class="square-wrapper">
+        <div class="square" style="background-image: url('ProjectPics/RockEnrollment.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Rock Enrollment</h2>
+              <p>Talent Acquisition Company</p>
+            </div>
+          </div>
+        </div>
+      </a> 
 
       <a href="PageHtmlFiles/Synergy.html"> 
-         <div class="square" style="background-image: url('ProjectPics/Synergy.avif');"></div>
+         <div class="square" style="background-image: url('ProjectPics/Synergy.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Synergy</h2>
+              <p>Restaurant Consultants</p>
+            </div>
+          </div>
+
+         </div>
       </a>   
 
       <a href="PageHtmlFiles/Ignite.html">
-          <div class="square" style="background-image: url('ProjectPics/Ignite.avif');"></div>
+          <div class="square" style="background-image: url('ProjectPics/Ignite.avif');">
+            <div class="overlay">
+              <div class="overlay-text">
+                <h2>Ignite</h2>
+                <p>Luxary Home Features</p>
+              </div>
+            </div>
+          </div>
       </a>   
 
       <a href="PageHtmlFiles/NCCIL.html">
-            <div class="square" style="background-image: url('ProjectPics/NCIIL.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/NCIIL.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>NCIIL</h2>
+                  <p>National Center for Childrens Illustrated Literature</p>
+                </div>
+              </div>
+            </div>
        </a>   
 
       <a href="PageHtmlFiles/DirtyDrinkers.html">
-            <div class="square" style="background-image: url('ProjectPics/DIrtyDrinkers.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/DIrtyDrinkers.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>Dirty Drinkers</h2>
+                  <p>Drink dirty with me - A beverage shop</p>
+                </div>
+              </div>
+            </div>
       </a>   
 
       <a href="PageHtmlFiles/WhatIf.html">
-            <div class="square" style="background-image: url('ProjectPics/WhatIf.gif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/WhatIf.gif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>What If</h2>
+                  <p>Tea and Herb Coolers</p>
+                </div>
+              </div>
+            </div>
       </a>   
 
       <a href="PageHtmlFiles/RPG.html">
-            <div class="square" style="background-image: url('ProjectPics/RPG Homes.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/RPG Homes.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>RPG Homes</h2>
+                  <p>Luxury Home Builders</p>
+                </div>
+              </div>
+            </div>
       </a>   
 
       <a href="PageHtmlFiles/TBM.html"> 
-            <div class="square" style="background-image: url('ProjectPics/TBM.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/TBM.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>TBM</h2>
+                  <p>Payroll, PRO, and HR Management</p>
+                </div>
+              </div>
+            </div>
       </a>   
 
       <a href="PageHtmlFiles/West.html">
-            <div class="square" style="background-image: url('ProjectPics/West One.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/West One.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>West One</h2>
+                  <p>West One Finance</p>
+                </div>
+              </div>
+            </div>
       </a>   
 
       <a href="PageHtmlFiles/Brutiful.html">
-            <div class="square" style="background-image: url('ProjectPics/Brutiful.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/Brutiful.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>Brutiful</h2>
+                  <p>Life Reset · Reimagined · Redesigned</p>
+                </div>
+              </div>
+            </div>
       </a>   
  
        <a href="PageHtmlFiles/MFA.html">
-            <div class="square" style="background-image: url('ProjectPics/MFA.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/MFA.JPG');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>MFA</h2>
+                  <p>Museum of Fine Arts</p>
+                </div>
+              </div>
+            </div>
       </a>   
 
       <a href="PageHtmlFiles/Soulful.html">
-            <div class="square" style="background-image: url('ProjectPics/Soulful.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/Soulful.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>Soulful</h2>
+                  <p>Culinary Website UI</p>
+                </div>
+              </div>
+            </div>
       </a>   
 
       <a href="PageHtmlFiles/350.html"> 
-            <div class="square" style="background-image: url(ProjectPics/350.avif);"></div>
+            <div class="square" style="background-image: url(ProjectPics/350.avif);">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>350</h2>
+                  <p>Social Campaign</p>
+                </div>
+              </div>
+            </div>
       </a>   
 
       <a href="PageHtmlFiles/PRJCT.html">
-            <div class="square" style="background-image: url('ProjectPics/PRJCT_WNDW.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/PRJCT_WNDW.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>PRJCT_WNDW</h2>
+                  <p>For Boston's Downtown Innovation District</p>
+                </div>
+              </div>
+            </div>
        </a>   
-
-      <a href="PageHtmlFiles/Bindaas.html">
-            <div class="square" style="background-image: url('ProjectPics/Bindas.avif');"></div>
-      </a>   
-
+     
        <a href="PageHtmlFiles/Terrible.html">
-            <div class="square" style="background-image: url('ProjectPics/Terrible.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/Terrible.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>Terrible</h2>
+                  <p>Social Campaign</p>
+                </div>
+              </div>
+            </div>
        </a>   
 
        <a href="PageHtmlFiles/Switch.html">
-            <div class="square" style="background-image: url('ProjectPics/SwitchGlitch.avif');"></div>
+            <div class="square" style="background-image: url('ProjectPics/SwitchGlitch.avif');">
+              <div class="overlay">
+                <div class="overlay-text">
+                  <h2>Switch Glitch</h2>
+                  <p>Exhibition Design</p>
+                </div>
+              </div>
+            </div>
        </a>   
 
-        <a href="PageHtmlFiles/Raghu.html">
-            <div class="square" style="background-image: url('ProjectPics/Raghu.avif');"></div>
-        </a>   
+       
 
-        <a href="PageHtmlFiles/Karma.html">
-            <div class="square" style="background-image: url('ProjectPics/Karma.avif');"></div>
-        </a>   
+       
 
-        <a href="PageHtmlFiles/Synergy.html"> <!-- keep -->
-            <div class="square" style="background-image: url('');">20</div>
-        </a>   
+      
 
     </div>
+
     <div class="contact-section">
       <div class="top-blue">
         <div style="word-spacing: 4px;" class="center-text">GET IN TOUCH</div>
@@ -391,8 +533,8 @@
 
         <div class="contact-info">
           <span class="greeting">(say Hi!)</span>
-          <span>email@example.com</span>
-          <span>+1 (555) 123-4567</span>
+          <span>ssatodia97@gmail.com</span>
+          <span>(857)437-9148</span>
         </div>
 
       </div>
