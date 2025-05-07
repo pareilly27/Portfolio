@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     
     const bubbles = [];
-    const radius = 50;
+    const radius = 65;
     
     // Create 1 green bubble
     bubbles.push(new Bubble(
