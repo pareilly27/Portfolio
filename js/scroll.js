@@ -17,3 +17,5 @@ window.addEventListener('scroll', () => {
     hero.classList.remove('hidden');
   }
 });
+
+

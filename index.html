@@ -9,7 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta+Mahee:wght@800;&display=swap" rel="stylesheet">
-
+  <link rel="preload" as="image" href="ProjectPics/RockEnrollment.avif">
+  <link rel="preload" as="image" href="ProjectPics/Synergy.avif">
 
   <style>
     body {
@@ -27,7 +28,10 @@
       font-weight: normal;
       font-style: normal;
     }
- 
+
+    html {
+      scroll-behavior: smooth;
+    }
     
 
     .hero {
@@ -90,6 +94,10 @@
       text-align: left;
     }
 
+    .overlay-subtitle {
+      font-weight: 100;
+    }
+
     .scroll-section {
      
     
@@ -145,6 +153,13 @@
 .square {
   position: relative;
   overflow: hidden; /* so the overlay doesn't spill out */
+}
+
+.square {
+  background-color: #e0e0e0; /* soft gray fallback */
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.3s ease-in-out;
 }
 
 .overlay {
@@ -353,12 +368,34 @@
     <div class="grid-container" id="grid-container">
       <!-- Generate 20 squares with background images -->
 
+      <a href="PageHtmlFiles/Picklemans.html" class="square-wrapper">
+        <div class="square" style="background-image: url('ProjectPics/Picklemans.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Pickleman's</h2>
+              <p class="overlay-subtitle">Rebranding</p>
+            </div>
+          </div>
+        </div>
+      </a> 
+
+      <a href="PageHtmlFiles/GenWater.html" class="square-wrapper">
+        <div class="square" style="background-image: url('ProjectPics/genWaters.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>General Waters</h2>
+              <p class="overlay-subtitle">Rebranding</p>
+            </div>
+          </div>
+        </div>
+      </a> 
+
       <a href="PageHtmlFiles/RockEnrollment.html" class="square-wrapper">
         <div class="square" style="background-image: url('ProjectPics/RockEnrollment.avif');">
           <div class="overlay">
             <div class="overlay-text">
               <h2>Rock Enrollment</h2>
-              <p>Rebranding</p>
+              <p class="overlay-subtitle">Rebranding</p>
             </div>
           </div>
         </div>
@@ -369,7 +406,7 @@
           <div class="overlay">
             <div class="overlay-text">
               <h2>Synergy</h2>
-              <p>Rebranding</p>
+              <p class="overlay-subtitle">Rebranding</p>
             </div>
           </div>
 
@@ -381,7 +418,7 @@
             <div class="overlay">
               <div class="overlay-text">
                 <h2>Ignite</h2>
-                <p>Rebranding</p>
+                <p class="overlay-subtitle">Rebranding</p>
               </div>
             </div>
           </div>
@@ -392,7 +429,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>NCIIL</h2>
-                  <p>Rebranding</p>
+                  <p class="overlay-subtitle">Rebranding</p>
                 </div>
               </div>
             </div>
@@ -403,7 +440,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>Dirty Drinkers</h2>
-                  <p>Branding</p>
+                  <p class="overlay-subtitle">Branding</p>
                 </div>
               </div>
             </div>
@@ -414,7 +451,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>What If</h2>
-                  <p>Packaging Design</p>
+                  <p class="overlay-subtitle">Packaging Design</p>
                 </div>
               </div>
             </div>
@@ -425,7 +462,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>RPG Homes</h2>
-                  <p>Branding</p>
+                  <p class="overlay-subtitle">Branding</p>
                 </div>
               </div>
             </div>
@@ -436,7 +473,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>TBM</h2>
-                  <p>Rebranding</p>
+                  <p class="overlay-subtitle">Rebranding</p>
                 </div>
               </div>
             </div>
@@ -447,7 +484,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>West One</h2>
-                  <p>Rebranding</p>
+                  <p class="overlay-subtitle">Rebranding</p>
                 </div>
               </div>
             </div>
@@ -458,7 +495,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>Brutiful</h2>
-                  <p>Rebranding</p>
+                  <p class="overlay-subtitle">Rebranding</p>
                 </div>
               </div>
             </div>
@@ -469,7 +506,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>MFA</h2>
-                  <p>Rebranding</p>
+                  <p class="overlay-subtitle">Rebranding</p>
                 </div>
               </div>
             </div>
@@ -480,7 +517,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>Soulful</h2>
-                  <p>UI/UX Design</p>
+                  <p class="overlay-subtitle">UI/UX Design</p>
                 </div>
               </div>
             </div>
@@ -491,7 +528,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>350</h2>
-                  <p>Social Campaign</p>
+                  <p class="overlay-subtitle">Social Campaign</p>
                 </div>
               </div>
             </div>
@@ -502,7 +539,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>PRJCT_WNDW</h2>
-                  <p>For Boston's Downtown Innovation District</p>
+                  <p class="overlay-subtitle">For Boston's Downtown Innovation District</p>
                 </div>
               </div>
             </div>
@@ -513,7 +550,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>Terrible</h2>
-                  <p>Social Campaign</p>
+                  <p class="overlay-subtitle">Social Campaign</p>
                 </div>
               </div>
             </div>
@@ -524,7 +561,7 @@
               <div class="overlay">
                 <div class="overlay-text">
                   <h2>Switch Glitch</h2>
-                  <p>Exhibition Design</p>
+                  <p class="overlay-subtitle">Exhibition Design</p>
                 </div>
               </div>
             </div>
