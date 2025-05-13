@@ -20,7 +20,7 @@
       font-family: "avenir-book", sans-serif;
       min-height: auto;
       overflow-x: hidden;
-      color: #fcfdf5;;
+      color: #fcfdf5;
     }
 
     h1 {
@@ -61,49 +61,55 @@
       color: rgb(169, 162, 162);
     }
 
-    .header {
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      z-index: 100;
-      padding: 0.1rem 0.1vw;
-    }
-
+ 
     header.header { 
       background-color: #729ed4 !important; /* Force override */     /* Target both <header> tag and .header class */
      
     }
 
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2vw;
-      font-family: 'Avenir-book', sans-serif;
-      box-sizing: border-box; /* Ensures padding is included in width */
-    } 
+    .header {
+          position: fixed;
+          width: 100%;
+          top: 0;
+          left: 0;
+          z-index: 100;
+          padding: 0.1rem 0.1vw;
+          background-color: rgba(252, 253, 245);
+        }
 
-    .nav-links {
-      list-style: none;
-      display: flex;
-      width: 95%; /* Crucial for spacing */
-      margin: 0;
-      padding: 0;
-      justify-content: space-between;
-    }
+        .navbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 2vw;
+          padding-left: 4vw;
+          color: #fcfdf5;
+          box-sizing: border-box;
+        }
 
-    .nav-links a {
-      text-decoration: none;
-      color: #fcfdf5;
-      font-size: 1.2rem;
-      transition: color 0.3s ease;  
-    } 
+        .nav-links {
+          list-style: none;
+          display: flex;
+          width: 95%;
+          margin: 0;
+          padding: 0;
+          justify-content: flex-start;
+        }
 
-    .nav-links a:hover {
-      color: #000;
-    } 
+        .nav-links a {
+          text-decoration: none;
+          color: #fcfdf5;
+          font-size: 1.2rem;
+          transition: color 0.3s ease;
+        }
 
+        .nav-links li {
+          padding: 0 15px;
+        }
+
+        .nav-links a:hover {
+          color: #000;
+        }
 
     .contact-section {
       position: relative;

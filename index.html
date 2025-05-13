@@ -202,61 +202,49 @@
 .square:hover .overlay {
   opacity: 1;
 }
+.header {
+          position: fixed;
+          width: 100%;
+          top: 0;
+          left: 0;
+          z-index: 100;
+          padding: 0.1rem 0.1vw;
+          background-color: rgba(252, 253, 245);
+        }
 
-    .header {
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      z-index: 100;
-      padding: 0.1rem 0.1vw;
+        .navbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 2vw;
+          padding-left: 4.5%;
+          color: #fcfdf5;
+          box-sizing: border-box;
+        }
 
-    }
+        .nav-links {
+          list-style: none;
+          display: flex;
+          width: 95%;
+          margin: 0;
+          padding: 0;
+          justify-content: flex-start;
+        }
 
+        .nav-links a {
+          text-decoration: none;
+          color: #729ed4;
+          font-size: 1.2rem;
+          transition: color 0.3s ease;
+        }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2vw;
-  
-  background-color: transparent; /* Makes navbar transparent */
-  color: #fcfdf5; /* Ensures text is visible on a transparent background */
-  box-sizing: border-box;
-}
+        .nav-links li {
+          padding: 0 15px;
+        }
 
-  
-
-  
-
-
-.nav-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  width: 95%; /* Crucial for spacing */
-  margin: 0;
-  padding: 0;
-  justify-content: space-between;
-
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #729ed4;
-  font-size: 1.2rem;
-  transition: color 0.3s ease;
- 
-}
-
-.nav-links a:hover {
-  color: #000;
-}
+        .nav-links a:hover {
+          color: #000;
+        }
 
 .contact-section {
       position: relative;
