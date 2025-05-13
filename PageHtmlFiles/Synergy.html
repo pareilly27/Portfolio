@@ -1,23 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Synergy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500&display=swap" rel="stylesheet">
+    <title>Synergy </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-      body {
+        body {
           font-family: 'avenir-book', sans-serif;
-          max-width: 1200px;
           margin: 0 auto;
-          padding: 20px;
-          text-align: center;
           background-color: #fcfdf5;
+          overflow-x: hidden;
+          position: relative;
+          transition: transform 0.3s ease-out;
+          transform: translateX(0);
+        }
+
+        /* Slide transition classes */
+        body.slide-out-left {
+          transform: translateX(-100%);
+        }
+
+        body.slide-out-right {
+          transform: translateX(100%);
+        }
+
+        body.slide-in-from-left {
+          transform: translateX(-100%);
+        }
+
+        body.slide-in-from-right {
+          transform: translateX(100%);
+        }
+
+        body.slide-in-active {
+          transform: translateX(0);
         }
 
         @font-face {
           font-family: 'avenir-book';
           src: url('Fonts/avenir-book.ttf') format('truetype');
           font-weight: normal;
+          font-style: normal;
+        }
+
+        @font-face {
+          font-family: 'avenir-black';
+          src: url('Fonts/avenir-black.ttf') format('truetype');
+          font-weight: bold;
+          font-style: normal;
+        }
+
+        @font-face {
+          font-family: 'avenir-heavy';
+          src: url('Fonts/avenir-heavy.ttf') format('truetype');
           font-style: normal;
         }
 
@@ -28,7 +65,7 @@
           left: 0;
           z-index: 100;
           padding: 0.1rem 0.1vw;
-          background-color: rgba(252, 253, 245); /* semi-transparent */
+          background-color: rgba(252, 253, 245);
         }
 
         .navbar {
@@ -36,26 +73,18 @@
           justify-content: space-between;
           align-items: center;
           padding: 1rem 2vw;
-          
-         
-          color: #fcfdf5; /* Ensures text is visible on a transparent background */
+          padding-left: 4.5%;
+          color: #fcfdf5;
           box-sizing: border-box;
-        }
-
-        .nav-logo {
-          font-size: 1.5rem;
-          font-weight: bold;
-          color: #333;
         }
 
         .nav-links {
           list-style: none;
           display: flex;
-          width: 95%; /* Crucial for spacing */
+          width: 95%;
           margin: 0;
           padding: 0;
-          justify-content: space-between;
-
+          justify-content: flex-start;
         }
 
         .nav-links a {
@@ -63,7 +92,10 @@
           color: #729ed4;
           font-size: 1.2rem;
           transition: color 0.3s ease;
-        
+        }
+
+        .nav-links li {
+          padding: 0 15px;
         }
 
         .nav-links a:hover {
@@ -71,33 +103,143 @@
         }
 
         h1 {
-          font-size: 5vw;
-          transform: scaleX(0.8) scaleY(1.2); /* Narrower and taller */
-          color: rgb(228, 225, 225);
+          font-size: 3vw;
+          color: #729ed4;
           font-weight: 600;
           margin: 0;
-          margin-top: 3vw;
-          text-align: center;
+          padding: 0;
+          text-align: left;
           white-space: nowrap;
           user-select: none;
-          font-family: "Mukta Mahee", sans-serif;
+          font-family: 'avenir-black';
+        }
+
+        h2 {
+          font-weight: normal;
+          font-family: 'avenir-heavy';
         }
 
         .description {
-          margin-bottom: 30px;
-          max-width: 60ch;    /* constrain width */
-          width: 90%;          /* responsive shrink */
-          margin: 0 auto 2rem; /* center it */
+          margin-bottom: 20px;
+          width: 90%;
           line-height: 1.3;
           font-size: 18px;
           color: rgb(1, 1, 1);
-            }
+        }
+
+        .content {
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          grid-template-rows: auto auto;
+          gap: 20px;
+          padding-bottom: 3%;
+        }
+
+        .left-column {
+          text-align: left;
+          margin-left: 8%;
+          margin-top: 7%;
+        }
+
+        .left-column button {
+          display: inline-block;
+          padding: 10px 20px;
+          background-color: transparent;
+          color: #729ed4;
+          border: 2px solid #729ed4;
+          border-radius: 50px;
+          font-size: 16px;
+          cursor: pointer;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+
+        .left-column button:hover {
+          background-color: #729ed4;
+          color: #fff;
+        }
+
+        .right-column {
+          margin-top: 14%;
+          margin-left: 10%;
+        }
+
+        .right-column ul {
+          list-style: none;
+          padding: 0;
+        }
+
+        .right-column ul li {
+          margin-bottom: 5px;
+          font-size: 16px;
+        }
 
         img {
-          max-width: 100%;
+          max-width: 95%;
           height: auto;
           display: block;
-          margin: 20px auto;
+          margin: 10px auto;
+        }
+
+        .images {
+          grid-column: 1 / -1;
+          text-align: center;
+        }
+
+        .images img {
+          max-width: 95%;
+          height: auto;
+        }
+
+        .right-column ul:first-of-type {
+          list-style-type: disc;
+          padding-left: 20px;
+        }
+
+        .bottom-list-item {
+          margin-left: 6%;
+        }
+
+        .right-column h2 {
+          margin-bottom: 5px;
+        }
+
+        .right-column ul {
+          margin-top: 0;
+        }
+
+        .footer-bar {
+          width: 100%;
+          background-color: #fcfdf5;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          margin-top: 20px;
+        }
+
+        .arrow-link {
+          text-decoration: none;
+          color: #000000;
+          font-weight: normal;
+          transition: color 0.3s ease;
+        }
+
+        .arrow-link:hover {
+          color: #000;
+        }
+
+        .left-arrow {
+          margin-left: 2%;
+        }
+
+        .right-arrow {
+          margin-right: 4%;
+        }
+
+        .arrow-symbol {
+          font-size: 2rem;
+          vertical-align: -.15rem;
         }
     </style>
 </head>
@@ -111,25 +253,92 @@
       </ul>
     </nav>
   </header>
-    <h1>SYNERGY</h1>
-    <p class="description">When Synergy Restaurant Consultants approached me, they sought a brand as dynamic and forward-thinking as their hospitality consulting expertise. This comprehensive rebrand delivered a modern, bold identity, and a state-of-the-art website. The design reflects Synergy’s unparalleled industry expertise and commitment to enhancing client experiences, positioning them as leaders in global restaurant consulting. The creative concept highlights how chefs design menus and bring them to life through illustrations of kitchen scenes intertwined with photography. This transformation ensures Synergy’s brand speaks to the excellence and innovation they bring to every project.
-        Explore more at www.synergyconsultants.com.</p>
-    
-    <!-- Add your downloaded images  ../ -->
-    <img src="../IndividualPagePics/SynergyPics/1.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/2.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/3.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/4.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/5.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/6.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/7.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/8.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/9.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/10.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/11.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/12.png" alt="Synergy design">
-    <img src="../IndividualPagePics/SynergyPics/13.png" alt="Synergy design">
-    
-    <!-- Continue with all images -->
+
+  <div class="content">
+    <!-- Left Column -->
+    <div class="left-column">
+      <h1>Synergy </h1>
+      <p class="description">
+
+        Synergy Restaurant Consultants needed a brand as innovative and dynamic as their hospitality expertise. The rebrand delivered a bold visual identity and a cutting-edge website that reflects their global leadership in restaurant consulting. Blending illustrated kitchen scenes with photography, the creative direction mirrors how chefs craft menus bringing ideas to life with precision and flair. The result is a modern, elevated brand that captures Synergy’s commitment to excellence and transformative client experiences.
+
+      </p>
+      <a href="https://www.synergyconsultants.com/
+
+      " target="_blank"><button>Visit Website</button></a>
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+      <h2>Scope:</h2>
+      <ul>
+       
+        <li class="bottom-list-item">Branding & Strategy</li>
+        <li class="bottom-list-item">Website Design</li>
+      
+        
+      </ul>
+      <h2>Role:</h2>
+      <ul>
+        <li>Design Lead for Synergy</li>
+      </ul>
+    </div>
+  </div>
+
+  <img src="../IndividualPagePics/SynergyPics/1.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/2.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/3.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/4.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/5.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/6.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/7.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/8.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/9.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/10.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/11.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/12.png" alt="Synergy design">
+  <img src="../IndividualPagePics/SynergyPics/13.png" alt="Synergy design">
+
+  <!-- Footer Bar -->
+  <div class="footer-bar">
+    <a href="Terrible.html" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> Terrible</a>
+    <a href="RockEnrollment.html" class="arrow-link right-arrow">Rock Enrollment <span class="arrow-symbol">&#8250;</span></a>
+  </div>
+
+  <!-- Transition Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.arrow-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isPrev = link.classList.contains('left-arrow');
+          const href = link.href;
+          sessionStorage.setItem('slideDir', isPrev ? 'left' : 'right');
+          document.body.classList.add(isPrev ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(function() {
+            window.location = href;
+          }, 300);
+        });
+      });
+
+      const dir = sessionStorage.getItem('slideDir');
+      if (dir) {
+        if (dir === 'left') {
+          document.body.classList.add('slide-in-from-left');
+        } else {
+          document.body.classList.add('slide-in-from-right');
+        }
+        requestAnimationFrame(() => {
+          document.body.classList.add('slide-in-active');
+          sessionStorage.removeItem('slideDir');
+        });
+      }
+    });
+  </script>
+
 </body>
 </html>
+    
+   
+    
+    
