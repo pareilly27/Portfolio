@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ignite</title>
+    <title>Rock Enrollment </title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -257,9 +257,15 @@
   <div class="content">
     <!-- Left Column -->
     <div class="left-column">
-      <h1>Ignite</h1>
-      <p class="description">Ignite Home Features specializes in high-end fireplaces, delivering premium heating solutions for both residential and commercial spaces. To match their vision, the new brand identity evokes sophistication through elegant typography, a sleek, muted palette, and upscale visuals. The design conveys warmth, style, and quality mirroring the luxury of their bespoke fireplace installations. From printed materials to a meticulously crafted brand book, every element reinforces Ignite’s position as a premier provider of refined fireplace features.</p>
-      <!-- <a href="https://www.picklemans.com" target="_blank"><button>Visit Website</button></a> -->
+      <h1>Rock Enrollment </h1>
+      <p class="description">
+
+        Rock Enrollment simplifies and elevates employee benefits through a user-friendly platform that helps employees easily understand and access what they’re offered. The rebrand draws inspiration from the natural layers of rock and earth symbolizing the complexity and depth of talent acquisition. The new identity reflects clarity, structure, and strength, aligning with Rock Enrollment’s mission to make benefits feel approachable, intuitive, and impactful. Learn more at www.rockenrollment.com.
+
+
+
+      </p>
+      <a href="https://www.picklemans.com" target="_blank"><button>Visit Website</button></a>
     </div>
 
     <!-- Right Column -->
@@ -268,34 +274,25 @@
       <ul>
        
         <li class="bottom-list-item">Branding & Strategy</li>
-   
+        <li class="bottom-list-item">Website Design</li>
+        <li class="bottom-list-item">Social Media</li>
+
+      
         
       </ul>
       <h2>Role:</h2>
       <ul>
-        <li>Design Lead for Ignite</li>
+        <li>Design Lead for Rock Enrollment</li>
       </ul>
     </div>
   </div>
 
  
-  <img src="../IndividualPagePics/IgnitePics/1.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/2.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/3.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/4.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/5.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/6.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/7.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/8.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/9.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/10.png" alt="Synergy design">
-  <img src="../IndividualPagePics/IgnitePics/11.png" alt="Synergy design">
-
 
   <!-- Footer Bar -->
   <div class="footer-bar">
-    <a href="RPG.html" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> RPG</a>
-    <a href="West.html" class="arrow-link right-arrow">West One <span class="arrow-symbol">&#8250;</span></a>
+    <a href="Synergy.html" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> Synergy</a>
+    <a href="NCCIL.html" class="arrow-link right-arrow">NCIIL <span class="arrow-symbol">&#8250;</span></a>
   </div>
 
   <!-- Transition Script -->
@@ -331,5 +328,3 @@
 
 </body>
 </html>
-
-    
