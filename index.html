@@ -299,6 +299,50 @@
       z-index: 20;      /* Ensure it sits above the canvas */
       max-width: 20vw; /* Optional: limit width */
     }
+
+    .header {
+          position: fixed;
+          width: 100%;
+          top: 0;
+          left: 0;
+          z-index: 100;
+          padding: 0.1rem 0.1vw;
+          background-color: rgba(252, 253, 245);
+        }
+
+        .navbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 2vw;
+          padding-left: 4.5%;
+          color: #fcfdf5;
+          box-sizing: border-box;
+        }
+
+        .nav-links {
+          list-style: none;
+          display: flex;
+          width: 95%;
+          margin: 0;
+          padding: 0;
+          justify-content: flex-start;
+        }
+
+        .nav-links a {
+          text-decoration: none;
+          color: #729ed4;
+          font-size: 1.2rem;
+          transition: color 0.3s ease;
+        }
+
+        .nav-links li {
+          padding: 0 15px;
+        }
+
+        .nav-links a:hover {
+          color: #000;
+        }
   </style>
 </head>
 <body>
