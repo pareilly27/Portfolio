@@ -15,7 +15,7 @@
   <link rel="preload" as="image" href='ProjectPics/genWaters.avif'>
   <link rel="preload" as="image" href='ProjectPics/RockEnrollment.avif'>
  <link rel="preload" as="image" href='ProjectPics/Synergy.avif'>
-<link rel="preload" as="image" href='ProjectPics/Ignite.avif'>
+
 <link rel="preload" as="image" href='ProjectPics/NCIIL.avif'>
 <link rel="preload" as="image" href='ProjectPics/DIrtyDrinkers.avif'>
  <link rel="preload" as="image" href='ProjectPics/RPG Homes.avif'>
@@ -315,7 +315,7 @@
           justify-content: space-between;
           align-items: center;
           padding: 1rem 2vw;
-          padding-left: 2.5%;
+          padding-left: 1.5%;
           color: #fcfdf5;
           box-sizing: border-box;
         }
@@ -327,6 +327,7 @@
           margin: 0;
           padding: 0;
           justify-content: flex-start;
+          margin-left: -10px;
         }
 
         .nav-links a {
@@ -343,6 +344,37 @@
         .nav-links a:hover {
           color: #000;
         }
+
+    .nav-s-button {
+      text-decoration: none;
+      color: #729ed4;
+      font-size: 2.7rem;
+      font-family: "Mukta Mahee", sans-serif;
+      font-weight: 800;
+      transition: color 0.3s ease;
+      transform: scale(1.8, 2.4);
+      display: inline-block;
+      position: relative;
+      top: 0rem;
+      line-height: 1;
+    }
+
+    .nav-s-button:hover {
+      color: #000;
+    }
+
+    .nav-regular-link {
+      text-decoration: none;
+      color: #729ed4;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+      padding-top: 0.2rem;  /* Adjust this value to move About Me and Work up/down */
+      display: inline-block;
+    }
+
+    .nav-regular-link:hover {
+      color: #000;
+    }
   </style>
 </head>
 <body>
@@ -350,8 +382,9 @@
   <header class="header">
     <nav class="navbar">
       <ul class="nav-links">
-        <li><a href="AboutMe.html">About Me</a></li>
-        <li><a href="#scroll-section">Work</a></li>
+        <li><a href="#" class="nav-s-button">S.</a></li>
+        <li><a href="AboutMe.html" class="nav-regular-link">About Me</a></li>
+        <li><a href="#scroll-section" class="nav-regular-link">Work</a></li>
       </ul>
     </nav>
   </header>
@@ -433,10 +466,10 @@
     </a>  
 
     <a href="PageHtmlFiles/Ignite.html">
-      <div class="square" style="background-image: url('ProjectPics/Ignite.avif');">
+      <div class="square" style="background-image: url('IndividualPagePics/Netflix/NETFLIX-01.png');">
         <div class="overlay">
           <div class="overlay-text">
-            <h2>Ignite</h2>
+            <h2>Netflix</h2>
             <p class="overlay-subtitle">Re-Brand</p>
           </div>
         </div>
@@ -509,6 +542,17 @@
       </div>
     </a> 
 
+    <a href="PageHtmlFiles/swyft.html" class="square-wrapper">
+      <div class="square" style="background-image: url('IndividualPagePics/swyft/Artboard 1@4x.png');">
+        <div class="overlay">
+          <div class="overlay-text">
+            <h2>Swyft</h2>
+            <p class="overlay-subtitle">Rebranding</p>
+          </div>
+        </div>
+      </div>
+    </a> 
+
     <a href="PageHtmlFiles/TBM.html"> 
       <div class="square" style="background-image: url('ProjectPics/TBM.avif');">
         <div class="overlay">
@@ -576,16 +620,7 @@
     </a>   
 
 
-      <a href="PageHtmlFiles/swyft.html" class="square-wrapper">
-        <div class="square" style="background-image: url('IndividualPagePics/swyft/02.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>Swyft</h2>
-              <p class="overlay-subtitle">Rebranding</p>
-            </div>
-          </div>
-        </div>
-      </a> 
+      
 
       
 
