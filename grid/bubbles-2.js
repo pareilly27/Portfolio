@@ -169,17 +169,10 @@
     const bubbles = [];
     const radius = 65;
 
-    // 1 green bubble
-    bubbles.push(new Bubble(
-        Math.random() * (canvas.width - radius * 2) + radius,
-        Math.random() * (canvas.height - radius * 2) + radius,
-        radius,
-        colors.green,
-        null
-    ));
+   
 
     // 2 blue bubbles
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 8; i++) {
         bubbles.push(new Bubble(
             Math.random() * (canvas.width - radius * 2) + radius,
             Math.random() * (canvas.height - radius * 2) + radius,
@@ -189,16 +182,6 @@
         ));
     }
 
-    // 2 pink bubbles
-    for (let i = 0; i < 2; i++) {
-        bubbles.push(new Bubble(
-            Math.random() * (canvas.width - radius * 2) + radius,
-            Math.random() * (canvas.height - radius * 2) + radius,
-            radius,
-            colors.pink,
-            null
-        ));
-    }
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);

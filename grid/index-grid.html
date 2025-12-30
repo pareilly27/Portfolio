@@ -5,14 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <link
+    href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap"
+    rel="stylesheet"
+    />
 </head>
 <body>
 
+    
+
     <div class="overlay">
+
+        <header class="header">
+            <nav class="navbar">
+                <a href="#" class="nav-s-button">Shreyanshi Satodia</a>
+            <ul class="nav-links">
+                <li><a href="../AboutMe.html" class="nav-regular-link">About Me</a></li>
+                <li><a href="#scroll-section" class="nav-regular-link">Work</a></li>
+                <li><a href="#scroll-section" class="nav-regular-link">Resume</a></li>
+            </ul>
+            </nav>
+        </header>
 
         <button id="toggleBtn" class="toggle-btn">
             <span class="toggle-circle"></span>
-            Precision
+            <label id="toggleLabel">Precision</label>
         </button>
 
         <div class="container">
@@ -40,7 +57,7 @@
     <canvas id="bubbleCanvas"></canvas>
 
     <script src="grid.js"></script>
-    <script src="bubbles.js"></script>
+    <script src="bubbles-2.js"></script>
     <script src="toggle.js"></script>
 </body>
 </html>

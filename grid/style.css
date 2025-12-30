@@ -25,11 +25,12 @@
     
 }
 
+ /* Container */
+
 .container {
 
   width: 60vw;
   height: 40vh;
-
   position: absolute;
   top: 50%;
   left: 50%;
@@ -47,7 +48,7 @@
 .middle-row{
     height: 33%;
     container-type: size;
-    font-size: clamp(1rem, 8cqh, 20rem);
+    font-size: 7vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -63,7 +64,7 @@
 .top-right{
     width: 59%;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: flex-start;
     overflow: hidden;
     margin-left: 1vw;
@@ -72,9 +73,9 @@
 .top-left{
     container-type: size;
     width: 39%;
-    font-size: clamp(1rem, 8cqh, 20rem);
+    font-size: 7vw;
     display: flex;
-    align-items: flex-end;      
+    align-items: center;      
     justify-content: flex-end;
     overflow: hidden;
     margin-right: 1vw;
@@ -84,9 +85,9 @@
 .bottom-right{
     container-type: size;
     width: 34%;
-    font-size: clamp(1rem, 8cqh, 20rem);
+    font-size: 7vw;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     overflow: hidden;
     margin-left: 1vw;
@@ -95,7 +96,7 @@
 .bottom-left{
     width: 64%;
     display: flex;
-    align-items: flex-start;      
+    align-items: center;      
     justify-content: flex-end;
     overflow: hidden;
     text-align: right;
@@ -103,16 +104,17 @@
 }
 
 .text-large {
+  font-family: "Desire Pro", serif;
   
-  font-weight: bold;
   
 }
 
+.text-small {
+    font-family: 'Raleway', sans-serif;
+}
 
 
-
-
-
+/* Toggle */
 
 .toggle-btn {
     pointer-events: auto;
@@ -152,6 +154,8 @@
     transition: opacity 0.2s ease;
 }
 
+/* Grid */
+
 .grid {
     display: none;
 }
@@ -189,6 +193,8 @@
     transition: none;
 }
 
+/* Bubble */
+
 #bubbleCanvas {
     display: none;
     position: fixed;
@@ -202,4 +208,87 @@
     display: block;
 }
 
+/* Navbar */
+
+.header {
+    font-family: 'Raleway', sans-serif;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0.1rem 0.1vw;
+    background-color: transparent;
+    pointer-events: auto;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2vw;
+    padding-left: 1.5%;
+    color: #fcfdf5;
+    box-sizing: border-box;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    width: 95%;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-end;
+    margin-left: -10px;
+    text-decoration: none;
+    color: #000;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+    padding: 0 15px;
+}
+
+.nav-links li {
+    padding: 0 15px;
+}
+
+.nav-links a:hover {
+    color: #000;
+}
+
+.nav-s-button {
+    list-style: none;
+    display: flex; 
+    justify-content: flex-end;
+    text-decoration: none;
+    color: #000;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    list-style: none;
+}
+
+.nav-s-button:hover {
+    color: #000;
+}
+
+.nav-regular-link {
+    text-decoration: none;
+    color: #000000;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+    padding-top: 0.2rem;  
+
+}
+
+.nav-regular-link:hover {
+    color: #000;
+}   
+
+/* Fonts */
+
+@font-face {
+    font-family: "Desire Pro";
+    src: url("../Fonts/Desire-Pro.woff") format("woff");
+    font-weight: 100;
+}
 
