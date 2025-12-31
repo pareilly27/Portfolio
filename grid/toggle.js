@@ -1,9 +1,10 @@
 const toggleBtn = document.getElementById('toggleBtn');
+const toggleCircle = document.getElementById('toggleCircle')
 const toggleLabel = document.getElementById('toggleLabel');
 const grid = document.getElementById('grid');
 const bubbleCanvas = document.getElementById('bubbleCanvas');
 
-toggleBtn.addEventListener('click', () => {
+toggleCircle.addEventListener('click', () => {
     grid.classList.toggle('active-view');
     bubbleCanvas.classList.toggle('active-view');
     toggleBtn.classList.toggle('toggled');

@@ -29,12 +29,12 @@
 
 .container {
 
-  width: 60vw;
-  height: 40vh;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    width: 60vw;
+    height: 40vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   
 }
 
@@ -48,11 +48,10 @@
 .middle-row{
     height: 33%;
     container-type: size;
-    font-size: 7vw;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+   
 }
 
 .bottom-row{
@@ -73,7 +72,6 @@
 .top-left{
     container-type: size;
     width: 39%;
-    font-size: 7vw;
     display: flex;
     align-items: center;      
     justify-content: flex-end;
@@ -85,7 +83,6 @@
 .bottom-right{
     container-type: size;
     width: 34%;
-    font-size: 7vw;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -105,12 +102,13 @@
 
 .text-large {
   font-family: "Desire Pro", serif;
-  
+  font-size: 15vmin;
   
 }
 
 .text-small {
     font-family: 'Raleway', sans-serif;
+    font-size: 2vmin;
 }
 
 
@@ -132,6 +130,8 @@
     display: flex;
     align-items: center;
     gap: 1vw;
+    min-height: 3.1vh;
+    
 }
 
 .toggle-circle {
@@ -139,20 +139,22 @@
     top: 50%;
     left: 0.5vw;
     transform: translateY(-50%);
-    width: 2vw;
-    height: 2vw;
+    width: 3vh;
+    height: 3vh;
     background: #7B97C5;
     border-radius: 50%;
     transition: left 0.3s ease;
 }
 
 .toggle-btn.toggled .toggle-circle {
-    left: calc(100% - 0.5vw - 2vw);
+    left: calc(100% - 0.5vw - 3.1vh);
 }
 
 .toggle-text {
     transition: opacity 0.2s ease;
 }
+
+
 
 /* Grid */
 
@@ -242,7 +244,7 @@
     margin-left: -10px;
     text-decoration: none;
     color: #000;
-    font-size: 1.2rem;
+    font-size: 1.2vw;
     transition: color 0.3s ease;
     padding: 0 15px;
 }
@@ -261,7 +263,7 @@
     justify-content: flex-end;
     text-decoration: none;
     color: #000;
-    font-size: 1.2rem;
+    font-size: 1.2vw;
     transition: color 0.3s ease;
     white-space: nowrap;
     list-style: none;
@@ -274,7 +276,7 @@
 .nav-regular-link {
     text-decoration: none;
     color: #000000;
-    font-size: 1.2rem;
+    font-size: 1.2vw;
     transition: color 0.3s ease;
     padding-top: 0.2rem;  
 
@@ -291,4 +293,102 @@
     src: url("../Fonts/Desire-Pro.woff") format("woff");
     font-weight: 100;
 }
+
+/* Responsive Resizing */
+
+
+@media (max-aspect-ratio: 28/15) {
+    /* Very wide - base size on height so it doesn't get huge */
+    .text-large {
+        font-size: 12vmin;
+    }
+}
+
+@media (max-aspect-ratio: 21/14) {
+    /* Very wide - base size on height so it doesn't get huge */
+    .text-large {
+        font-size: 10vmin;
+    }
+}
+
+@media (max-aspect-ratio: 16/13) {
+    /* Very wide - base size on height so it doesn't get huge */
+    .text-large {
+        font-size: 8vmin;
+    }
+
+    .text-small {
+        font-size: 1.5vmin;
+    }
+}
+
+@media (max-aspect-ratio: 5/4) {
+    .toggle-btn {
+        width: 25vw;
+        top: 12vh;
+    }
+}
+
+
+    
+
+@media (orientation: portrait) and (max-aspect-ratio: 3/4) {
+    /* mobile portrait */
+
+    .container {
+        height: 60vh;
+    }
+    
+    .top-row, .bottom-row, .middle-row {
+        flex-direction: column-reverse;
+        height: 20vh;
+        justify-content: space-around;
+    }
+
+    .middle-row {
+    line-height: 1.1; 
+    text-align: center;
+}
+    
+    .top-left, .top-right,
+    .bottom-left, .bottom-right {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        overflow: visible;
+    }
+    
+    .text-large {
+        font-size: 6vh;
+    }
+
+
+    
+    .text-small {
+        font-size: 3vw;
+    }
+
+    .toggle-label {
+    font-size: 0px;
+    }
+
+    .toggle-btn {
+        width: 25vw;
+        top: 10vh;
+    }
+
+    .nav-s-button, .nav-regular-link{
+        
+        font-size: 2vh;
+        
+    }
+
+    
+
+}
+
+
+
+
+
 
