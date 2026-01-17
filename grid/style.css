@@ -1,6 +1,8 @@
 :root {
     --grid-columns: 12;
-    --grid-rows: 5;
+    --grid-size-base: 10;
+    --grid-rows: 42;
+    
 }
 
 
@@ -11,8 +13,10 @@
 }
 
 
+
+
 .overlay {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -160,18 +164,22 @@
 
 .grid {
     display: none;
+    
+    
 }
 
 .grid.active-view {
     display: grid;
     grid-template-columns: repeat(var(--grid-columns), 1fr);
     grid-template-rows: repeat(var(--grid-rows), 1fr);
-    height: 100vh;
+    height: 840vh;
     gap: 0px;
+    
+    
 }
 
 .cell {
-    background-color: #ffffff;
+    
     box-shadow: inset 0 0 0 0.5px #5c5b5b;
     position: relative;
     overflow: hidden;
@@ -385,7 +393,78 @@
 
     
 
+
+    
+
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3vw;
+    padding: 3vw;
+    position: relative;
+    margin-top: -745vh;  
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background: transparent;
+}
+
+.square {
+    background-color: #e0e0e0;
+    aspect-ratio: 3 / 2;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    
+}
+
+.square .overlay {
+    position: absolute;
+    top: -500;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.square:hover .overlay {
+    opacity: 1;
+}
+
+.grid-container a {
+    text-decoration: none;
+}
+
+.selected-text-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    position: absolute;
+    top: 90vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: 10px;
+}
+
+.vertical-line {
+    top: 0;
+    width: 80vw;
+    height: 1px;
+    background: #000;
+}
+
+/* grid veiw height vh and num rows need to be proportional 1 to 5. Change later to single variable.  */
+/* root conflict between index & about me needs fix  */
 
 
 
