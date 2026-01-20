@@ -6,6 +6,7 @@ body {
           position: relative;
           transition: transform 0.3s ease-out;
           transform: translateX(0);
+          
         }
 
         /* Slide transition classes */
@@ -70,7 +71,7 @@ body {
           grid-template-rows: auto auto;
           gap: 20px;
           padding-bottom: 3%;
-          
+          pointer-events: auto;
         }
 
         .left-column {
@@ -164,6 +165,7 @@ body {
           align-items: center;
           padding: 10px 20px;
           margin-top: 20px;
+          pointer-events: auto;
         }
 
         .arrow-link {

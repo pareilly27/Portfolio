@@ -5,6 +5,7 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
+      pointer-events: auto;
     }
 
     .curve-line {

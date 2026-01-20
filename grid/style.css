@@ -27,6 +27,7 @@
     justify-content: space-between;
     align-items: flex-start;
     
+    
 }
 
  /* Container */
@@ -122,7 +123,7 @@
 
 .toggle-btn {
     pointer-events: auto;
-    position: fixed;
+    position: relative;
     top: 5vh;
     left: 50%;
     transform: translateX(-50%);
@@ -137,6 +138,7 @@
     align-items: center;
     gap: 1vw;
     min-height: 3.1vh;
+    
     
 }
 
@@ -166,7 +168,7 @@
 
 .grid {
     display: none;
-    
+    pointer-events: auto;
     
 }
 
@@ -176,7 +178,7 @@
     grid-template-rows: repeat(var(--grid-rows), 1fr);
     height: 100%;
     gap: 0px;
-    
+    pointer-events: auto;
     
 }
 
@@ -224,7 +226,7 @@
 
 .header {
     font-family: 'Raleway', sans-serif;
-    position: fixed;
+    position: relative;
     width: 100%;
     top: 0;
     left: 0;
@@ -411,6 +413,12 @@
     width: 100%;
     z-index: 10;
     background: transparent;
+    pointer-events: auto;
+}
+
+.full-page-container {
+    
+    pointer-events: none;
 }
 
 .square {
@@ -464,6 +472,15 @@
     height: 1px;
     background: #000;
 }
+
+html, body {
+    pointer-events: none;
+}
+
+
+
+
+
 
 /* grid veiw height vh and num rows need to be proportional 1 to 5. Change later to single variable.  */
 /* root conflict between index & about me needs fix  */
