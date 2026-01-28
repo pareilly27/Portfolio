@@ -3,652 +3,333 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shreyanshi Satodia</title>
+  <title>Portfolio</title>
 
-  <!-- Load Oswald Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mukta+Mahee:wght@800;&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="ProjectPics/RockEnrollment.avif">
-  <link rel="preload" as="image" href="ProjectPics/Synergy.avif">
-  <link rel="preload" as="image" href='ProjectPics/Picklemans.avif'>
-  <link rel="preload" as="image" href='ProjectPics/genWaters.avif'>
-  <link rel="preload" as="image" href='ProjectPics/RockEnrollment.avif'>
- <link rel="preload" as="image" href='ProjectPics/Synergy.avif'>
-
-<link rel="preload" as="image" href='ProjectPics/NCIIL.avif'>
-<link rel="preload" as="image" href='ProjectPics/DIrtyDrinkers.avif'>
- <link rel="preload" as="image" href='ProjectPics/RPG Homes.avif'>
-<link rel="preload" as="image" href='ProjectPics/TBM.avif'>
-<link rel="preload" as="image" href='ProjectPics/West One.avif'>
-<link rel="preload" as="image" href='ProjectPics/Brutiful.avif'>
-<link rel="preload" as="image" href='ProjectPics/MFA.jpg'>
-<link rel="preload" as="image" href='ProjectPics/Soulful.avif'>
-<link rel="preload" as="image" href='ProjectPics/350.avif'>
-<link rel="preload" as="image" href='ProjectPics/PRJCT_WNDW.avif'>
-<link rel="preload" as="image" href='ProjectPics/Terrible.avif'>
-<link rel="preload" as="image" href='ProjectPics/SwitchGlitch.avif'>
-
+  <!-- Styles -->
+  <link rel="stylesheet" href="grid/style.css" />
+  <link rel="stylesheet" href="grid/contactSection.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
 
   <style>
-    body {
-      margin: 0;
-      background: linear-gradient(135deg, #ffffff, #ffffff, #ffffff);
-      font-family: "avenir-book", sans-serif;
-      font-stretch: ultra-condensed;
-      min-height: 100vh;
-      overflow-x: hidden;
+    :root {
+      --grid-rows: 5;
     }
 
-    @font-face {
-      font-family: 'avenir-book';
-      src: url('Fonts/avenir-book.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-    
-
-    .hero {
-      height: 100vh;
-/* overflow hidden was removed */
+    .grid {
       position: fixed;
       top: 0;
-      z-index: 10;
-      
-    }
-      
-    #bubbleCanvas {
-      display: block;
-      position: absolute;
-      top: 0;
       left: 0;
-      z-index: 1;
-      background-color: #ffffff;
-    }
-
-    .content {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 2vw;
-      z-index: 2;
-      text-align: center;
-      padding: 2rem;
-      margin: auto;
-      color: rgb(169, 162, 162);
-
-    }
-
-    h1 {
-      font-size: 23vw;
-      transform: scaleX(0.8) scaleY(1.2); /* Narrower and taller */
-      color: rgb(228, 225, 225);
-      position: absolute;
-      bottom: -11vw;
-      left: 0vw;
-      right: 2vw;
-      font-weight: 600;
-      margin: 0;
-      text-align: center;
-      white-space: nowrap;
-      user-select: none;
-      font-family: "Mukta Mahee", sans-serif;
-
-    }
-
-    .subtitle {
-      position: absolute;
-      bottom: 17vw;
-      left: 2vw;
-      width: 60vw;
-      font-size: 1.5vw;
-      font-weight: 400;
-      color: #555;
-      user-select: none;
-      text-align: left;
-    }
-
-    .overlay-subtitle {
-      font-weight: 100;
-    }
-
-    .scroll-section {
-     
-    
-      height: 102%;
-      background-color: #729ed4;
-      padding: 0vw;
-      font-family: 'Oswald', sans-serif;
-      color: #333;
-      text-align: center;
-      z-index: 11;
-      position: relative;
-      
-    }
-
-    #scroll-top {
-      height: 400px;
-      margin-top: 100vh;
-      background: linear-gradient(
-        to bottom,
-        rgba(114, 158, 212, 0) 0%,     /* #729ed4 with 0 opacity */
-        rgba(114, 158, 212, 0.3) 30%,  /* 30% opacity */
-        rgba(114, 158, 212, 0.7) 70%,  /* 70% opacity */
-        rgba(114, 158, 212, 1) 100%    /* Fully solid */
-      );
-    }
-
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 3 columns per row */
-      gap: 2vw;
-      padding: 2vw;
-    }
-
-    .square {
-      background-color: #f0f0f0;
-      aspect-ratio: 3 / 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      font-weight: bold;
-      color: #fff;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .square-wrapper {
-  position: relative;
-  display: block;
-  text-decoration: none;
-}
-
-.square {
-  position: relative;
-  overflow: hidden; /* so the overlay doesn't spill out */
-}
-
-.square {
-  background-color: #e0e0e0; /* soft gray fallback */
-  background-size: cover;
-  background-position: center;
-  transition: background-image 0.3s ease-in-out;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;            /* Start at top */
-  left: 0;           /* Start at left */
-  width: 100%;       /* Full width */
-  height: 100%;      /* Full height */
-  background: rgba(0, 0, 0, 0.5); /* Dark overlay */
-  color: #fff;
-  display: flex;     /* Center text */
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.square:hover .overlay {
-  opacity: 1;
-}
-
-
-.contact-section {
-      position: relative;
-      height: 100%;
       width: 100%;
-      overflow: hidden;
-    }
-
-    
- 
-    .top-blue {
-      background-color: #ffffff;
-      height: 30vw;
-      position: relative;
-      clip-path: ellipse(60% 100% at 50% 100%);
-      z-index: -2;
-    }
-
-    .bottom-white {
-      background-color: #ffffff;
-      position: relative;
-      bottom: 0;
-      width: 100%;
-      height: auto;
-      z-index: 13;
-      
-    }
-
-    .center-text {
-      position: absolute;
-      bottom: 2.5%;
-      right: 5%;
-      transform: scaleX(0.8) scaleY(1.2); /* Narrower and taller */
-      font-size: 18vw;
-      font-weight: 600;
-      color: rgb(228, 225, 225);
-      text-align: center;
-      width: 100%;
-      white-space: nowrap;
-      font-family: "Mukta Mahee", sans-serif;
-    }
-
-
-
-    .contact-info {
-      position: relative;
-      left: 63%; /* Move it from the left instead of using right */
-      bottom: 5vw;
-      font-size: 1.5rem;
-      text-align: left; /* Align text to the left */
-      color: #333;
-      background-color: #ffffff;
-      height: auto;
-      z-index: 13;
-    }
-
-    .contact-info span {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .contact-info .greeting {
-     
-      font-style: italic;
-      color: #729ed4;
-    }
-
-    @media (max-width: 768px) {
-      .contact-info {
-        font-size: 1rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .contact-info {
-        font-size: 0.6rem;
-      }
-    }
-
-   
-
-    .hero.hidden {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-    }
-
-.left-text {
-      position: absolute;
-      top: 15vh;       /* Adjust vertical position */
-      left: 2vw;       /* Push it in from the left edge */
-      font-size: 2vw;
-      color: #888;     /* Light gray or pick a brand color */
-      z-index: 20;      /* Ensure it sits above the canvas */
-      max-width: 20vw; /* Optional: limit width */
-    }
-
-    .header {
-          position: fixed;
-          width: 100%;
-          top: 0;
-          left: 0;
-          z-index: 100;
-          padding: 0.1rem 0.1vw;
-          background-color: transparent;
-        }
-
-        .navbar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1rem 2vw;
-          padding-left: 1.5%;
-          color: #fcfdf5;
-          box-sizing: border-box;
-        }
-
-        .nav-links {
-          list-style: none;
-          display: flex;
-          width: 95%;
-          margin: 0;
-          padding: 0;
-          justify-content: flex-start;
-          margin-left: -10px;
-        }
-
-        .nav-links a {
-          text-decoration: none;
-          color: #729ed4;
-          font-size: 1.2rem;
-          transition: color 0.3s ease;
-        }
-
-        .nav-links li {
-          padding: 0 15px;
-        }
-
-        .nav-links a:hover {
-          color: #000;
-        }
-
-    .nav-s-button {
-      text-decoration: none;
-      color: #729ed4;
-      font-size: 2.7rem;
-      font-family: "Mukta Mahee", sans-serif;
-      font-weight: 800;
-      transition: color 0.3s ease;
-      transform: scale(1.8, 2.4);
-      display: inline-block;
-      position: relative;
-      top: 0rem;
-      line-height: 1;
-    }
-
-    .nav-s-button:hover {
-      color: #000;
-    }
-
-    .nav-regular-link {
-      text-decoration: none;
-      color: #729ed4;
-      font-size: 1.2rem;
-      transition: color 0.3s ease;
-      padding-top: 0.2rem;  /* Adjust this value to move About Me and Work up/down */
-      display: inline-block;
-    }
-
-    .nav-regular-link:hover {
-      color: #000;
+      z-index: -1;
     }
   </style>
 </head>
+
 <body>
+  <section class="full-page-container" id="full-page-container">
 
-  <header class="header">
-    <nav class="navbar">
-      <ul class="nav-links">
-        <li><a href="#" class="nav-s-button">S.</a></li>
-        <li><a href="AboutMe.html" class="nav-regular-link">About Me</a></li>
-        <li><a href="#scroll-section" class="nav-regular-link">Work</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <!-- HERO SECTION -->
-  <div  class="hero"> 
-        <canvas id="bubbleCanvas"></canvas>
-
-    <div class="content">
-      <h1>SHREYANSHI</h1>
-      <p class="subtitle">Throw an idea hard enough and it'll bounce into something better. That's the theory.<br>This portfolio is the proof. 
-        ( Go ahead, drag any circle and bounce it into others )</p>
-
+    <div id="button-container" class="button-container">
+      <button id="toggleBtn" class="toggle-btn">
+          <span id="toggleCircle" class="toggle-circle"></span>
+          <label id="toggleLabel" class="toggle-label">Precision</label>
+        </button>
     </div>
-  </div>
-  
+    <div class="overlay">
 
-  <!-- SCROLLABLE SECTION -->
-  <div class="scroll-section" id="scroll-top"></div>
-  <section class="scroll-section" id="scroll-section">
-    
-    <div class="grid-container" id="grid-container">
-      <!-- Generate 20 squares with background images -->
-
-      <a href="PageHtmlFiles/Synergy.html"> 
-        <div class="square" style="background-image: url('ProjectPics/Synergy.avif');">
-         <div class="overlay">
-           <div class="overlay-text">
-             <h2>Synergy</h2>
-             <p class="overlay-subtitle">Re-Brand</p>
-           </div>
-         </div>
-
-        </div>
-     </a>   
-
-     <a href="PageHtmlFiles/RockEnrollment.html" class="square-wrapper">
-      <div class="square" style="background-image: url('ProjectPics/RockEnrollment.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Rock Enrollment</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a> 
-
-    <a href="PageHtmlFiles/NCCIL.html">
-      <div class="square" style="background-image: url('ProjectPics/NCIIL.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>NCIIL</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a>   
-
-    <a href="PageHtmlFiles/Picklemans.html" class="square-wrapper">
-      <div class="square" style="background-image: url('ProjectPics/Picklemans.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Pickleman's</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a> 
-
-    
-
-    <a href="PageHtmlFiles/Netflix.html">
-      <div class="square" style="background-image: url('IndividualPagePics/Netflix/NETFLIX-01.png');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Netflix</h2>
-            <p class="overlay-subtitle">Visual Key Art Digital Design</p>
-          </div>
-        </div>
-      </div>
-    </a> 
-
-    <a href="PageHtmlFiles/West.html">
-      <div class="square" style="background-image: url('ProjectPics/West One.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>West One</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a>   
-
-    <a href="PageHtmlFiles/Wells.html" class="square-wrapper">
-      <div class="square" style="background-image: url('IndividualPagePics/Wells/1.png');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Wells</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a> 
-
-    <a href="PageHtmlFiles/DirtyDrinkers.html">
-      <div class="square" style="background-image: url('ProjectPics/DIrtyDrinkers.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Dirty Drinkers</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a>   
-
-    <a href="PageHtmlFiles/WhatIf.html">
-      <div class="square" style="background-image: url('ProjectPics/WhatIf.gif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>What If</h2>
-            <p class="overlay-subtitle">Packaging Design</p>
-          </div>
-        </div>
-      </div>
-    </a>  
-
-    <a href="PageHtmlFiles/Brutiful.html">
-      <div class="square" style="background-image: url('ProjectPics/Brutiful.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Brutiful</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a>  
-
-    <a href="PageHtmlFiles/GenWater.html" class="square-wrapper">
-      <div class="square" style="background-image: url('ProjectPics/genWaters.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>General Waters</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a> 
-
-    <a href="PageHtmlFiles/ignite.html" class="square-wrapper">
-      <div class="square" style="background-image: url(IndividualPagePics/IgnitePics/1.png);">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Ignite</h2>
-            <p class="overlay-subtitle">Rebranding</p>
-          </div>
-        </div>
-      </div>
-    </a> 
-
-    <a href="PageHtmlFiles/swyft.html" class="square-wrapper">
-      <div class="square" style="background-image: url('IndividualPagePics/swyft/Artboard 1@4x.png');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Swyft</h2>
-            <p class="overlay-subtitle">Rebranding</p>
-          </div>
-        </div>
-      </div>
-    </a> 
-
-    <a href="PageHtmlFiles/TBM.html"> 
-      <div class="square" style="background-image: url('ProjectPics/TBM.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>TBM</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a>   
-
-    <a href="PageHtmlFiles/MFA.html">
-      <div class="square" style="background-image: url('ProjectPics/MFA.jpg');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>MFA</h2>
-            <p class="overlay-subtitle">Re-Brand</p>
-          </div>
-        </div>
-      </div>
-    </a>   
-
-    <a href="PageHtmlFiles/Soulful.html">
-      <div class="square" style="background-image: url('ProjectPics/Soulful.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Soulful</h2>
-            <p class="overlay-subtitle">UI/UX Design</p>
-          </div>
-        </div>
-      </div>
-    </a>  
-
-    <a href="PageHtmlFiles/350.html"> 
-      <div class="square" style="background-image: url(ProjectPics/350.avif);">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>350</h2>
-            <p class="overlay-subtitle">Social Campaign</p>
-          </div>
-        </div>
-      </div>
-    </a>   
-
-    <a href="PageHtmlFiles/PRJCT.html">
-      <div class="square" style="background-image: url('ProjectPics/PRJCT_WNDW.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>PRJCT_WNDW</h2>
-            <p class="overlay-subtitle">For Boston's Downtown Innovation District</p>
-          </div>
-        </div>
-      </div>
-    </a>   
-
-    <a href="PageHtmlFiles/Switch.html">
-      <div class="square" style="background-image: url('ProjectPics/SwitchGlitch.avif');">
-        <div class="overlay">
-          <div class="overlay-text">
-            <h2>Switch Glitch</h2>
-            <p class="overlay-subtitle">Exhibition Design</p>
-          </div>
-        </div>
-      </div>
-    </a>   
-
-
-
-     
-
+      <!-- Header -->
+      <header class="header">
+        <nav class="navbar">
+          <a href="index.html" class="nav-s-button">Shreyanshi Satodia</a>
+          <ul class="nav-links">
+            <li><a href="AboutMe/" class="nav-regular-link">About Me</a></li>
+            <li><a href="index.html#grid-container" class="nav-regular-link">Work</a></li>
+            <li><a href="ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
+          </ul>
+        </nav>
+      </header>
 
       
 
+      <!-- Hero Text -->
+      <div class="container">
+        <div class="top-row">
+          <div class="text-large top-left">Design</div>
+          <div class="text-small top-right">
+            Structure sets the stage; playful sabotage gives it life. I keep things polished, but there's always a quiet glitch or rule-bend woven in, small enough to miss, intentional enough to matter
+          </div>
+        </div>
+
+        <div class="text-large middle-row">
+          That stays calm, but thinks
+        </div>
+
+        <div class="bottom-row">
+          <div class="text-small bottom-left">
+            Everything here opens up little by little, hover, scroll,<br />
+            pause. But the louder personality sits behind the<br />
+            toggle, waiting for someone curious enough
+          </div>
+          <div class="text-large bottom-right">loudly</div>
+        </div>
+      </div>
     </div>
 
-    <div class="contact-section">
-      <div class="top-blue">
-        <div style="word-spacing: 4px;" class="center-text">GET IN TOUCH</div>
-      </div>
-      <div class="bottom-white">
+    <!-- Background Grid -->
+    <div class="grid" id="grid"></div>
 
+    <!-- Section Label -->
+    <div class="selected-text-container" id="selected-text-container">
+      <div class="text-small" style="white-space: nowrap;">Selected Works</div>
+      <div class="vertical-line"></div>
+      <div class="text-small">Projects</div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="grid-container" id="grid-container">
+
+      <!-- Project Cards -->
+      <a href="Projects/synergy/">
+        <div class="square" style="background-image: url('ProjectPics/Synergy.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Synergy</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/rock-enrollment/" class="square-wrapper">
+        <div class="square" style="background-image: url('ProjectPics/RockEnrollment.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Rock Enrollment</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/nciil/">
+        <div class="square" style="background-image: url('ProjectPics/NCIIL.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>NCIIL</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/picklemans/" class="square-wrapper">
+        <div class="square" style="background-image: url('ProjectPics/Picklemans.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Pickleman's</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/netflix/">
+        <div class="square" style="background-image: url('ProjectGalleries/Netflix/NETFLIX-01.webp');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Netflix</h2>
+              <p class="overlay-subtitle">Visual Key Art Digital Design</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/west/">
+        <div class="square" style="background-image: url('ProjectPics/West One.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>West One</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/wells/" class="square-wrapper">
+        <div class="square" style="background-image: url('ProjectGalleries/Wells/1.webp');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Wells</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/dirty-drinkers/">
+        <div class="square" style="background-image: url('ProjectPics/DIrtyDrinkers.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Dirty Drinkers</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/what-if/">
+        <div class="square" style="background-image: url('ProjectPics/WhatIf.gif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>What If</h2>
+              <p class="overlay-subtitle">Packaging Design</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/brutiful/">
+        <div class="square" style="background-image: url('ProjectPics/Brutiful.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Brutiful</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/gen-water/" class="square-wrapper">
+        <div class="square" style="background-image: url('ProjectPics/genWaters.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>General Waters</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/ignite/" class="square-wrapper">
+        <div class="square" style="background-image: url('ProjectGalleries/IgnitePics/1.webp');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Ignite</h2>
+              <p class="overlay-subtitle">Rebranding</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/swyft/" class="square-wrapper">
+        <div class="square" style="background-image: url('ProjectGalleries/swyft/Artboard 1@4x.webp');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Swyft</h2>
+              <p class="overlay-subtitle">Rebranding</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/tbm/">
+        <div class="square" style="background-image: url('ProjectPics/TBM.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>TBM</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/mfa/">
+        <div class="square" style="background-image: url('ProjectPics/MFA.jpg');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>MFA</h2>
+              <p class="overlay-subtitle">Re-Brand</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/soulful/">
+        <div class="square" style="background-image: url('ProjectPics/Soulful.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Soulful</h2>
+              <p class="overlay-subtitle">UI/UX Design</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/350/">
+        <div class="square" style="background-image: url('ProjectPics/350.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>350</h2>
+              <p class="overlay-subtitle">Social Campaign</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/prjct/">
+        <div class="square" style="background-image: url('ProjectPics/PRJCT_WNDW.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>PRJCT_WNDW</h2>
+              <p class="overlay-subtitle">
+                For Boston's Downtown Innovation District
+              </p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="Projects/switch/">
+        <div class="square" style="background-image: url('ProjectPics/SwitchGlitch.avif');">
+          <div class="overlay">
+            <div class="overlay-text">
+              <h2>Switch Glitch</h2>
+              <p class="overlay-subtitle">Exhibition Design</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Contact -->
+     <div class="contact-section" id="contact-section">
+      <svg class="curve-line" viewBox="0 -0.4 100 24" preserveAspectRatio="none">
+        <ellipse cx="50" cy="20" rx="58" ry="20" fill="none" stroke="#000" stroke-width="0.04" />
+      </svg>
+
+      <div class="top-blue">
+        <div class="center-text" style="word-spacing: 4px;">GET IN TOUCH</div>
+      </div>
+
+      <div class="bottom-white">
         <div class="contact-info">
-          <span class="greeting">(Say Hi!)</span>
+          <span class="greeting">SAY HI!</span>
           <span>ssatodia97@gmail.com</span>
           <span>(857)437-9148</span>
         </div>
-
       </div>
-      
-      
     </div>
+    
+
+    <canvas id="bubbleCanvas"></canvas>
   </section>
 
-  <script src="js/bubbles.js" defer></script>
-  <script src="js/scroll.js" defer></script>
+  <!-- Scripts -->
+  <script src="js/grid.js"></script>
+  <script src="js/bubbles-2.js"></script>
+  <script src="js/toggle.js"></script>
 </body>
 </html>

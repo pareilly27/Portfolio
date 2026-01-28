@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Terrible!! Thank's for asking...</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/workPageStyles.css">
+    <style>
+      .grid {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+      }
+
+      :root {
+        --grid-rows: 45;
+      }
+
+      video {
+        max-height: 90vh;
+        background-color: white;
+      }
+    </style>
+</head>
+<body>
+
+  <section class="full-page-container">
+  <header class="header">
+    <nav class="navbar">
+      <a href="../../index.html" class="nav-s-button">Shreyanshi Satodia</a>
+      <ul class="nav-links">
+        <li><a href="../../AboutMe/" class="nav-regular-link">About Me</a></li>
+        <li><a href="../../index.html#grid-container" class="nav-regular-link">Work</a></li>
+        <li><a href="../../ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="content">
+    <!-- Left Column -->
+    <div class="left-column">
+      <h1>Terrible!! Thank's for asking...</h1>
+      <p class="description">"Terrible..! Thanks for asking." is a social action campaign designed to challenge society's misconceptions about mental health. We often hear and say "Hi, how are you doing?" daily, yet it rarely prompts a genuine response. This campaign aims to reclaim the essence of this phrase by encouraging people to pause, reflect, and provide authentic answers. By sparking conversations around everyday expressions, it highlights how quickly meaningful words can lose impact without proper context and emotion. Prompt cards placed across campus collected responses from students, creating a collection that reflects their true feelings and experiences.</p>
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+      <!-- <h2>Scope:</h2>
+      <ul>
+        <li class="bottom-list-item">Branding & Strategy</li>
+      </ul>
+      <h2>Role:</h2>
+      <ul>
+        <li>Design Lead for Terrible</li>
+      </ul> -->
+    </div>
+  </div>
+
+  <img src="../../ProjectGalleries/Terrible/1.webp" width="1920" height="1342" loading="eager" decoding="sync" alt="Terrible design">
+  <img src="../../ProjectGalleries/Terrible/2.webp" width="3840" height="2160" loading="eager" decoding="sync" alt="Terrible design">
+  <img src="../../ProjectGalleries/Terrible/3.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Terrible design">
+  <img src="../../ProjectGalleries/Terrible/4.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Terrible design">
+
+  <video width="640" height="360" controls>
+    <source src="../../ProjectGalleries/Terrible/KwjWZ9M_h4Y_720.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <img src="../../ProjectGalleries/Terrible/5.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Terrible design">
+
+  <!-- Footer Bar -->
+  <div class="footer-bar">
+    <a href="../prjct/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> PRJCT_WNDW</a>
+    <a href="../synergy/" class="arrow-link right-arrow">Synergy <span class="arrow-symbol">&#8250;</span></a>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  </section>
+
+  <!-- Transition Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.arrow-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isPrev = link.classList.contains('left-arrow');
+          const href = link.href;
+          sessionStorage.setItem('slideDir', isPrev ? 'left' : 'right');
+          document.body.classList.add(isPrev ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(function() {
+            window.location = href;
+          }, 300);
+        });
+      });
+
+      const dir = sessionStorage.getItem('slideDir');
+      if (dir) {
+        if (dir === 'left') {
+          document.body.classList.add('slide-in-from-left');
+        } else {
+          document.body.classList.add('slide-in-from-right');
+        }
+        requestAnimationFrame(() => {
+          document.body.classList.add('slide-in-active');
+          sessionStorage.removeItem('slideDir');
+        });
+      }
+    });
+  </script>
+  <script src="../../js/grid-projects.js"></script>
+
+</body>
+</html>
