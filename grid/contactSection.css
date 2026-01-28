@@ -31,7 +31,7 @@
       bottom: 15%;
       right: 10%;
       transform: scaleX(0.8) scaleY(1.5);
-      font-size: clamp(40px, 17vw, 250px);
+      font-size: max(40px, 17vw);
       font-weight: 600;
       text-align: center;
       width: 100%;
