@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>What If</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/workPageStyles.css">
+    <style>
+      .grid {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+      }
+
+      :root {
+        --grid-rows: 65;
+      }
+    </style>
+</head>
+<body>
+
+  <section class="full-page-container">
+  <header class="header">
+    <nav class="navbar">
+      <a href="../../index.html" class="nav-s-button">Shreyanshi Satodia</a>
+      <ul class="nav-links">
+        <li><a href="../../AboutMe/" class="nav-regular-link">About Me</a></li>
+        <li><a href="../../index.html#grid-container" class="nav-regular-link">Work</a></li>
+        <li><a href="../../ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="content">
+    <!-- Left Column -->
+    <div class="left-column">
+      <h1>What If</h1>
+      <p class="description">What If is a range of refreshing herb-based coolers inspired by nature's calming properties. The packaging design focuses on evoking a sense of freshness and tranquility through vibrant colors and custom illustrations that highlight the natural ingredients. Each element from the soothing palette to the organic visual details—was carefully chosen to reflect the purity and serenity at the heart of the product. The result is a visually uplifting brand that feels as refreshing as the drink itself.</p>
+      <!-- <a href="https://www.picklemans.com" target="_blank"><button>Visit Website</button></a> -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+      <!-- <h2>Scope:</h2>
+      <ul>
+       
+        <li class="bottom-list-item">Packaging Design and Illustrations</li>
+
+        
+      </ul>
+      <h2>Role:</h2>
+      <ul>
+        <li>Design Lead for What If</li>
+      </ul> -->
+    </div>
+  </div>
+
+  <img src="../../ProjectGalleries/WhatIfPics/1.gif" width="1920" height="1080" loading="eager" decoding="sync" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/2.webp" width="1920" height="1080" loading="eager" decoding="sync" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/3.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/4.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/5.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/6.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/7.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/8.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/9.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/10.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/11.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+  <img src="../../ProjectGalleries/WhatIfPics/12.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="What If design">
+
+  <!-- Footer Bar -->
+  <div class="footer-bar">
+    <a href="../dirty-drinkers/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> Dirty Drinkers</a>
+    <a href="../brutiful/" class="arrow-link right-arrow">Brutiful <span class="arrow-symbol">&#8250;</span></a>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  </section>
+
+  <!-- Transition Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.arrow-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isPrev = link.classList.contains('left-arrow');
+          const href = link.href;
+          sessionStorage.setItem('slideDir', isPrev ? 'left' : 'right');
+          document.body.classList.add(isPrev ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(function() {
+            window.location = href;
+          }, 300);
+        });
+      });
+
+      const dir = sessionStorage.getItem('slideDir');
+      if (dir) {
+        if (dir === 'left') {
+          document.body.classList.add('slide-in-from-left');
+        } else {
+          document.body.classList.add('slide-in-from-right');
+        }
+        requestAnimationFrame(() => {
+          document.body.classList.add('slide-in-active');
+          sessionStorage.removeItem('slideDir');
+        });
+      }
+    });
+  </script>
+  <script src="../../js/grid-projects.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shreyanshi Satodia</title>
+
+  <!-- Load Oswald Font -->
+  
+
+  <link rel="stylesheet" href="../grid/style.css">
+  <link rel="stylesheet" href="../grid/contactSection.css">
+  <style>
+
+    @font-face {
+        font-family: "Desire Pro";
+        src: url("../Fonts/desire-pro.woff") format("woff");
+        font-weight: 100;
+    }
+
+    :root {
+    --grid-rows: 5;
+    }
+
+    #grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+  }
+
+      .scroll-section {
+        position: relative;
+        z-index: 1;
+    }
+
+    .header {
+        z-index: 100;
+    }
+
+        
+    
+
+    h1 {
+      font-size: 23vw;
+      transform: scaleX(0.8) scaleY(1.2); /* Narrower and taller */
+      color: rgb(228, 225, 225);
+      position: absolute;
+      bottom: -11vw;
+      left: 0vw;
+      right: 2vw;
+      font-weight: 600;
+      margin: 0;
+      text-align: center;
+      white-space: nowrap;
+      user-select: none;
+    }
+    
+
+    h2 {
+      font-size: 4.5vw;
+      margin-bottom: 0.5rem;
+      transform: scaleX(1) scaleY(1.5);
+      color: #7B97C5;
+    }
+
+    h3 {
+      font-size: 4vh;
+      font-weight: bold; /* Ensure the title is bold */
+    }
+
+    .content {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2vw;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      margin: auto;
+      color: rgb(169, 162, 162);
+    }
+
+ 
+    /* Navbar */
+
+.header {
+    font-family: 'Raleway', sans-serif;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0.1rem 0.1vw;
+    pointer-events: auto;
+    
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2vw;
+    padding-left: 1.5%;
+    color: #fcfdf5;
+    box-sizing: border-box;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    width: 95%;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-end;
+    margin-left: -10px;
+    text-decoration: none;
+    color: #000;
+    font-size: 1.2vw;
+    transition: color 0.3s ease;
+    padding: 0 15px;
+}
+
+.nav-links li {
+    padding: 0 15px;
+}
+
+.nav-links a:hover {
+    color: #000;
+}
+
+.nav-s-button {
+    list-style: none;
+    display: flex; 
+    justify-content: flex-end;
+    text-decoration: none;
+    color: #000;
+    font-size: 1.2vw;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    list-style: none;
+}
+
+.nav-s-button:hover {
+    color: #000;
+}
+
+.nav-regular-link {
+    text-decoration: none;
+    color: #000000;
+    font-size: 1.2vw;
+    transition: color 0.3s ease;
+    padding-top: 0.2rem;  
+
+}
+
+.nav-regular-link:hover {
+    color: #000;
+}   
+
+   
+
+    
+
+    
+ 
+    
+
+    
+
+    
+
+
+
+    
+
+   
+   
+   
+    .hero.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+  .full-page {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: auto;
+      padding-bottom: 0px;
+      
+
+    }
+
+   
+    .left-column {
+      padding: 4vw 8vw 0 8vw; /* Remove bottom padding */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* Align items to the top */
+      /* Align items to the left */
+    }
+
+    .left-column h1 {
+      font-size: 3rem;
+      margin-bottom: 0rem;
+      padding-bottom: 0px;
+      text-align: left;
+    }
+
+    
+
+    .left-column p {
+      margin-bottom: 0.75rem;
+      font-size: 2vh;
+      /* No color override — inherit from body */
+    }
+
+    .left-column ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+      font-size: 2vh;
+    }
+
+    .left-column ul li {
+      margin-bottom: 0.3rem;
+    }
+    .list-row {
+      display: flex;
+      gap: 0rem;
+      flex-wrap: wrap;
+    }
+
+    .list-group {
+      flex: 1;
+      min-width: 200px;
+      list-style-type: none;
+    }
+
+    .right-column {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 0;
+    }
+
+    .image-container {
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-container img {
+      height: 80vh;
+      width: 40vw;
+      object-fit: contain;
+      margin-top: 3rem; /* Raise image by 2 rems */
+     
+    }
+
+    
+
+    #list-1,
+    #list-2 {
+      margin-left: -20px; /* Negative value moves it left */
+    }
+
+    #list-2 {
+      margin-top: 3.6rem; /* Or adjust as needed */
+    }
+
+    
+
+    #listTitle{
+      color: #7B97C5;
+    }
+
+    .title-row {
+        display: flex;
+        flex-direction: row;;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .fluff-text {
+    transition: color 0.3s ease;
+}
+
+    .fluff-text.removed {
+        text-decoration: line-through;
+        color: #999;
+    }
+
+    .your-button{
+        background-image: url('../cursor.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        border: none;
+        width:2vw;
+        height: 2vw;
+        cursor: pointer;
+         transform: rotate(-25deg);
+        }
+
+    html, body {
+      pointer-events: auto;
+  }
+
+
+
+    
+  </style>
+</head>
+<body>
+
+  
+
+  <header class="header">
+            <nav class="navbar">
+                <a href="../index.html" class="nav-s-button">Shreyanshi Satodia</a>
+            <ul class="nav-links">
+                <li><a href="./" class="nav-regular-link">About Me</a></li>
+                <li><a href="../index.html#grid-container" class="nav-regular-link">Work</a></li>
+                <li><a href="../ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
+            </ul>
+            </nav>
+    </header>
+
+
+ 
+  
+
+  <!-- SCROLLABLE SECTION -->
+  <div class="scroll-section" id="scroll-top"></div>
+  <section class="scroll-section" id="scroll-section">
+    
+    <div class="full-page">
+      <!-- LEFT COLUMN -->
+      <div class="left-column">
+        <h2>About Me</h2>
+        
+        <div class="title-row">
+            <h3>Strip the fluff</h3>
+            <button class="your-button" id="strip-fluff-button"></button>
+        </div>
+        
+        <p>I am <span class="fluff-text">Shreyanshi Satodia</span>, a Graphic Designer based in Dallas, Texas, with 7 years of experience turning bold ideas into impactful visuals through color, typography, layout, and thoughtful design. I believe design should be felt as much as it’s seen; it grabs attention, tells a story, and leaves an impression that lasts. My work blends creativity with strategy, weaving together visual language and purposeful communication across branding, editorial, packaging, and digital experiences.</p>
+        <p>Driven by curiosity, I’m always looking for fresh ways to connect people and ideas through design. And when I’m not creating, I’m usually chasing inspiration and greeting every dog I pass. Let’s create work that moves people.</p>
+
+  
+        <div class="list-row">
+          <div class="list-group">
+            <h3 id="listTitle">Area of Focus</h3>
+            <ul style="list-style-type: none;" id="list-1">
+              <li>Branding & Strategy</li>
+              <li>Print Design</li>
+              <li>UI-UX Design</li>
+              <li>Art Direction</li>
+              <li>Motion Graphics</li>
+              <li>Illustrations</li>
+              <li>Typography</li>
+            </ul>
+          </div>
+          
+        </div>
+      </div>
+  
+      <!-- RIGHT COLUMN -->
+      <div class="right-column">
+        <div class="image-container">
+          <img src="../Screenshot 2025-04-29 at 9.08.13 PM-Photoroom.png" alt="Placeholder Image" />
+        </div>
+      </div>
+    </div>
+    <div class="contact-section">
+      <svg class="curve-line" viewBox="0 -0.4 100 24" preserveAspectRatio="none">
+        <ellipse cx="50" cy="20" rx="58" ry="20" fill="none" stroke="#000" stroke-width="0.04"/>
+      </svg>
+      <div class="top-blue">
+        <div style="word-spacing: 4px;" class="center-text">GET IN TOUCH</div>
+      </div>
+      <div class="bottom-white">
+
+        <div class="contact-info">
+          <span class="greeting">SAY HI!</span>
+          <span>ssatodia97@gmail.com</span>
+          <span>(857)437-9148</span>
+        </div>
+
+      </div>
+      
+      
+    </div>
+  </section>
+
+  <div class="grid active-view" id="grid"></div>
+  
+  <script>
+    const header = document.querySelector('.header');
+    const hero = document.querySelector('.hero');
+    const heroHeight = hero.offsetHeight; // Get the height of the hero section
+  
+    
+    window.addEventListener('scroll', () => {
+  const hero = document.querySelector('.hero');
+  if (window.scrollY >= window.innerHeight) {
+    hero.classList.add('hidden');
+  } else {
+    hero.classList.remove('hidden');
+  }
+});
+  </script>
+  <script src="../js/grid.js"></script>
+  <script src="../js/removeFluff.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dirty Drinkers</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/workPageStyles.css">
+    <style>
+      .grid {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+      }
+
+      :root {
+        --grid-rows: 63;
+      }
+    </style>
+</head>
+<body>
+
+  <section class="full-page-container">
+  <header class="header">
+    <nav class="navbar">
+      <a href="../../index.html" class="nav-s-button">Shreyanshi Satodia</a>
+      <ul class="nav-links">
+        <li><a href="../../AboutMe/" class="nav-regular-link">About Me</a></li>
+        <li><a href="../../index.html#grid-container" class="nav-regular-link">Work</a></li>
+        <li><a href="../../ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="content">
+    <!-- Left Column -->
+    <div class="left-column">
+      <h1>Dirty Drinkers</h1>
+      <p class="description">Dirty Drinkers is a bold, character-driven brand that taps into vintage cartoon nostalgia with a gritty, modern twist. Featuring thick black outlines, expressive hand-drawn faces, and a punchy red-and-white palette, the design embraces a loud, unapologetic attitude. The custom typography and sticker-like illustrations create a collectible, rebellious feel. With its comic-book energy and nostalgic humor, Dirty Drinkers offers a playful, in-your-face soda experience unlike anything else on the shelf.</p>
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+      <h2>Scope:</h2>
+      <ul>
+        <li class="bottom-list-item">Branding & Strategy</li>
+      </ul>
+      <h2>Role:</h2>
+      <ul>
+        <li>Design Lead for Dirty Drinkers</li>
+      </ul>
+    </div>
+  </div>
+
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/1.webp" width="3840" height="2160" loading="eager" decoding="sync" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/2.webp" width="3840" height="2160" loading="eager" decoding="sync" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/3.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/4.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/5.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/6.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/7.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/8.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/9.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/10.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/11.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+  <img src="../../ProjectGalleries/DirtyDrinkersPics/12.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Dirty Drinkers design">
+
+
+  <!-- Footer Bar -->
+  <div class="footer-bar">
+    <a href="../wells/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> Wells</a>
+    <a href="../What-if/" class="arrow-link right-arrow">What If <span class="arrow-symbol">&#8250;</span></a>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  </section>
+
+  <!-- Transition Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.arrow-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isPrev = link.classList.contains('left-arrow');
+          const href = link.href;
+          sessionStorage.setItem('slideDir', isPrev ? 'left' : 'right');
+          document.body.classList.add(isPrev ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(function() {
+            window.location = href;
+          }, 300);
+        });
+      });
+
+      const dir = sessionStorage.getItem('slideDir');
+      if (dir) {
+        if (dir === 'left') {
+          document.body.classList.add('slide-in-from-left');
+        } else {
+          document.body.classList.add('slide-in-from-right');
+        }
+        requestAnimationFrame(() => {
+          document.body.classList.add('slide-in-active');
+          sessionStorage.removeItem('slideDir');
+        });
+      }
+    });
+  </script>
+  <script src="../../js/grid-projects.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wells</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/workPageStyles.css">
+    <style>
+      .grid {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+      }
+
+      :root {
+        --grid-rows: 54;
+      }
+    </style>
+</head>
+<body>
+
+  <section class="full-page-container">
+  <header class="header">
+    <nav class="navbar">
+      <a href="../../index.html" class="nav-s-button">Shreyanshi Satodia</a>
+      <ul class="nav-links">
+        <li><a href="../../AboutMe/" class="nav-regular-link">About Me</a></li>
+        <li><a href="../../index.html#grid-container" class="nav-regular-link">Work</a></li>
+        <li><a href="../../ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="content">
+    <!-- Left Column -->
+    <div class="left-column">
+      <h1>Wells</h1>
+      <p class="description">Curtis Wells Real Estate's brand system was designed to capture the rugged elegance of the Western lifestyle with a refined, strategic edge. Built around the promise of being straightforward, strategic, and results-driven, the identity balances grit with polish. The visual direction leans into earthy tones, minimal typography, and a logo suite that reflects confidence without being flashy. Photography plays a key role—highlighting open landscapes, natural textures, and the lifestyle that defines high-end Western living. This brand isn't just about real estate transactions; it's about creating a sense of place and belonging through a clear, purposeful visual voice.</p>
+      <!-- <a href="https://www.picklemans.com" target="_blank"><button>Visit Website</button></a> -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+      <!-- <h2>Scope:</h2>
+      <ul>
+       
+        <li class="bottom-list-item">Branding & Strategy</li>
+        <li class="bottom-list-item">Website Design</li>
+        
+      </ul>
+      <h2>Role:</h2>
+      <ul>
+        <li>Design Lead for West One</li>
+      </ul> -->
+    </div>
+  </div>
+
+  <img src="../../ProjectGalleries/Wells/1.webp" width="3840" height="2160" loading="eager" decoding="sync" alt="Wells design">
+  <img src="../../ProjectGalleries/Wells/2.webp" width="3840" height="2160" loading="eager" decoding="sync" alt="Wells design">
+  <img src="../../ProjectGalleries/Wells/3.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Wells design">
+  <img src="../../ProjectGalleries/Wells/4.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Wells design">
+  <img src="../../ProjectGalleries/Wells/5.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Wells design">
+  <img src="../../ProjectGalleries/Wells/6.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Wells design">
+  <img src="../../ProjectGalleries/Wells/7.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Wells design">
+  <img src="../../ProjectGalleries/Wells/8.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Wells design">
+  <img src="../../ProjectGalleries/Wells/9.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Wells design">
+  <img src="../../ProjectGalleries/Wells/10.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="Wells design">
+
+  <!-- Footer Bar -->
+  <div class="footer-bar">
+    <a href="../west/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> West One</a>
+    <a href="../dirty-drinkers/" class="arrow-link right-arrow">Dirty Drinkers <span class="arrow-symbol">&#8250;</span></a>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  </section>
+
+  <!-- Transition Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.arrow-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isPrev = link.classList.contains('left-arrow');
+          const href = link.href;
+          sessionStorage.setItem('slideDir', isPrev ? 'left' : 'right');
+          document.body.classList.add(isPrev ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(function() {
+            window.location = href;
+          }, 300);
+        });
+      });
+
+      const dir = sessionStorage.getItem('slideDir');
+      if (dir) {
+        if (dir === 'left') {
+          document.body.classList.add('slide-in-from-left');
+        } else {
+          document.body.classList.add('slide-in-from-right');
+        }
+        requestAnimationFrame(() => {
+          document.body.classList.add('slide-in-active');
+          sessionStorage.removeItem('slideDir');
+        });
+      }
+    });
+  </script>
+  <script src="../../js/grid-projects.js"></script>
+
+</body>
+</html>
