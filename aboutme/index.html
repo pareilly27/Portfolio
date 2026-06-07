@@ -294,17 +294,40 @@
         color: #999;
     }
 
-    .your-button{
-        background-image: url('../cursor.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-color: transparent;
-        border: none;
-        width:2vw;
-        height: 2vw;
-        cursor: pointer;
-         transform: rotate(-25deg);
-        }
+     .strip-fluff-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    background-color: #7B97C5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 400;
+}
+
+.strip-fluff-label {
+    font-size: 1.3vh;
+    transform: scaleX(1) scaleY(1.5);
+    transform-origin: left center;
+    line-height: 1;
+}
+
+.strip-fluff-cursor {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background-image: url('../css/cursor.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(-25deg);
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
 
     html, body {
       pointer-events: auto;
@@ -343,10 +366,10 @@
       <div class="left-column">
         <h2>About Me</h2>
         
-        <div class="title-row">
-            <h3>Strip the fluff</h3>
-            <button class="your-button" id="strip-fluff-button"></button>
-        </div>
+        <button class="strip-fluff-btn" id="strip-fluff-button">
+            <span class="strip-fluff-label">STRIP THE FLUFF</span>
+            <span class="strip-fluff-cursor" aria-hidden="true"></span>
+        </button>
         
         <p>I am <span class="fluff-text">Shreyanshi Satodia</span>, a Graphic Designer based in Dallas, Texas, with 7 years of experience turning bold ideas into impactful visuals through color, typography, layout, and thoughtful design. I believe design should be felt as much as it’s seen; it grabs attention, tells a story, and leaves an impression that lasts. My work blends creativity with strategy, weaving together visual language and purposeful communication across branding, editorial, packaging, and digital experiences.</p>
         <p>Driven by curiosity, I’m always looking for fresh ways to connect people and ideas through design. And when I’m not creating, I’m usually chasing inspiration and greeting every dog I pass. Let’s create work that moves people.</p>

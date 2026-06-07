@@ -75,10 +75,10 @@
 .top-right{
     width: 59%;
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: right;
+    justify-content: flex-end;
     overflow: hidden;
-    margin-left: 1vw;
+    margin-left: 0;
 }
 
 .top-left{
@@ -86,9 +86,9 @@
     width: 39%;
     display: flex;
     align-items: center;      
-    justify-content: flex-end;
+    justify-content: flex-start;
     overflow: hidden;
-    margin-right: 1vw;
+    margin-right: 0;
    
 }
 
@@ -97,19 +97,19 @@
     width: 34%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: flex-end;
     overflow: hidden;
-    margin-left: 1vw;
+    margin-left: 0;
 }
 
 .bottom-left{
     width: 64%;
     display: flex;
     align-items: center;      
-    justify-content: flex-end;
+    justify-content: flex-start;
     overflow: hidden;
     text-align: right;
-    margin-right: 1vw;
+    margin-right: 0;
 }
 
 .text-large {
