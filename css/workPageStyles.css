@@ -118,16 +118,17 @@ body {
           width: 90%;
           height: auto;
           display: block;
-          margin: 10px auto;
-          border: 1px solid #000000;
+          margin: 0 auto;
+
+        
         }
 
         video {
           width: 90%;
           height: auto;
           display: block;
-          margin: 10px auto;
-          border: 1px solid #000000;
+          margin: 0 auto;
+          
           pointer-events: auto;
         }
 

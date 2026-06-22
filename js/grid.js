@@ -81,10 +81,10 @@ function createGrid(rows, columns) {
         const col = i % columns;
         
         let shadows = [];
-        if (row !== 0) shadows.push('inset 0 0.2px 0 0 #5c5b5b');
-        if (col !== 0) shadows.push('inset 0.2px 0 0 0 #5c5b5b');
-        if (col !== columns - 1) shadows.push('inset -0.2px 0 0 0 #5c5b5b');
-        if (row !== rows - 1) shadows.push('inset 0 -0.2px 0 0 #5c5b5b');
+        if (row !== 0) shadows.push('inset 0 0.2px 0 0 #9d9d9d');
+        if (col !== 0) shadows.push('inset 0.2px 0 0 0 #9d9d9d');
+        if (col !== columns - 1) shadows.push('inset -0.2px 0 0 0 #9d9d9d');
+        if (row !== rows - 1) shadows.push('inset 0 -0.2px 0 0 #9d9d9d');
 
         cell.style.boxShadow = shadows.join(', ') || 'none';
         gridContainer.appendChild(cell);
