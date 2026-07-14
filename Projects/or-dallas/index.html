@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>OR Dallas</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../../css/workPage__NEW.css">
+  <style>
+    /* ===== Section spacing — adjust top/bottom padding here only ===== */
+    #gallery-1 { --gallery-top-spacing: 0; --gallery-bottom-spacing: 0; }
+    #gallery-1 img { border-bottom: 1px solid #000; }
+    /* Header/nav text color override for this page only */
+    .nav-s-button,
+    .nav-regular-link,
+    .nav-links a:hover,
+    .nav-regular-link:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header" style="background-color: #252F65;"></header>
+    <nav class="navbar" style="background-color: #252F65;">
+      <a href="../../index.html" class="nav-s-button">Shreyanshi Satodia</a>
+      <ul class="nav-links">
+        <li><a href="../../aboutme/" class="nav-regular-link">About Me</a></li>
+        <li><a href="../../index.html#grid-container" class="nav-regular-link">Work</a></li>
+        <li><a href="../../ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="gallery" id="gallery-1">
+    <img src="../../project_images/OR_Dallas/gallery_image_OR_Dallas_1.webp" alt="OR Dallas design">
+  </div>
+
+  <!-- Footer Bar -->
+  <div class="footer-bar">
+    <a href="../what-if/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> What If</a>
+    <a href="../hg/" class="arrow-link right-arrow">HG <span class="arrow-symbol">&#8250;</span></a>
+  </div>
+
+  <!-- Transition Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.arrow-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isPrev = link.classList.contains('left-arrow');
+          const href = link.href;
+          sessionStorage.setItem('slideDir', isPrev ? 'left' : 'right');
+          document.body.classList.add(isPrev ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(function() {
+            window.location = href;
+          }, 300);
+        });
+      });
+
+      const dir = sessionStorage.getItem('slideDir');
+      if (dir) {
+        if (dir === 'left') {
+          document.body.classList.add('slide-in-from-left');
+        } else {
+          document.body.classList.add('slide-in-from-right');
+        }
+        requestAnimationFrame(() => {
+          document.body.classList.add('slide-in-active');
+          sessionStorage.removeItem('slideDir');
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
