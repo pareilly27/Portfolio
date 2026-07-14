@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>NCCIL</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../../css/workPage__NEW.css">
+  <style>
+    /* ===== Section spacing — adjust top/bottom padding here only ===== */
+    #gallery-1 { --gallery-top-spacing: 5rem; --gallery-bottom-spacing: 0rem; }
+    #scroll-section-1 { --scroll-section-top-spacing: 10rem; --scroll-section-bottom-spacing: 5rem; }
+    #gallery-2 { --gallery-top-spacing: 0rem; --gallery-bottom-spacing: 0rem; }
+    #laptop-frame-1 { --laptop-frame-top-spacing: 0; --laptop-frame-bottom-spacing: 5rem; }
+    #gallery-3 { --gallery-top-spacing: 0rem; --gallery-bottom-spacing: 5rem; border-bottom: 1px solid #000; }
+  </style>
+</head>
+<body>
+
+  <header class="header header--overlay">
+    <nav class="navbar">
+      <a href="../../index.html" class="nav-s-button">Shreyanshi Satodia</a>
+      <ul class="nav-links">
+        <li><a href="../../aboutme/" class="nav-regular-link">About Me</a></li>
+        <li><a href="../../index.html#grid-container" class="nav-regular-link">Work</a></li>
+        <li><a href="../../ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="header-image">
+    <img src="../../project_images/NCCIL/header_image_nccil.png" alt="NCCIL header">
+  </div>
+
+  <div class="gallery" id="gallery-1">
+    <img src="../../project_images/NCCIL/gallery_image_nccil_1.png" alt="NCCIL design">
+  </div>
+
+  <div class="scroll-section" id="scroll-section-1">
+    <div class="scroll-section__viewport">
+      <div class="scroll-section__track">
+        <img src="../../project_images/NCCIL/scroll_images/scroll_image_nccil_1.png" alt="NCCIL website preview 1">
+        <img src="../../project_images/NCCIL/scroll_images/scroll_image_nccil_2.png" alt="NCCIL website preview 2">
+        <img src="../../project_images/NCCIL/scroll_images/scroll_image_nccil_3.png" alt="NCCIL website preview 3">
+        <img src="../../project_images/NCCIL/scroll_images/scroll_image_nccil_4.png" alt="NCCIL website preview 4">
+        <img src="../../project_images/NCCIL/scroll_images/scroll_image_nccil_5.png" alt="NCCIL website preview 5">
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery-2">
+    <img src="../../project_images/NCCIL/gallery_image_nccil_2.webp" alt="NCCIL design">
+  </div>
+
+  <div class="laptop-frame" id="laptop-frame-1">
+    <img class="laptop-frame__base" src="../../project_images/laptop_frame.png" alt="">
+    <div class="laptop-frame__screen">
+      <img src="../../project_images/NCCIL/laptop_frames/laptop_frame_nccil_1.png" alt="NCCIL website preview 1">
+      <img src="../../project_images/NCCIL/laptop_frames/laptop_frame_nccil_2.png" alt="NCCIL website preview 2">
+      <img src="../../project_images/NCCIL/laptop_frames/laptop_frame_nccil_3.png" alt="NCCIL website preview 3">
+      <img src="../../project_images/NCCIL/laptop_frames/laptop_frame_nccil_4.png" alt="NCCIL website preview 4">
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery-3">
+    <img src="../../project_images/NCCIL/gallery_image_nccil_3.png" alt="NCCIL design">
+  </div>
+
+  <script src="../../js/scroll-section.js"></script>
+  <script src="../../js/laptop-frame.js"></script>
+
+  <!-- Footer Bar -->
+  <div class="footer-bar">
+    <a href="../picklemans/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> Pickleman's</a>
+    <a href="../general-waters/" class="arrow-link right-arrow">General Waters <span class="arrow-symbol">&#8250;</span></a>
+  </div>
+
+  <!-- Transition Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.arrow-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isPrev = link.classList.contains('left-arrow');
+          const href = link.href;
+          sessionStorage.setItem('slideDir', isPrev ? 'left' : 'right');
+          document.body.classList.add(isPrev ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(function() {
+            window.location = href;
+          }, 300);
+        });
+      });
+
+      const dir = sessionStorage.getItem('slideDir');
+      if (dir) {
+        if (dir === 'left') {
+          document.body.classList.add('slide-in-from-left');
+        } else {
+          document.body.classList.add('slide-in-from-right');
+        }
+        requestAnimationFrame(() => {
+          document.body.classList.add('slide-in-active');
+          sessionStorage.removeItem('slideDir');
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
