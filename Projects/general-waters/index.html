@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>General Waters</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../../css/workPage__NEW.css">
+  <style>
+    /* ===== Section spacing — adjust top/bottom padding here only ===== */
+    #gallery-1 { --gallery-top-spacing: 5rem; --gallery-bottom-spacing: 0; }
+    #scroll-section-1 { --scroll-section-top-spacing: 10rem; --scroll-section-bottom-spacing: 10rem; }
+    #gallery-2 { --gallery-top-spacing: 0rem; --gallery-bottom-spacing: 0; }
+    #laptop-frame-1 { --laptop-frame-top-spacing: 0; --laptop-frame-bottom-spacing: 0; }
+    #gallery-3 { --gallery-top-spacing: 0; --gallery-bottom-spacing: 0; }
+  </style>
+</head>
+<body>
+
+  <header class="header header--overlay">
+    <nav class="navbar">
+      <a href="../../index.html" class="nav-s-button">Shreyanshi Satodia</a>
+      <ul class="nav-links">
+        <li><a href="../../aboutme/" class="nav-regular-link">About Me</a></li>
+        <li><a href="../../index.html#grid-container" class="nav-regular-link">Work</a></li>
+        <li><a href="../../ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="header-image">
+    <img src="../../project_images/GeneralWaters/header_image_general_waters.png" alt="General Waters header">
+  </div>
+
+  <div class="gallery" id="gallery-1">
+    <img src="../../project_images/GeneralWaters/gallery_image_general_waters_1.webp" alt="General Waters design">
+  </div>
+
+  <div class="scroll-section" id="scroll-section-1">
+    <div class="scroll-section__viewport">
+      <div class="scroll-section__track">
+        <img src="../../project_images/GeneralWaters/scroll_images/scroll_image_general_waters_1.png" alt="General Waters website preview 1">
+        <img src="../../project_images/GeneralWaters/scroll_images/scroll_image_general_waters_2.png" alt="General Waters website preview 2">
+        <img src="../../project_images/GeneralWaters/scroll_images/scroll_image_general_waters_3.png" alt="General Waters website preview 3">
+        <img src="../../project_images/GeneralWaters/scroll_images/scroll_image_general_waters_4.png" alt="General Waters website preview 4">
+        <img src="../../project_images/GeneralWaters/scroll_images/scroll_image_general_waters_5.png" alt="General Waters website preview 5">
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery-2">
+    <img src="../../project_images/GeneralWaters/gallery_image_general_waters_2.webp" alt="General Waters design">
+  </div>
+
+  <div class="laptop-frame" id="laptop-frame-1">
+    <img class="laptop-frame__base" src="../../project_images/laptop_frame.png" alt="">
+    <div class="laptop-frame__screen">
+      <img src="../../project_images/GeneralWaters/laptop_frames/laptop_frame_general_water_1.png" alt="General Waters website preview 1">
+      <img src="../../project_images/GeneralWaters/laptop_frames/laptop_frame_general_water_2.png" alt="General Waters website preview 2">
+      <img src="../../project_images/GeneralWaters/laptop_frames/laptop_frame_general_water_3.png" alt="General Waters website preview 3">
+      <img src="../../project_images/GeneralWaters/laptop_frames/laptop_frame_general_water_4.png" alt="General Waters website preview 4">
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery-3">
+    <img src="../../project_images/GeneralWaters/gallery_image_general_waters_3.webp" alt="General Waters design">
+  </div>
+
+  <script src="../../js/scroll-section.js"></script>
+  <script src="../../js/laptop-frame.js"></script>
+
+  <!-- Footer Bar -->
+  <div class="footer-bar">
+    <a href="../nccil/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> NCCIL</a>
+    <a href="../what-if/" class="arrow-link right-arrow">What If <span class="arrow-symbol">&#8250;</span></a>
+  </div>
+
+  <!-- Transition Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.arrow-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isPrev = link.classList.contains('left-arrow');
+          const href = link.href;
+          sessionStorage.setItem('slideDir', isPrev ? 'left' : 'right');
+          document.body.classList.add(isPrev ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(function() {
+            window.location = href;
+          }, 300);
+        });
+      });
+
+      const dir = sessionStorage.getItem('slideDir');
+      if (dir) {
+        if (dir === 'left') {
+          document.body.classList.add('slide-in-from-left');
+        } else {
+          document.body.classList.add('slide-in-from-right');
+        }
+        requestAnimationFrame(() => {
+          document.body.classList.add('slide-in-active');
+          sessionStorage.removeItem('slideDir');
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
