@@ -461,6 +461,25 @@
     pointer-events: auto;
 }
 
+/* Sits above the whole grid as an invisible glass pane. While the page is
+   scrolling, JS (js/grid-hover-fix.js) flips this to pointer-events: auto,
+   so the mouse is effectively hovering the pane instead of whatever square
+   happens to be underneath it -- that square's native :hover (and its
+   overlay) clears immediately, no manual class bookkeeping on 14 squares
+   needed. Once scrolling settles, it goes back to pointer-events: none and
+   plain :hover takes over again on the next real mouse move. */
+.grid-scroll-blocker {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: transparent;
+    pointer-events: none;
+}
+
+.grid-scroll-blocker.is-blocking {
+    pointer-events: auto;
+}
+
 .full-page-container {
    
     pointer-events: none;
@@ -474,7 +493,7 @@
     background-position: center;
     position: relative;
     overflow: hidden;
-    
+    border-radius: 6px;
 }
 
 .square .overlay {

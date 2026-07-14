@@ -457,7 +457,12 @@
     transition: opacity 0.3s ease;
 }
 
-.square:hover .overlay {
+/* .is-active is JS-driven (js/grid-hover-fix.js) instead of :hover directly,
+   so the overlay gets recalculated on scroll too — plain :hover only updates
+   on mouse movement, so scrolling a new tile under a stationary cursor would
+   never reveal it, and scrolling the old hovered tile away would leave its
+   overlay stuck on screen. */
+.square.is-active .overlay {
     opacity: 1;
 }
 

@@ -1,0 +1,462 @@
+/* ===== Work Page ===== */
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500&display=swap');
+
+@font-face {
+  font-family: 'avenir-book';
+  src: url('../fonts/avenir-book.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'avenir-book', sans-serif;
+  margin: 0;
+  background-color: #ffffff;
+  overflow-x: hidden;
+  position: relative;
+  transition: transform 0.3s ease-out;
+  transform: translateX(0);
+}
+
+/* Slide transition classes, used by the footer prev/next nav script */
+body.slide-out-left {
+  transform: translateX(-100%);
+}
+
+body.slide-out-right {
+  transform: translateX(100%);
+}
+
+body.slide-in-from-left {
+  transform: translateX(-100%);
+}
+
+body.slide-in-from-right {
+  transform: translateX(100%);
+}
+
+body.slide-in-active {
+  transform: translateX(0);
+}
+
+/* ===== Header — same as existing pages ===== */
+
+.header {
+  font-family: 'Raleway', sans-serif;
+  position: relative;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding: 0.1rem 0.1vw;
+  background-color: transparent;
+  pointer-events: auto;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2vw;
+  padding-left: 1.5%;
+  color: #fcfdf5;
+  box-sizing: border-box;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  width: 95%;
+  margin: 0;
+  justify-content: flex-end;
+  margin-left: -10px;
+  text-decoration: none;
+  color: #000;
+  font-size: clamp(14px, 1.2vw, 18px);
+  transition: color 0.3s ease;
+  padding: 0 15px;
+}
+
+.nav-links li {
+  padding: 0 15px;
+}
+
+.nav-links a:hover {
+  color: #000;
+}
+
+.nav-s-button {
+  display: flex;
+  justify-content: flex-end;
+  text-decoration: none;
+  color: #000;
+  font-size: clamp(14px, 1.2vw, 18px);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.nav-regular-link {
+  text-decoration: none;
+  color: #000000;
+  font-size: clamp(14px, 1.2vw, 18px);
+  transition: color 0.3s ease;
+  padding-top: 0.2rem;
+}
+
+.nav-regular-link:hover {
+  color: #000;
+}
+
+/* ===== Laptop Frame — reusable device mockup, pin any image into the screen =====
+   Markup:
+   <div class="laptop-frame">
+     <img class="laptop-frame__base" src="../../project_images/laptop_frame.png" alt="">
+     <div class="laptop-frame__screen">
+       <img src="path/to/your-image.jpg" alt="...">
+     </div>
+   </div>
+
+   The screen position/size is set as percentages of the laptop_frame.png
+   artwork (re-measured after the source photo was cropped down to its
+   current canvas: the true white screen area sits at 27.4%–72.7% of the
+   width and 10.1%–82.3% of the height — re-measure these any time
+   laptop_frame.png's canvas changes, since a crop shifts these fractions
+   even if the screen itself didn't move). The screen box below is
+   deliberately a little larger than that on every side — the pinned
+   image is allowed to bleed slightly past the true screen edge. That's safe because laptop_frame.png's screen area is genuinely
+   transparent (a real cutout, not painted white), and the base image is
+   stacked ON TOP of the screen layer (z-index below), so the opaque
+   bezel crops the bleed off cleanly. Without this, any tiny mismatch
+   between an image's crop and the exact screen edge shows up as a
+   sliver of page-white behind the frame; bleeding the image under the
+   bezel hides that instead of exposing it.
+
+   Because the base image sets the container's height (width: 100%,
+   height: auto) and the screen box is positioned in percentages, this
+   scales correctly at any size — drop it in at any width and the pinned
+   image stays locked inside the white area. Swap the inner <img>(s) to
+   reuse this anywhere. */
+
+.laptop-frame {
+  position: relative;
+  width: 100%;
+  margin-top: var(--laptop-frame-top-spacing, 0);
+  margin-bottom: var(--laptop-frame-bottom-spacing, 0);
+}
+
+.laptop-frame__base {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.laptop-frame__screen {
+  position: absolute;
+  top: 9.7%;
+  left: 27.0%;
+  width: 46.0%;
+  height: 73.0%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Drop any number of <img> tags inside .laptop-frame__screen and
+   js/laptop-frame.js will crossfade through them automatically, one
+   at a time. Only .is-active is visible; the rest are stacked and
+   faded out, so they all share the same spot in the screen. */
+.laptop-frame__screen img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.laptop-frame__screen img.is-active {
+  opacity: 1;
+}
+
+/* ===== TV Frame — same idea as .laptop-frame, but for a single pinned video =====
+   Markup:
+   <div class="tv-frame">
+     <img class="tv-frame__base" src="../../project_images/Culpepper/tv_frame_cutout.png" alt="">
+     <div class="tv-frame__screen">
+       <video src="../../project_images/Culpepper/tv_frame_content.mp4" autoplay muted loop playsinline></video>
+     </div>
+   </div>
+
+   Unlike laptop_frame.png, the source tv_frame.png has no real alpha
+   cutout for its screen (it's a flat photo with an opaque placeholder
+   graphic baked in) — tv_frame_cutout.png is a derived copy with the
+   screen area's alpha punched out to 0, built specifically so this
+   works the same way .laptop-frame does: the base image stacks on top
+   (z-index above the screen), and the screen box is sized slightly
+   larger than the true screen edges (measured at 23.85%-76.85% of the
+   width, 20.9%-79.25% of the height) so any minor crop mismatch bleeds
+   under the opaque bezel instead of showing as a gap. If you reuse this
+   pattern with a different frame photo, punch out its screen the same
+   way before relying on this bleed trick — it silently fails (shows the
+   base's own screen artwork on top of your content) on a frame image
+   that's still fully opaque. */
+
+.tv-frame {
+  position: relative;
+  width: 100%;
+  margin-top: var(--tv-frame-top-spacing, 5rem);
+  margin-bottom: var(--tv-frame-bottom-spacing, 0);
+}
+
+.tv-frame__base {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.tv-frame__screen {
+  position: absolute;
+  top: 20.9%;
+  left: 23.85%;
+  width: 53.0%;
+  height: 58.35%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.tv-frame__screen video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== Header Image — full-bleed hero image, header overlays on top ===== */
+
+/* Padding, not margin, on purpose: .header--overlay is position:absolute
+   with top:0, anchored to body (body is position:relative, for the
+   slide transition). A top MARGIN here would collapse through — since
+   .header-image is effectively body's first in-flow child (.header is
+   position:absolute, out of flow) — and shift body itself down, which
+   drags the "pinned to the top" nav down with it. Padding never
+   collapses, so it opens space above/below the image without moving
+   body, and the header nav stays exactly at the true top of the page. */
+.header-image {
+  position: relative;
+  width: 100%;
+  padding-top: var(--header-image-top-spacing, 0);
+  padding-bottom: var(--header-image-bottom-spacing, 0);
+  box-sizing: border-box;
+}
+
+/* Width drives sizing, height follows the image's own aspect ratio
+   (no object-fit, no forced height, no min-height) — so the image is
+   never stretched or cropped, and the container never holds open extra
+   blank space below it either. It's simply exactly as tall as the
+   image renders at 100% width, full stop. */
+.header-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Add the header--overlay modifier to .header on pages that have a
+   .header-image section, so the nav floats on top of the image instead
+   of pushing it down the page. */
+.header.header--overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* ===== Gallery — straight in under header, full page width, flush ===== */
+
+/* Space above the first image (below header) and below the last image.
+   Change these two values to add/remove space; set to 0 for fully flush.
+   No spacing is added between images. */
+:root {
+  --gallery-top-spacing: 10rem;
+  --gallery-bottom-spacing: 10rem;
+}
+
+.gallery {
+  padding-top: var(--gallery-top-spacing);
+  padding-bottom: var(--gallery-bottom-spacing);
+}
+
+.gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+/* ===== Scroll Section — reusable horizontal-scroll row of images =====
+   Markup:
+   <div class="scroll-section">
+     <div class="scroll-section__viewport">
+       <div class="scroll-section__track">
+         <img src="1.jpg" alt="...">
+         <img src="2.jpg" alt="...">
+         <img src="3.jpg" alt="...">
+         <img src="4.jpg" alt="...">
+         <img src="5.jpg" alt="...">
+       </div>
+     </div>
+   </div>
+
+   With N images and a gap g (--scroll-gap) between them, each image is
+   sized so the whole track (images + gaps together) works out to
+   N/(N-1) of the page width — that's what makes the first and last
+   images sit exactly half off-screen once js/scroll-section.js centers
+   the scroll position on load. The gap is subtracted out of each
+   image's width (not added on top), so cranking --scroll-gap up makes
+   the images correspondingly smaller rather than pushing the bookend
+   images further off-screen. The default is 5 images at a 1.5rem gap;
+   override --scroll-count on .scroll-section for a different count
+   (e.g. style="--scroll-count: 4;"), and --scroll-gap for tighter or
+   looser spacing. Scrolling is native horizontal overflow, so the
+   browser naturally stops the moment the first or last image's outer
+   edge reaches the frame — no extra bounds logic needed. White space
+   above/below comes from the same
+   --gallery-top-spacing/--gallery-bottom-spacing variables used
+   elsewhere; override --scroll-section-top-spacing /
+   --scroll-section-bottom-spacing on the element to set them
+   independently. */
+
+.scroll-section {
+  --scroll-count: 5;
+  --scroll-gap: 5rem;
+  width: 100%;
+  padding-top: var(--scroll-section-top-spacing, var(--gallery-top-spacing, 4rem));
+  padding-bottom: var(--scroll-section-bottom-spacing, var(--gallery-bottom-spacing, 4rem));
+  box-sizing: border-box;
+}
+
+.scroll-section__viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.scroll-section__viewport::-webkit-scrollbar {
+  display: none;
+  height: 0;
+}
+
+.scroll-section__track {
+  display: flex;
+  width: max-content;
+  gap: var(--scroll-gap);
+}
+
+.scroll-section__track img {
+  flex: none;
+  width: calc(
+    (100vw / (var(--scroll-count) - 1)) -
+    ((var(--scroll-count) - 1) * var(--scroll-gap) / var(--scroll-count))
+  );
+  display: block;
+  height: auto;
+  object-fit: cover;
+  margin: 0;
+}
+
+/* ===== Footer Bar — prev/next project nav, ported from the original
+   work pages (workPageStyles.css) so it also works on this template ===== */
+
+.footer-bar {
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  margin-top: 20px;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.arrow-link {
+  text-decoration: none;
+  color: #000000;
+  font-weight: normal;
+  transition: color 0.3s ease;
+}
+
+.arrow-link:hover {
+  color: #000;
+}
+
+.left-arrow {
+  margin-left: 2%;
+}
+
+.right-arrow {
+  margin-right: 4%;
+}
+
+.arrow-symbol {
+  font-size: 2rem;
+  vertical-align: -.15rem;
+}
+
+/* Mobile: same navbar stacking as existing pages */
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 4%;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-links li {
+    padding: 0 8px;
+  }
+
+  .nav-s-button {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-bar {
+    padding: 15px 5%;
+    margin-top: 30px;
+  }
+
+  .arrow-link {
+    font-size: 14px;
+  }
+
+  .arrow-symbol {
+    font-size: 1.5rem;
+  }
+
+  .left-arrow {
+    margin-left: 0;
+  }
+
+  .right-arrow {
+    margin-right: 0;
+  }
+}
