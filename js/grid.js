@@ -96,12 +96,16 @@ function createGrid(rows, columns, imageSet = 'linear') {
         cell.className = 'cell';
         const row = Math.floor(i / columns);
         const col = i % columns;
-        // Experimental keeps the complete 12-image set in every row, but
-        // rotates it one column per row so a project never stays in the same
-        // vertical position throughout the grid.
-        const imageIndex = imageSet === 'experimental'
-            ? (col + row) % sources.length
-            : i % sources.length;
+        // Straight sequential walk through the list: guarantees every
+        // project appears before any repeat, for any grid size. Also
+        // avoids vertical repetition here because the column count (5)
+        // and project count (12) are coprime, so each column steps
+        // through all 12 before coming back around.
+        //
+        // (Earlier offset schemes -- (col+row)%n, then (i+row)%n --
+        // both created a stride sharing a factor with 12 and silently
+        // dropped projects: 8 of 12 shown at 5x4, then 10 of 12.)
+        const imageIndex = i % sources.length;
         const source = sources[imageIndex];
         cell.style.setProperty('--bg-image', `url('${source}')`);
         

@@ -260,6 +260,23 @@ body.is-experimental .container {
     
 }
 
+/* Experimental: cells must match the artwork's 7:5 ratio so images
+   aren't cropped by `background-size: cover`. Row height is derived
+   from column width (100vw / columns * 5/7) rather than splitting the
+   viewport height evenly. Enough rows are generated (in js/toggle.js)
+   to cover the full viewport height -- the last one runs off the
+   bottom edge and is clipped, so the grid still reaches every pixel
+   of the screen and the reveal works everywhere. */
+body.is-experimental .grid.active-view {
+    height: 100%;
+    overflow: hidden;
+    grid-template-rows: repeat(
+        var(--grid-rows),
+        calc(100vw / var(--grid-columns) * 5 / 7)
+    );
+    align-content: start;
+}
+
 .cell {
     
     box-shadow: inset 0 0 0 0.5px #5c5b5b;
@@ -358,7 +375,9 @@ body.is-experimental .grid-focus-tile.is-visible {
     --crosshair-y: -100px;
     position: fixed;
     inset: 0;
-    z-index: 110;
+    /* Below .grid-focus-tile (105) so the lines pass BEHIND the image
+       rather than drawing across it, but still above the grid cells. */
+    z-index: 104;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.12s ease;
@@ -370,20 +389,31 @@ body.is-experimental .grid-focus-tile.is-visible {
     position: absolute;
 }
 
+/* repeating-linear-gradient rather than `border: dotted`: the browser's
+   dotted pattern is fixed and tight, this lets the dot/gap rhythm be
+   tuned -- 2px dot, 6px gap. */
 .grid-crosshair::before {
     top: var(--crosshair-y);
     left: 0;
     width: 100%;
-    height: 0;
-    border-top: 1px dotted rgba(0, 0, 0, 0.88);
+    height: 1px;
+    background-image: repeating-linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.88) 0 2px,
+        transparent 2px 8px
+    );
 }
 
 .grid-crosshair::after {
     top: 0;
     left: var(--crosshair-x);
-    width: 0;
+    width: 1px;
     height: 100%;
-    border-left: 1px dotted rgba(0, 0, 0, 0.88);
+    background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.88) 0 2px,
+        transparent 2px 8px
+    );
 }
 
 body.is-experimental .grid-crosshair.is-visible {

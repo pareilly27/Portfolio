@@ -55,11 +55,85 @@ document.addEventListener('DOMContentLoaded', function () {
   const MOTION_WOBBLE_BOOST = -0.5;// negative = boundary SMOOTHS OUT at speed (lumps fade while moving)
   const MOTION_SCATTER_BOOST = 0.8;// extra stray scatter distance at full cursor speed
 
+  // --- Memory (trail) buffer -----------------------------------------
+  // The displacement maths below is stateless: it only knows where the
+  // cursor IS. These drive a persistent off-screen texture recording
+  // where the cursor HAS BEEN and how long ago -- 1.0 directly under
+  // the cursor, fading toward 0 over TRAIL_HALFLIFE. The main pass
+  // reads it, so disturbance lingers and recovers instead of being
+  // rigidly tied to the current cursor position.
+  const TRAIL_SCALE = 0.5;    // buffer resolution vs canvas (0.5 = half, cheaper + smoother)
+  const TRAIL_HALFLIFE = 0.55; // seconds for a disturbed spot to fade halfway back
+  const TRAIL_BRUSH = 0.85;   // stamp radius as a fraction of the reveal radius
+  const TRAIL_BREAKUP = 1.1;  // 0 = trail fades as one uniform sheet; higher = the
+                              // tail dissolves into patches/grains as it ages
+  const TRAIL_TAIL_BIAS = 1.6;// >1 makes the FAINT end of the trail thin out much
+                              // faster than the fresh end (distillation)
+
+  // --- Grid lines as a barrier ---------------------------------------
+  // The cell borders act as a slight obstruction: crossing one leaves
+  // pixels banked up on the side the cursor came FROM, and thinned on
+  // the side it went TO, as if the line caught some of them. Fades with
+  // the same memory the rest of the effect uses.
+  const LINE_STICK = 0.26;    // pile-up strength BEHIND the line (shift applied to t, 0..1)
+  const LINE_REACH = 0.22;    // how far from the line the pile-up reaches, as a fraction of cell size
+  const LINE_SHADOW = 0.22;   // forward thinning, as a fraction of the pile-up -- deliberately
+                              // much weaker: ahead of the line is only SLIGHTLY less pixelated
+  const LINE_SPREAD = 0.75;   // how far the pile-up washes ALONG the line (fraction of cell size),
+                              // like water hitting a wall and running sideways
+  const LINE_SPREAD_TAPS = 4; // samples per side for that lateral wash
+
   // ---- Shaders ---------------------------------------------------------
   const VERTEX_SRC = [
     'attribute vec2 aPosition;',
     'void main() {',
     '  gl_Position = vec4(aPosition, 0.0, 1.0);',
+    '}',
+  ].join('\n');
+
+  // Fragment shader for the memory buffer: decay what's already there,
+  // then stamp the cursor's current footprint on top. Runs into a
+  // framebuffer, ping-ponged between two textures each frame.
+  const TRAIL_FRAG_SRC = [
+    'precision mediump float;',
+    'uniform sampler2D uPrev;',
+    'uniform vec2 uSize;',      // trail buffer size, px
+    'uniform vec2 uCursorFB;',  // cursor in trail-buffer pixel coords
+    'uniform float uBrush;',    // stamp radius, trail px
+    'uniform float uDecay;',    // per-frame multiplier (time-corrected)
+    'uniform float uActive;',   // 0 while the cursor is away -> decay only
+    'uniform float uBreakup;',  // spatial variation in decay rate
+    'uniform float uTailBias;', // extra decay once a spot is already faint
+    '',
+    'float hash(vec2 p) {',
+    '  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);',
+    '}',
+    '',
+    'void main() {',
+    '  float prev = texture2D(uPrev, gl_FragCoord.xy / uSize).r;',
+    '',
+    '  // Per-texel decay rate. A single uniform decay makes the whole',
+    '  // trail dim as one solid sheet; varying the exponent per texel',
+    '  // means neighbouring spots fade at different speeds, so the',
+    '  // trail breaks into patches and grains instead.',
+    '  float h = hash(floor(gl_FragCoord.xy));',
+    '  float rate = mix(1.0 - uBreakup * 0.5, 1.0 + uBreakup * 0.5, h);',
+    '',
+    '  // Bias toward the tail: the fainter a spot already is, the',
+    '  // faster it gives up what is left. This concentrates the trail',
+    '  // near the cursor and lets the far end distil away rather than',
+    '  // trailing off in an even ramp.',
+    '  rate *= mix(uTailBias, 1.0, clamp(prev, 0.0, 1.0));',
+    '',
+    '  prev = pow(uDecay, max(rate, 0.05)) * prev;',
+    '  float stamp = 0.0;',
+    '  if (uActive > 0.5 && uBrush > 0.5) {',
+    '    float d = length(gl_FragCoord.xy - uCursorFB);',
+    '    stamp = 1.0 - smoothstep(uBrush * 0.35, uBrush, d);',
+    '  }',
+    '  // max(), not add: a spot is "fully disturbed" at most once, so',
+    '  // holding still cannot drive it past 1 and blow out.',
+    '  gl_FragColor = vec4(max(prev, stamp), 0.0, 0.0, 1.0);',
     '}',
   ].join('\n');
 
@@ -87,6 +161,13 @@ document.addEventListener('DOMContentLoaded', function () {
     'uniform float uBlock;',
     'uniform float uTime;',
     'uniform sampler2D uMosaic;',
+    '#define SPREAD_TAPS ' + LINE_SPREAD_TAPS,
+    'uniform sampler2D uTrailTex;',
+    'uniform vec2 uCellPx;',    // grid cell size in device px (line spacing)
+    'uniform float uLineStick;',
+    'uniform float uLineReach;',
+    'uniform float uLineShadow;',
+    'uniform float uLineSpread;',
     '',
     'float hash(vec2 p) {',
     '  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);',
@@ -166,9 +247,16 @@ document.addEventListener('DOMContentLoaded', function () {
     '  float shapeTime = uTime * uShapeDrift;',
     '  float outerR = boundaryR(fragTheta, uRadius, uOuterShapeAmp, 0.0, shapeTime, windDir, windStrength);',
     '',
-    '  if (uRadius < 1.0 || dist > outerR * (1.0 + uOutlierReach)) {',
-    '    discard;',
-    '  }',
+    '  // How disturbed is this spot, per the memory buffer? 1 = the',
+    '  // cursor is here now, falling toward 0 as it recovers.',
+    '  float mem = texture2D(uTrailTex, gl_FragCoord.xy / uResolution).r;',
+    '',
+    '  // Cull only where the cursor is neither here NOR recently was.',
+    '  if (uRadius < 1.0) discard;',
+    '  // Perf cull only: below this, memory is too faint to render',
+    '  // anything anyway. Distance alone must NOT cull, or trails get',
+    '  // clipped to a disc around the cursor again.',
+    '  if (dist > outerR * (1.0 + uOutlierReach) && mem < 0.015) discard;',
     '',
     '  // Quantize to a block grid: density and scatter are decided per',
     '  // block, so the fringe reads as discrete square particles of',
@@ -184,29 +272,96 @@ document.addEventListener('DOMContentLoaded', function () {
     '  // 0 inside the (wobbled) core -> 1 at the (wobbled) rim.',
     '  float t = clamp((blockDist - coreR) / max(blockOuterR - coreR, 1.0), 0.0, 1.0);',
     '',
+    '  // Fold in memory. `live` is this frame\'s blob (1 at the core),',
+    '  // `mem` is the lingering record of past passes. Taking the max',
+    '  // means a spot the cursor has just left stays partially',
+    '  // disturbed and recovers over time, rather than snapping back',
+    '  // the instant the cursor moves off it -- so t is now driven by',
+    '  // BOTH distance and recency, and every downstream effect',
+    '  // (density, scatter, drift) inherits that for free.',
+    '  float live = 1.0 - t;',
+    '  float influence = max(live, mem);',
+    '  t = 1.0 - influence;',
+    '',
+    '  // --- Grid lines as a barrier --------------------------------',
+    '  // Applied to t (position along the density gradient), NOT to',
+    '  // density itself: near the cursor density is already saturated',
+    '  // at 1.0, so scaling it there is a no-op and the effect was',
+    '  // mathematically invisible. Shifting t moves the block along',
+    '  // the falloff, which reads everywhere the gradient is live.',
+    '  //',
+    '  // Cell borders sit at every multiple of uCellPx. Find the',
+    '  // nearest one, then decide whether this block is on the side',
+    '  // the cursor came FROM (banks up, t decreases -> denser) or the',
+    '  // side it went TO (thins, t increases -> sparser).',
+    '  if (uLineStick > 0.001 && uCellPx.x > 1.0 && uCellPx.y > 1.0) {',
+    '    vec2 lineDelta = blockCoord - (floor(blockCoord / uCellPx + 0.5) * uCellPx);',
+    '    vec2 reachPx = uCellPx * uLineReach;',
+    '    vec2 nearLine = 1.0 - smoothstep(vec2(0.0), reachPx, abs(lineDelta));',
+    '',
+    '    vec2 approach = -sign(windDir);',
+    '    vec2 blockSide = sign(lineDelta);',
+    '    vec2 agree = blockSide * approach;   // +1 same side, -1 far side',
+    '    // Strongly asymmetric: material banks up behind the line at',
+    '    // full strength, but only a little is missing in front of it.',
+    '    vec2 signedGain = mix(vec2(-uLineShadow), vec2(1.0), step(0.0, agree));',
+    '',
+    '    // Lateral wash. Sampling memory only at THIS point confines the',
+    '    // pile-up to wherever the cursor itself went. Taking the max of',
+    '    // memory sampled ALONG the line lets the banked-up material',
+    '    // run sideways past the cursor\'s own footprint -- water',
+    '    // hitting a wall and spreading along it. Vertical lines wash',
+    '    // vertically (offset in y), horizontal lines wash in x.',
+    '    float spreadPx = max(uCellPx.x, uCellPx.y) * uLineSpread;',
+    '    float memV = mem;',
+    '    float memH = mem;',
+    '    for (int s = 1; s <= SPREAD_TAPS; s++) {',
+    '      float f = float(s) / float(SPREAD_TAPS);',
+    '      float o = f * spreadPx;',
+    '      float w = 1.0 - f;   // taper: the far edge of the wash is weakest',
+    '      memV = max(memV, texture2D(uTrailTex, (fragPos + vec2(0.0,  o)) / uResolution).r * w);',
+    '      memV = max(memV, texture2D(uTrailTex, (fragPos + vec2(0.0, -o)) / uResolution).r * w);',
+    '      memH = max(memH, texture2D(uTrailTex, (fragPos + vec2( o, 0.0)) / uResolution).r * w);',
+    '      memH = max(memH, texture2D(uTrailTex, (fragPos + vec2(-o, 0.0)) / uResolution).r * w);',
+    '    }',
+    '',
+    '    // x-component = vertical lines (crossed by horizontal motion),',
+    '    // and those wash vertically -> memV. y-component mirrors it.',
+    '    vec2 crossing = abs(windDir) * windStrength * vec2(memV, memH);',
+    '    float gain = dot(nearLine * signedGain * crossing, vec2(1.0));',
+    '    t = clamp(t - uLineStick * gain, 0.0, 1.0);',
+    '  }',
+    '',
     '  // Density: 1.0 in the core (all blocks drawn -> solid clear',
     '  // image), falling to 0.0 at the rim. A block survives if its',
     '  // static hash clears the local density -- fewer and fewer do as',
     '  // t rises, giving the dense-center/sparse-edge cloud.',
+    '  // Density comes from `t`, which already folds in memory -- so a',
+    '  // spot the cursor has left keeps a density of its own and thins',
+    '  // out as that memory fades, at ANY distance.',
+    '  //',
+    '  // This used to be an if/else on blockDist: past the live rim a',
+    '  // pixel could only be a straggler, and straggler odds reach 0 at',
+    '  // blockOuterR * (1 + reach). That hard-clipped every trail pixel',
+    '  // to a disc around the CURRENT cursor, which is why the trail',
+    '  // looked uniform and cut off instead of distilling away.',
+    '  float density = pow(1.0 - t, uFalloffPower);',
+    '',
+    '  // Stragglers are now an ADDITIONAL floor near the live rim, not',
+    '  // a replacement for the memory-driven density.',
     '  if (blockDist > blockOuterR) {',
-    '    // Stragglers: a very small fraction of pixels flung past the',
-    '    // edge, thinning to nothing across the reach band. The main',
-    '    // density gradient is untouched -- the shape and its falloff',
-    '    // stay exactly as they are; these are just loose ejecta.',
     '    float excess = (blockDist - blockOuterR) / max(blockOuterR * uOutlierReach, 1.0);',
-    '    float odds = uOutlierDensity * (1.0 - clamp(excess, 0.0, 1.0));',
-    '    if (hash(blockCoord * 0.53) > odds) {',
-    '      discard;',
-    '    }',
+    '    density = max(density, uOutlierDensity * (1.0 - clamp(excess, 0.0, 1.0)));',
     '  } else {',
-    '    // Floor the inner density at the straggler density so the',
-    '    // profile is continuous across the rim: without this, density',
-    '    // dips to ~0 just inside the edge while stragglers outside',
-    '    // start at uOutlierDensity, leaving a visible sparse ring.',
-    '    float density = max(pow(1.0 - t, uFalloffPower), uOutlierDensity);',
-    '    if (hash(blockCoord * 0.53) > density) {',
-    '      discard;',
-    '    }',
+    '    // Floor inside the rim so the profile stays continuous across',
+    '    // it -- without this, density dips to ~0 just inside while',
+    '    // stragglers outside start at uOutlierDensity, leaving a',
+    '    // visible sparse ring.',
+    '    density = max(density, uOutlierDensity);',
+    '  }',
+    '',
+    '  if (hash(blockCoord * 0.53) > max(density, 0.0)) {',
+    '    discard;',
     '  }',
     '',
     '  // Scatter: zero in the core (image stays perfectly crisp),',
@@ -284,6 +439,61 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   gl.useProgram(program);
 
+  // Second program: updates the memory buffer (decay + stamp).
+  const trailFrag = compileShader(gl.FRAGMENT_SHADER, TRAIL_FRAG_SRC);
+  if (!trailFrag) return;
+  const trailProgram = gl.createProgram();
+  gl.attachShader(trailProgram, vertexShader);
+  gl.attachShader(trailProgram, trailFrag);
+  gl.linkProgram(trailProgram);
+  if (!gl.getProgramParameter(trailProgram, gl.LINK_STATUS)) {
+    console.error('grid-reveal trail link error:', gl.getProgramInfoLog(trailProgram));
+    return;
+  }
+  const tuPrev = gl.getUniformLocation(trailProgram, 'uPrev');
+  const tuSize = gl.getUniformLocation(trailProgram, 'uSize');
+  const tuCursorFB = gl.getUniformLocation(trailProgram, 'uCursorFB');
+  const tuBrush = gl.getUniformLocation(trailProgram, 'uBrush');
+  const tuDecay = gl.getUniformLocation(trailProgram, 'uDecay');
+  const tuActive = gl.getUniformLocation(trailProgram, 'uActive');
+  const tuBreakup = gl.getUniformLocation(trailProgram, 'uBreakup');
+  const tuTailBias = gl.getUniformLocation(trailProgram, 'uTailBias');
+  const trailPosAttr = gl.getAttribLocation(trailProgram, 'aPosition');
+
+  // Ping-pong pair: read one, write the other, swap. A single texture
+  // can't be both source and destination in one draw.
+  let trailFBOs = [];
+  let trailTex = [];
+  let trailW = 0, trailH = 0;
+  let trailSrc = 0;
+
+  function initTrailBuffers(w, h) {
+    trailW = Math.max(1, Math.round(w * TRAIL_SCALE));
+    trailH = Math.max(1, Math.round(h * TRAIL_SCALE));
+    trailFBOs.forEach(function (f) { gl.deleteFramebuffer(f); });
+    trailTex.forEach(function (t) { gl.deleteTexture(t); });
+    trailFBOs = []; trailTex = [];
+    for (var i = 0; i < 2; i++) {
+      var tex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, trailW, trailH, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      // LINEAR so the half-res buffer reads back smoothly, CLAMP so the
+      // edges don't wrap disturbance around the screen.
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      var fbo = gl.createFramebuffer();
+      gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+      gl.clearColor(0, 0, 0, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      trailTex.push(tex); trailFBOs.push(fbo);
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    trailSrc = 0;
+  }
+
   const quadBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
@@ -319,6 +529,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const uBlock = gl.getUniformLocation(program, 'uBlock');
   const uTime = gl.getUniformLocation(program, 'uTime');
   const uMosaic = gl.getUniformLocation(program, 'uMosaic');
+  const uTrailTex = gl.getUniformLocation(program, 'uTrailTex');
+  const uCellPx = gl.getUniformLocation(program, 'uCellPx');
+  const uLineStick = gl.getUniformLocation(program, 'uLineStick');
+  const uLineReach = gl.getUniformLocation(program, 'uLineReach');
+  const uLineShadow = gl.getUniformLocation(program, 'uLineShadow');
+  const uLineSpread = gl.getUniformLocation(program, 'uLineSpread');
 
   gl.uniform1f(uCore, CORE_RATIO);
   gl.uniform1f(uFalloffPower, FALLOFF_POWER);
@@ -335,6 +551,10 @@ document.addEventListener('DOMContentLoaded', function () {
   gl.uniform1f(uMotionWobbleBoost, MOTION_WOBBLE_BOOST);
   gl.uniform1f(uMotionScatterBoost, MOTION_SCATTER_BOOST);
   gl.uniform1f(uMaxWindSpeed, MAX_WIND_SPEED);
+  gl.uniform1f(uLineStick, LINE_STICK);
+  gl.uniform1f(uLineReach, LINE_REACH);
+  gl.uniform1f(uLineShadow, LINE_SHADOW);
+  gl.uniform1f(uLineSpread, LINE_SPREAD);
 
   // ---- Mosaic texture: a composite of every cell's image at its exact
   // on-screen position, built with an offscreen 2D canvas and uploaded
@@ -395,6 +615,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   let rebuildPending = false;
+  let cellPxW = 0, cellPxH = 0;   // grid line spacing, device px
 
   function rebuildMosaic() {
     const gridRect = grid.getBoundingClientRect();
@@ -409,6 +630,7 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.style.width = displayWidth + 'px';
     canvas.style.height = displayHeight + 'px';
     gl.viewport(0, 0, pxWidth, pxHeight);
+    initTrailBuffers(pxWidth, pxHeight);
 
     mosaic.width = pxWidth;
     mosaic.height = pxHeight;
@@ -418,6 +640,11 @@ document.addEventListener('DOMContentLoaded', function () {
     for (let i = 0; i < cells.length; i++) {
       const cell = cells[i];
       const rect = cell.getBoundingClientRect();
+      if (i === 0) {
+        // Line spacing = the real laid-out cell box, in device px.
+        cellPxW = rect.width * DPR;
+        cellPxH = rect.height * DPR;
+      }
       const dx = (rect.left - gridRect.left) * DPR;
       const dy = (rect.top - gridRect.top) * DPR;
       const dw = rect.width * DPR;
@@ -463,6 +690,7 @@ document.addEventListener('DOMContentLoaded', function () {
   RevealPointer.init(grid, { radius: 130 });
 
   const startTime = performance.now();
+  let lastFrameMs = performance.now();
 
   // Second smoothing stage for the shape's motion response. The raw
   // pointer velocity is jumpy (it tracks the mouse within ~100ms), so
@@ -477,11 +705,56 @@ document.addEventListener('DOMContentLoaded', function () {
     const pxWidth = canvas.width;
     const pxHeight = canvas.height;
     if (!pxWidth || !pxHeight) return;
+    if (!trailFBOs.length) return;
+
+    // ---- Pass 1: advance the memory buffer -------------------------
+    // Decay is computed from real elapsed time, not a fixed per-frame
+    // constant, so the fade rate is identical at 30fps and 144fps.
+    const nowMs = performance.now();
+    const dt = Math.min((nowMs - lastFrameMs) / 1000, 0.1); // clamp tab-switch spikes
+    lastFrameMs = nowMs;
+    const decay = Math.pow(0.5, dt / TRAIL_HALFLIFE);
+
+    const dst = 1 - trailSrc;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, trailFBOs[dst]);
+    gl.viewport(0, 0, trailW, trailH);
+    gl.useProgram(trailProgram);
+    gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+    gl.enableVertexAttribArray(trailPosAttr);
+    gl.vertexAttribPointer(trailPosAttr, 2, gl.FLOAT, false, 0, 0);
+
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, trailTex[trailSrc]);
+    gl.uniform1i(tuPrev, 1);
+    gl.uniform2f(tuSize, trailW, trailH);
+    // Cursor into trail-buffer space. Y is flipped because gl_FragCoord
+    // is bottom-left origin while pointer coords are top-left.
+    gl.uniform2f(tuCursorFB,
+      state.x * DPR * TRAIL_SCALE,
+      trailH - state.y * DPR * TRAIL_SCALE);
+    gl.uniform1f(tuBrush, state.radius * DPR * TRAIL_SCALE * TRAIL_BRUSH);
+    gl.uniform1f(tuDecay, decay);
+    gl.uniform1f(tuActive, state.radius > 0.5 ? 1 : 0);
+    gl.uniform1f(tuBreakup, TRAIL_BREAKUP);
+    gl.uniform1f(tuTailBias, TRAIL_TAIL_BIAS);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+    trailSrc = dst;
+
+    // ---- Pass 2: draw the visible reveal ---------------------------
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, pxWidth, pxHeight);
+    gl.useProgram(program);
+    gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+    gl.enableVertexAttribArray(aPosition);
+    gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
 
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    if (state.radius <= 0.5) return;
+    // NOTE: no early-out on radius any more -- the memory buffer must
+    // keep decaying and drawing after the cursor leaves, otherwise the
+    // lingering disturbance would freeze mid-fade.
 
     gl.uniform2f(uResolution, pxWidth, pxHeight);
     gl.uniform2f(uCursor, state.x * DPR, state.y * DPR);
@@ -495,10 +768,15 @@ document.addEventListener('DOMContentLoaded', function () {
     gl.uniform1f(uRadius, state.radius * DPR);
     gl.uniform1f(uBlock, Math.max(BLOCK_CSS_PX * DPR, 1));
     gl.uniform1f(uTime, (performance.now() - startTime) / 1000);
+    gl.uniform2f(uCellPx, cellPxW, cellPxH);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.uniform1i(uMosaic, 0);
+
+    gl.activeTexture(gl.TEXTURE2);
+    gl.bindTexture(gl.TEXTURE_2D, trailTex[trailSrc]);
+    gl.uniform1i(uTrailTex, 2);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   });
