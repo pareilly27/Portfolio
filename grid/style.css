@@ -2,12 +2,23 @@
     --grid-columns: 12;
     --grid-size-base: 10;
     --grid-rows: 42;
-    --hero-width: min(60vw, 960px);
+    --hero-width: min(78vw, 1240px);
     --hero-height: max(min(40vh, 520px), calc(var(--hero-width) * 0.45));
 }
 
+/* Absolute, not fixed: the toggle belongs to the hero section, so it
+   scrolls away with the page rather than following the viewport. All
+   placement lives here -- .toggle-btn below must not add its own
+   top/left/transform, or it fights this and the result depends on box
+   widths. */
 #button-container {
-    display: none;
+    position: absolute;
+    top: 5vh;
+    left: 50%;
+    z-index: 150;
+    display: block;
+    pointer-events: auto;
+    transform: translateX(-50%);
 }
 
 
@@ -47,6 +58,50 @@
     left: 50%;
     transform: translate(-50%, -50%);
     overflow: hidden;
+}
+
+/* Experimental uses the image grid without the central hero statement. */
+body.is-experimental .container {
+    visibility: hidden;
+}
+
+/* Hero statement: three stacked, centre-aligned tiers -- bold headline,
+   supporting paragraph, then a smaller bold-italic line. Sized in cqw
+   (container query units) like the hero text it replaces, so it scales
+   with the hero box rather than the viewport. */
+/* Font families come from the .text-large / .text-small classes applied
+   in the markup -- the same two styles the old hero used (Desire Pro for
+   the display line, Raleway for the supporting copy). Only size, weight
+   and measure are set here. */
+.hero-statement {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6cqh;
+    text-align: center;
+}
+
+/* Overrides .container .text-large's display size: that was tuned for a
+   one-word line ("Design"), far too large for a full sentence. */
+.container .hero-headline {
+    font-size: clamp(22px, 5cqw, 54px);
+    line-height: 1.12;
+    max-width: 92%;
+}
+
+.container .hero-subtext {
+    line-height: 1.5;
+    max-width: 92%;
+}
+
+.container .hero-tagline {
+    font-size: clamp(10px, 1.5cqw, 14px);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.4;
+    max-width: 92%;
 }
 
 
@@ -147,10 +202,9 @@
 
 .toggle-btn {
     pointer-events: auto;
+    /* relative (not static) purely so .toggle-circle can position against
+       it; placement itself belongs to #button-container. */
     position: relative;
-    top: 5vh;
-    left: 50%;
-    transform: translateX(-50%);
     background: #000;
     color: white;
     border: none;
@@ -213,37 +267,195 @@
     overflow: hidden;
 }
 
-.cell::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: var(--bg-image);
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-}
-
-.cell:hover::before {
-    opacity: 1;
-    transition: none;
-}
-
-/* Bubble */
-
-#bubbleCanvas {
-    display: none;
+/* Cursor-following pixel-cloud reveal ---------------------------------
+   js/grid-reveal.js renders this as a WebGL canvas. Visibility is
+   pixel DENSITY: solid clear image at the cursor's center, blocks
+   probabilistically thinning out and scattering further from home as
+   distance grows, dissolving into stray pixel dust before the rim --
+   a particle cloud, dense center, sparse fringe. Discarded blocks
+   show the page's default grid. Pointer position/velocity/radius come
+   from js/reveal-pointer.js; tunables at the top of grid-reveal.js. */
+.grid-reveal-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: -1;
+    pointer-events: none;
 }
 
-#bubbleCanvas.active-view {
-    display: block;
+/* Experimental trades the cursor's pixel-cloud treatment for a direct,
+   one-at-a-time reveal: exactly one hovered tile can show its full image. */
+body.is-experimental .grid-reveal-canvas {
+    display: none;
+}
+
+/* No visible grid in Experimental: the cells stay as invisible hit
+   targets driving which image the focus tile shows, but their borders
+   are hidden so only the tile and crosshair read on screen. The inline
+   box-shadow written per-cell by js/grid.js needs !important to beat
+   its own specificity. Linear keeps its visible grid. */
+body.is-experimental .cell {
+    box-shadow: none !important;
+}
+
+body.is-experimental .cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.16s ease;
+    transition-delay: 0s;
+}
+
+/* The image no longer appears inside its own cell: it is drawn by
+   #gridFocusTile below, centred on the cursor, so the tile travels with
+   the pointer rather than sitting locked in the cell's slot. The
+   .is-revealed class is still applied (it marks which cell is active)
+   but intentionally paints nothing. */
+body.is-experimental .cell.is-revealed::before {
+    opacity: 0;
+}
+
+/* Experimental focus tile: one cell-sized image square, always centred
+   on the cursor. Same size as a grid cell, so it reads as "the grid
+   square itself moved" rather than as a floating thumbnail. */
+.grid-focus-tile {
+    --tile-x: -100px;
+    --tile-y: -100px;
+    --tile-w: 0px;
+    --tile-h: 0px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--tile-w);
+    height: var(--tile-h);
+    transform: translate(calc(var(--tile-x) - 50%), calc(var(--tile-y) - 50%));
+    background-image: var(--tile-image);
+    background-size: cover;
+    background-position: center;
+    z-index: 105; /* above the grid, below the crosshair (110) */
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.16s ease;
+    will-change: transform;
+}
+
+body.is-experimental .grid-focus-tile.is-visible {
+    opacity: 1;
+    transition-duration: 0s;
+}
+
+/* Experimental grid locator: the two lines meet at the exact centre of the
+   image currently under the pointer, and continue all the way to the viewport
+   edges so the selected tile reads as part of a measured coordinate system. */
+.grid-crosshair {
+    --crosshair-x: -100px;
+    --crosshair-y: -100px;
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+}
+
+.grid-crosshair::before,
+.grid-crosshair::after {
+    content: '';
+    position: absolute;
+}
+
+.grid-crosshair::before {
+    top: var(--crosshair-y);
+    left: 0;
+    width: 100%;
+    height: 0;
+    border-top: 1px dotted rgba(0, 0, 0, 0.88);
+}
+
+.grid-crosshair::after {
+    top: 0;
+    left: var(--crosshair-x);
+    width: 0;
+    height: 100%;
+    border-left: 1px dotted rgba(0, 0, 0, 0.88);
+}
+
+body.is-experimental .grid-crosshair.is-visible {
+    opacity: 1;
+}
+
+/* Bubble ---------------------------------------------------------------
+   This is deliberately absolute (rather than fixed): once the bubbles
+   settle, their floor is the bottom of this first-viewport scene and the
+   complete stack travels with that floor when the page scrolls. */
+.bubble-scene {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    pointer-events: none;
+    /* Above the hero copy, below the toggle control. */
+    z-index: 105;
+    visibility: hidden;
+}
+
+.bubble-scene.is-active {
+    visibility: visible;
+}
+
+.physics-bubble {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    min-width: 142px;
+    height: 42px;
+    padding: 0 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.78);
+    border-radius: 14px;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.18) 48%, rgba(255, 255, 255, 0.34)),
+        rgba(255, 255, 255, 0.22);
+    box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.20),
+        inset 1px 1px 1px rgba(255, 255, 255, 0.78),
+        inset -1px -1px 1px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(15px) saturate(155%) contrast(108%);
+    -webkit-backdrop-filter: blur(15px) saturate(155%) contrast(108%);
+    color: #0c0c0c;
+    font-family: 'Raleway', sans-serif;
+    font-size: clamp(0.62rem, 0.9vw, 0.82rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.045em;
+    text-align: center;
+    text-wrap: balance;
+    will-change: transform;
+}
+
+.physics-bubble::after {
+    content: '';
+    position: absolute;
+    inset: 3px 9% auto;
+    height: 44%;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255,255,255,0.62), rgba(255,255,255,0.06) 82%, transparent);
+    pointer-events: none;
+}
+
+@media (max-width: 640px) {
+    .physics-bubble {
+        min-width: 116px;
+        height: 38px;
+        padding: 0 0.8rem;
+        font-size: 0.58rem;
+    }
 }
 
 /* Navbar */
@@ -417,9 +629,13 @@
         margin-bottom: 0.5rem;
     }
     
-    /* Toggle button - lower it when navbar is centered */
-    .toggle-btn {
+    /* Toggle button - lower it when navbar is centered (offset the fixed
+       container, so the button keeps its own positioning clean) */
+    #button-container {
         top: 12vh;
+    }
+
+    .toggle-btn {
         width: 40vw;
         justify-content: center;
     }
@@ -449,16 +665,26 @@
 
 .grid-container {
     display: grid;
+    /* 7.5% outer + 40% item + 5% gap + 40% item + 7.5% outer = 100% */
     grid-template-columns: repeat(2, 1fr);
-    gap: 3vw;
-    padding: 3vw;
+    gap: 5vw;
+    padding: 3vw 7.5vw;
     position: relative;
     margin-top: 100vh;
     left: 0;
     width: 100%;
+    box-sizing: border-box;
     z-index: 10;
     background: transparent;
     pointer-events: auto;
+    /* Replaces the old "Selected Works / Projects" text divider: one
+       rounded border wraps the whole grid instead. box-sizing:border-box
+       (above) means the 1px border sits flush against the box's own
+       edges rather than adding to width -- and since this element is
+       width:100% with no side margin, those edges land exactly at the
+       viewport edges, same as the reference. */
+    border: 1px solid #000;
+    border-radius: 32px;
 }
 
 /* Sits above the whole grid as an invisible glass pane. While the page is
@@ -549,7 +775,3 @@ html, body {
 
 /* grid veiw height vh and num rows need to be proportional 1 to 5. Change later to single variable.  */
 /* root conflict between index & about me needs fix  */
-
-
-
-

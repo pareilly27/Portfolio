@@ -64,21 +64,46 @@ const images = [
 // Preload images
 images.forEach(src => {
     const img = new Image();
-    img.src = src;
+    // These paths are used by CSS relative to grid/style.css. A JavaScript
+    // Image resolves relative to index.html instead, so give the preloader
+    // the equivalent explicit grid/ base and avoid false /img/* 404s.
+    img.src = new URL(src, new URL('grid/', document.baseURI)).href;
 });
 
-function createGrid(rows, columns) {
+// Keep Experimental tied to the project gallery rather than maintaining a
+// second hand-curated image list. The active project cards supply 12 images,
+// so every experimental row can contain each project exactly once.
+function projectGridImages() {
+    return Array.from(document.querySelectorAll('#grid-container .square'))
+        .map(square => {
+            const match = /url\((['"]?)(.*?)\1\)/.exec(square.style.backgroundImage);
+            // A custom property is consumed by grid/style.css, so a relative
+            // URL would be resolved from /grid/. Make project-card paths
+            // document-relative before handing them to that stylesheet.
+            return match ? new URL(match[2], document.baseURI).href : null;
+        })
+        .filter(Boolean);
+}
+
+function createGrid(rows, columns, imageSet = 'linear') {
     const gridContainer = document.getElementById('grid');
+    const sources = imageSet === 'experimental' ? projectGridImages() : images;
     gridContainer.innerHTML = '';
     
     const totalCells = rows * columns;
     for (let i = 0; i < totalCells; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
-        cell.style.setProperty('--bg-image', `url('${images[i % images.length]}')`);
-        
         const row = Math.floor(i / columns);
         const col = i % columns;
+        // Experimental keeps the complete 12-image set in every row, but
+        // rotates it one column per row so a project never stays in the same
+        // vertical position throughout the grid.
+        const imageIndex = imageSet === 'experimental'
+            ? (col + row) % sources.length
+            : i % sources.length;
+        const source = sources[imageIndex];
+        cell.style.setProperty('--bg-image', `url('${source}')`);
         
         let shadows = [];
         if (row !== 0) shadows.push('inset 0 0.2px 0 0 #9d9d9d');
@@ -91,10 +116,157 @@ function createGrid(rows, columns) {
     }
 }
 
-const gridColumns = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--grid-columns'));
-const gridRows = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--grid-rows'));
+const gridContainer = document.getElementById('grid');
+let gridColumns = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--grid-columns'));
+let gridRows = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--grid-rows'));
+let gridImageSet = 'linear';
+
+function setDimensions(columns, rows, imageSet = 'linear') {
+    if (columns === gridColumns && rows === gridRows && imageSet === gridImageSet) return;
+    gridColumns = columns;
+    gridRows = rows;
+    gridImageSet = imageSet;
+    // The CSS variables define the visual grid tracks; rebuilding the cells
+    // gives the reveal canvas a matching image mosaic for every new track.
+    document.documentElement.style.setProperty('--grid-columns', columns);
+    document.documentElement.style.setProperty('--grid-rows', rows);
+    createGrid(rows, columns, imageSet);
+    if (imageSet === 'experimental') {
+        // A focused tile exists immediately on entry; subsequent focus changes
+        // wait for the hover dwell below.
+        setGridFocus(gridContainer.querySelector('.cell'));
+    }
+}
 
 createGrid(gridRows, gridColumns);
+gridContainer.classList.add('active-view');
 
-document.getElementById('grid').classList.add('active-view');
+window.HomeImageGrid = { setDimensions };
 
+// The locator uses event delegation so it keeps working after the grid cells
+// are rebuilt when switching between Linear and Experimental layouts.
+const crosshair = document.getElementById('gridCrosshair');
+const focusTile = document.getElementById('gridFocusTile');
+const REVEAL_DELAY = 260;
+// How hard the tile/crosshair chase the cursor, per frame. 1 = rigid
+// lock (old behaviour), lower = more lag. The tile trails the pointer
+// and catches up when you stop, so fast movements visibly outrun it.
+const FOLLOW_EASE = 0.06;
+let trackedCell = null;
+let crosshairTimer = null;
+let focusedCell = null;
+// Latest pointer position, in viewport coords. The focused tile is drawn
+// centred here rather than inside its cell, so the image square travels
+// with the cursor: moving up within the same cell carries the picture up
+// with it, instead of the cell acting as a fixed window.
+let pointerX = -1000;
+let pointerY = -1000;
+// The drawn position, eased toward the pointer each frame.
+let followX = -1000;
+let followY = -1000;
+let followRaf = null;
+
+function hideCrosshair() {
+    clearTimeout(crosshairTimer);
+    crosshairTimer = null;
+    if (crosshair) crosshair.classList.remove('is-visible');
+    if (focusTile) focusTile.classList.remove('is-visible');
+    if (focusedCell) {
+        focusedCell.classList.remove('is-revealed');
+        focusedCell = null;
+    }
+}
+
+// Position-only update: runs on every pointer move, so the tile and the
+// crosshair follow the cursor continuously even while the *image* stays
+// the same (the image only changes when the dwell timer promotes a new
+// cell in setGridFocus).
+function positionFocus() {
+    if (focusTile) {
+        focusTile.style.setProperty('--tile-x', `${followX}px`);
+        focusTile.style.setProperty('--tile-y', `${followY}px`);
+    }
+    if (crosshair) {
+        crosshair.style.setProperty('--crosshair-x', `${followX}px`);
+        crosshair.style.setProperty('--crosshair-y', `${followY}px`);
+    }
+}
+
+// Runs only while the drawn position is still catching up, then parks
+// itself -- no idle rAF loop when the cursor is at rest.
+function followLoop() {
+    const dx = pointerX - followX;
+    const dy = pointerY - followY;
+
+    if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+        followX = pointerX;
+        followY = pointerY;
+        positionFocus();
+        followRaf = null;
+        return;
+    }
+
+    followX += dx * FOLLOW_EASE;
+    followY += dy * FOLLOW_EASE;
+    positionFocus();
+    followRaf = requestAnimationFrame(followLoop);
+}
+
+function startFollow() {
+    if (followRaf === null) followRaf = requestAnimationFrame(followLoop);
+}
+
+function setGridFocus(cell) {
+    if (!cell || !crosshair) return;
+    if (focusedCell && focusedCell !== cell) focusedCell.classList.remove('is-revealed');
+    focusedCell = cell;
+    focusedCell.classList.add('is-revealed');
+
+    if (focusTile) {
+        const rect = cell.getBoundingClientRect();
+        // The tile matches the cell's dimensions so it reads as the grid
+        // square itself having moved, not as a free-floating thumbnail.
+        focusTile.style.setProperty('--tile-w', `${rect.width}px`);
+        focusTile.style.setProperty('--tile-h', `${rect.height}px`);
+        focusTile.style.setProperty('--tile-image', cell.style.getPropertyValue('--bg-image'));
+        focusTile.classList.add('is-visible');
+    }
+
+    if (followX < -900) {
+        // First appearance: start at the pointer instead of sliding in
+        // from the off-screen initial value.
+        followX = pointerX;
+        followY = pointerY;
+    }
+    positionFocus();
+    crosshair.classList.add('is-visible');
+}
+
+gridContainer.addEventListener('pointermove', event => {
+    if (!document.body.classList.contains('is-experimental') || !crosshair) return;
+
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    startFollow();
+
+    const cell = event.target.closest('.cell');
+    if (!cell || (cell === trackedCell && (crosshair.classList.contains('is-visible') || crosshairTimer))) return;
+    trackedCell = cell;
+    clearTimeout(crosshairTimer);
+    crosshairTimer = setTimeout(() => {
+        crosshairTimer = null;
+        // Keep the crosshair attached only to a tile whose delayed image is
+        // actually eligible to appear, never to an in-between hover target.
+        if (!document.body.classList.contains('is-experimental') || trackedCell !== cell) return;
+        setGridFocus(cell);
+    }, REVEAL_DELAY);
+});
+
+gridContainer.addEventListener('pointerleave', () => {
+    trackedCell = null;
+    if (followRaf !== null) {
+        cancelAnimationFrame(followRaf);
+        followRaf = null;
+    }
+    hideCrosshair();
+});

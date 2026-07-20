@@ -60,10 +60,17 @@
     
 
     h2 {
-      font-size: 4.5vw;
+      font-family: "Desire Pro";
+      font-weight: 400;
+      font-style: normal;
+      font-size: 117.32px;
+      line-height: 100%;
+      letter-spacing: 0%;
       margin-bottom: 0.5rem;
-      transform: scaleX(1) scaleY(1.5);
       color: #7B97C5;
+      white-space: nowrap; /* "The long version" is longer than "About Me" was */
+      transform: scaleY(1.15); /* slightly taller relative to width, width untouched */
+      transform-origin: left center;
     }
 
     h3 {
@@ -187,20 +194,24 @@
 
   .full-page {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 11fr 9fr; /* left column widened for paragraph line-count target */
       height: auto;
       padding-bottom: 0px;
-      
+      padding-top: 5vw; /* extra clearance below the header, shared by both columns */
+      margin-bottom: 6vw; /* more room before the contact section beneath */
 
     }
 
    
     .left-column {
-      padding: 4vw 8vw 0 8vw; /* Remove bottom padding */
+      padding: 6.5vw 0.5vw 0 6vw; /* right padding trimmed further -> minimal gap to the right column */
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* Align items to the top */
-      /* Align items to the left */
+      /* Was space-between, which stretched the h2/button/paragraphs
+         apart to fill the whole column height. Stack them tightly at
+         the top instead and control spacing with one explicit gap. */
+      justify-content: flex-start;
+      gap: 1.6rem;
     }
 
     .left-column h1 {
@@ -210,11 +221,18 @@
       text-align: left;
     }
 
-    
+    .left-column h2 {
+      margin-bottom: 0;
+    }
+
+    .left-column .strip-fluff-btn {
+      margin-bottom: 0;
+    }
 
     .left-column p {
-      margin-bottom: 0.75rem;
-      font-size: 2vh;
+      margin: 0;
+      font-size: 1.2vw;
+      font-family: 'Raleway', sans-serif; /* matches .nav-s-button */
       /* No color override — inherit from body */
     }
 
@@ -242,7 +260,8 @@
     .right-column {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start; /* hug the left edge of this column instead of centering,
+                                       which was leaving extra empty space next to the left column */
       padding-bottom: 0;
     }
 
@@ -290,23 +309,40 @@
 }
 
     .fluff-text.removed {
-        text-decoration: line-through;
-        color: #999;
+        font-weight: bold;
     }
 
+    .fluff-controls {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+    /* Transparent, always-black text at the same size/family as the
+       paragraphs below. The ONLY thing that changes between states is
+       the border: the button whose action is currently available gets
+       a visible one (.is-active, toggled in js/removeFluff.js), the
+       other keeps a transparent border of equal width so nothing
+       shifts as the state flips. */
      .strip-fluff-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
     width: fit-content;
-    background-color: #7B97C5;
-    color: #fff;
-    border: none;
+    background-color: transparent;
+    color: #000;
+    border: 1.5px solid transparent;
     border-radius: 8px;
-    padding: 0.4rem 0.6rem;
+    padding: 0.4rem 0.8rem;
     cursor: pointer;
-    font-family: inherit;
+    font-family: 'Raleway', sans-serif; /* same family as .left-column p */
     font-weight: 400;
+    transition: border-color 0.2s ease;
+}
+
+.strip-fluff-btn.is-active {
+    border-color: #000;
 }
 
 .strip-fluff-label {
@@ -316,27 +352,104 @@
     line-height: 1;
 }
 
-.strip-fluff-cursor {
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    background-image: url('../css/cursor.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    transform: rotate(-25deg);
-    flex-shrink: 0;
-    filter: brightness(0) invert(1);
-}
+
 
     html, body {
       pointer-events: auto;
+      overflow-x: hidden;
+      max-width: 100%;
   }
 
 
 
     
+
+    /* ===== Mobile ==========================================================
+       This page had no breakpoint at all before -- every size above is
+       vw/px tuned for a two-column desktop layout, which breaks down
+       hard on a phone: the fixed 117.32px heading alone would eat a
+       third of the screen width, 1.2vw paragraph text renders at
+       single-digit pixel sizes, and the 11fr/9fr columns would squeeze
+       side-by-side instead of stacking. This block stacks the layout
+       to one column and rescales those values to fixed, readable
+       sizes. */
+    @media (max-width: 768px) {
+      .full-page {
+        grid-template-columns: 1fr;
+        /* Fixed, not vw: the mobile nav now wraps to two rows (see
+           .navbar below), so it has a roughly constant height
+           regardless of screen width -- a vw-based offset that was
+           tuned against the old single-row nav no longer clears it. */
+        padding-top: 8rem;
+        margin-bottom: 12vw;
+      }
+
+      .left-column {
+        padding: 0 6vw;
+        gap: 1.25rem;
+      }
+
+      .left-column h2 {
+        font-size: 2.4rem;
+        transform: none;
+        white-space: normal;
+      }
+
+      .left-column p {
+        font-size: 1rem;
+      }
+
+      .fluff-controls {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .right-column {
+        justify-content: center;
+        margin-top: 2rem;
+      }
+
+      .image-container img {
+        height: auto;
+        width: 80vw;
+      }
+
+      /* This page's own .navbar/.nav-links rules above have no wrap
+         and give each <li> a fixed 15px side padding -- three links
+         plus the "Shreyanshi Satodia" wordmark (forced nowrap) on one
+         unwrapping line was wider than a phone screen, forcing
+         horizontal scroll on the whole page. */
+      .navbar {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.75rem 4%;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        padding: 0;
+        gap: 0.25rem;
+      }
+
+      .nav-links li {
+        padding: 0 8px;
+      }
+
+      .nav-links,
+      .nav-s-button,
+      .nav-regular-link {
+        font-size: 0.95rem;
+      }
+
+      .nav-s-button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
   </style>
+  <link rel="stylesheet" href="../css/cursor-glass.css">
 </head>
 <body>
 
@@ -364,37 +477,29 @@
     <div class="full-page">
       <!-- LEFT COLUMN -->
       <div class="left-column">
-        <h2>About Me</h2>
+        <h2>The long version</h2>
         
-        <button class="strip-fluff-btn" id="strip-fluff-button">
-            <span class="strip-fluff-label">STRIP THE FLUFF</span>
-            <span class="strip-fluff-cursor" aria-hidden="true"></span>
-        </button>
+        <div class="fluff-controls">
+          <button class="strip-fluff-btn is-active" id="strip-fluff-button">
+              <span class="strip-fluff-label">STRIP THE FLUFF</span>
+          </button>
+          <button class="strip-fluff-btn" id="put-it-back-button">
+              <span class="strip-fluff-label">PUT IT BACK</span>
+          </button>
+        </div>
         
         <p>
-  <span class="fluff-text">I am</span> Shreyanshi Satodia<span class="fluff-text">, a</span> Graphic Designer <span class="fluff-text">based</span> in Dallas, <span class="fluff-text">Texas, with</span> 7 years of experience turning <span class="fluff-text">bold</span> ideas into impactful visuals through color, typography, layout, and thoughtful design. <span class="fluff-text">I believe</span> design should be felt <span class="fluff-text">as much as it’s seen; it grabs attention,</span> tell<span class="fluff-text">'s</span> a story, and leave<span class="fluff-text">s</span> an impression <span class="fluff-text">that lasts.</span> My work blends creativity with strategy, <span class="fluff-text">weaving together visual language and purposeful communication</span> across branding, editorial, packaging, and digital experiences.
+  I am <span class="fluff-text">Shreyanshi Satodia</span>, a creative <span class="fluff-text">designer and strategist</span> with <span class="fluff-text">seven years</span> of experience <span class="fluff-text">creating brands</span> and <span class="fluff-text">digital experiences</span> with award-winning work <span class="fluff-text">across hospitality, SaaS, entertainment, nonprofit,</span> and <span class="fluff-text">F&amp;B.</span> I enjoy taking projects <span class="fluff-text">from concept to launch</span>, turning ideas into systems that feel thoughtful, cohesive, and built to last.
 </p>
 
 <p>
-  Driven by curiosity, <span class="fluff-text">I’m</span> always looking <span class="fluff-text">for fresh ways</span> to connect people and ideas through design. And <span class="fluff-text">when I’m not creating, I’m usually chasing inspiration and greeting every dog I pass. Let’s</span> create work that moves people.
+  <span class="fluff-text">I have learned that the first idea is rarely the best one.</span> It's just polite enough to introduce the rest. That's why <span class="fluff-text">I like the messy middle,</span> the stage where questions outnumber answers and everything still has room to change. It's also <span class="fluff-text">where</span> the strongest <span class="fluff-text">ideas</span> usually <span class="fluff-text">show up.</span>
 </p>
 
-  
-        <div class="list-row">
-          <div class="list-group">
-            <h3 id="listTitle">Area of Focus</h3>
-            <ul style="list-style-type: none;" id="list-1">
-              <li>Branding & Strategy</li>
-              <li>Print Design</li>
-              <li>UI-UX Design</li>
-              <li>Art Direction</li>
-              <li>Motion Graphics</li>
-              <li>Illustrations</li>
-              <li>Typography</li>
-            </ul>
-          </div>
-          
-        </div>
+<p>
+  I have a <span class="fluff-text">habit of rearranging things</span> until they make sense. <span class="fluff-text">Design turned out to be a pretty good place to channel that.</span> Whether I am building an <span class="fluff-text">identity</span>, designing a <span class="fluff-text">website,</span> or developing a <span class="fluff-text">campaign,</span> I am always looking for the one <span class="fluff-text">idea that ties</span> everything together. <span class="fluff-text">The fun part is figuring it out. The design just gets all the credit.</span>
+</p>
+
       </div>
   
       <!-- RIGHT COLUMN -->
@@ -444,5 +549,6 @@
   </script>
   <script src="../js/grid.js"></script>
   <script src="../js/removeFluff.js"></script>
+  <script src="../js/cursor-glass.js"></script>
 </body>
 </html>

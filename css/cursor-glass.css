@@ -1,0 +1,50 @@
+/* Custom glass cursor -------------------------------------------------
+   Replaces the native pointer with a small circle that blurs/refracts
+   whatever sits behind it (backdrop-filter), giving a frosted-glass
+   look. js/cursor-glass.js creates this element and drives its
+   position/scale entirely via inline transforms each frame; this file
+   only owns static appearance and the native-cursor hide.
+
+   Skipped entirely on touch/coarse-pointer devices by the JS (no
+   .glass-cursor-active class added), so mobile is unaffected. */
+
+html.glass-cursor-active,
+html.glass-cursor-active * {
+  cursor: none !important;
+}
+
+.glass-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  /* Higher opacity + a much heavier blur than before: at low blur
+     radii the backdrop-filter was only lightly softening the grainy
+     WebGL background it sits over (see js/grid-reveal.js), so noise
+     showed straight through. A heavier blur properly averages it into
+     a smooth frosted look; the extra background opacity keeps the
+     glass reading as milky rather than a near-transparent window. */
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(4px) saturate(120%);
+  -webkit-backdrop-filter: blur(4px) saturate(120%);
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  will-change: transform;
+}
+
+.glass-cursor.is-visible {
+  opacity: 1;
+}
+
+.glass-cursor.is-hover {
+  background: rgba(255, 255, 255, 0.38);
+  border-color: rgba(0, 0, 0, 0.75);
+}

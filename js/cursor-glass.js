@@ -1,0 +1,126 @@
+// Custom glass cursor.
+//
+// A small backdrop-blurred circle that trails the mouse with a light
+// ease and shrinks a touch on click. Size is otherwise fixed (no
+// hover-grow).
+//
+// Hidden entirely while over the home page's hero grid (#grid /
+// #grid-reveal-canvas / its .cell children) -- that area already has
+// its own cursor-following pixel-cloud WebGL effect
+// (js/grid-reveal.js), and stacking a second cursor indicator on top
+// of it was redundant.
+//
+// Bails out entirely on touch/coarse-pointer devices (no fine mouse),
+// where a custom cursor doesn't make sense and native touch behavior
+// should be left alone.
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) {
+    return;
+  }
+
+  document.documentElement.classList.add('glass-cursor-active');
+
+  const el = document.createElement('div');
+  el.className = 'glass-cursor';
+  // Appended to <html>, NOT document.body: several project pages
+  // (css/workPage__NEW.css) put `transform: translateX(0)` on <body>
+  // to power the slide page-transition. Any `transform` on an
+  // ancestor creates a new containing block for position:fixed
+  // descendants, so a cursor appended under body on those pages isn't
+  // actually fixed to the viewport -- it's anchored to body's box
+  // instead, and drifts/scrolls out of view on tall scrolling pages.
+  // <html> has no such transform, so appending here keeps it
+  // genuinely viewport-fixed everywhere.
+  document.documentElement.appendChild(el);
+
+  const HOVER_SELECTOR = 'a, button, input, textarea, select, [role="button"], .square, .toggle-btn';
+  const HIDE_SELECTOR = '#grid, #grid-reveal-canvas, .cell';
+  const POSITION_EASE = 0.35; // higher = tighter tracking, lower = more trail
+  const SIZE_EASE = 0.2;
+  const BASE_SIZE = 26;  // px
+  const PRESS_SIZE_MULT = 0.85;
+
+  let targetX = window.innerWidth / 2;
+  let targetY = window.innerHeight / 2;
+  let x = targetX;
+  let y = targetY;
+  let size = BASE_SIZE;
+  let inWindow = false;
+  let suppressed = false; // true while over the hero grid hide-zone
+  let hovering = false;
+  let pressed = false;
+
+  function updateVisibility() {
+    el.classList.toggle('is-visible', inWindow && !suppressed);
+  }
+
+  function onMove(e) {
+    targetX = e.clientX;
+    targetY = e.clientY;
+
+    const wasInWindow = inWindow;
+    if (!inWindow) {
+      inWindow = true;
+      x = targetX;
+      y = targetY;
+    }
+
+    const target = e.target;
+    // Linear uses the WebGL cursor reveal and hides the secondary cursor.
+    // Experimental has full-cell image reveals, so the glass cursor remains
+    // visible above those images and the locator lines.
+    const nowSuppressed = !document.body.classList.contains('is-experimental')
+      && !!(target && target.closest && target.closest(HIDE_SELECTOR));
+    const hovered = !nowSuppressed && target && target.closest && target.closest(HOVER_SELECTOR);
+
+    if (nowSuppressed !== suppressed || !wasInWindow) {
+      suppressed = nowSuppressed;
+      updateVisibility();
+    }
+
+    if (!!hovered !== hovering) {
+      hovering = !!hovered;
+      el.classList.toggle('is-hover', hovering);
+    }
+  }
+
+  function hide() {
+    inWindow = false;
+    updateVisibility();
+  }
+
+  window.addEventListener('mousemove', onMove, { passive: true });
+
+  // mouseleave on <html> (unlike mouseout) doesn't bubble and only
+  // fires when the pointer genuinely leaves the document -- not on
+  // every element-to-element transition. The old approach (window
+  // 'mouseout' + checking relatedTarget is null) is a common pattern,
+  // but it's a heuristic: some browsers fire that same null-
+  // relatedTarget mouseout spuriously mid-page, especially around
+  // large images still decoding/painting (this project's gallery
+  // images run 15-95MB), which was reading as "cursor left the
+  // window" and hiding it while the mouse was still over the page.
+  document.documentElement.addEventListener('mouseleave', hide);
+
+  window.addEventListener('mousedown', function () { pressed = true; });
+  window.addEventListener('mouseup', function () { pressed = false; });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) hide();
+  });
+
+  function tick() {
+    x += (targetX - x) * POSITION_EASE;
+    y += (targetY - y) * POSITION_EASE;
+
+    const targetSize = pressed ? BASE_SIZE * PRESS_SIZE_MULT : BASE_SIZE;
+    size += (targetSize - size) * SIZE_EASE;
+
+    const half = size / 2;
+    el.style.width = size + 'px';
+    el.style.height = size + 'px';
+    el.style.transform = 'translate3d(' + (x - half) + 'px, ' + (y - half) + 'px, 0)';
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+});

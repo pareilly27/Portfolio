@@ -26,15 +26,16 @@
       z-index: -1;
     }
   </style>
+  <link rel="stylesheet" href="css/cursor-glass.css">
 </head>
 
 <body>
   <section class="full-page-container" id="full-page-container">
 
     <div id="button-container" class="button-container">
-      <button id="toggleBtn" class="toggle-btn">
+      <button id="toggleBtn" class="toggle-btn" aria-pressed="false">
           <span id="toggleCircle" class="toggle-circle"></span>
-          <label id="toggleLabel" class="toggle-label">Precision</label>
+          <label id="toggleLabel" class="toggle-label">Linear</label>
         </button>
     </div>
     <div class="overlay">
@@ -55,37 +56,32 @@
 
       <!-- Hero Text -->
       <div class="container">
-        <div class="top-row">
-          <div class="text-large top-left">Design</div>
-          <div class="text-small top-right">
-            Structure sets the stage; playful sabotage gives it life. I keep things polished, but there's always a quiet glitch or rule-bend woven in, small enough to miss, intentional enough to matter
-          </div>
-        </div>
-
-        <div class="text-large middle-row">
-          That stays calm, but thinks
-        </div>
-
-        <div class="bottom-row">
-          <div class="text-small bottom-left">
-            Everything here opens up little by little, hover, scroll,
-            pause. But the louder personality sits behind the
-            toggle, waiting for someone curious enough
-          </div>
-          <div class="text-large bottom-right">loudly</div>
+        <div class="hero-statement">
+          <p class="text-large hero-headline">Building brands people connect with. Creating experiences they remember.</p>
+          <p class="text-small hero-subtext">Brand Designer &amp; Creative Strategist based in Dallas with seven years of experience creating identities, websites, and campaigns that balance strategy, personality, and lasting impact.</p>
+          <p class="text-small hero-tagline">Curiosity starts every project. Detail finishes it.</p>
         </div>
       </div>
     </div>
 
     <!-- Background Grid -->
     <div class="grid" id="grid"></div>
+    <div class="grid-crosshair" id="gridCrosshair" aria-hidden="true"></div>
+    <!-- Experimental: the focused tile's image, rendered here rather than
+         inside its cell, so it can ride with the cursor instead of being
+         pinned to the cell's slot (see js/grid.js). -->
+    <div class="grid-focus-tile" id="gridFocusTile" aria-hidden="true"></div>
 
-    <!-- Section Label -->
+    <!-- Deactivated: "Selected Works / Projects" text divider, replaced
+         by a single rounded border around the whole grid (see
+         .grid-container in grid/style.css). Kept for reference, not deleted. -->
+    <!--
     <div class="selected-text-container" id="selected-text-container">
       <div class="text-small" style="white-space: nowrap;">Selected Works</div>
       <div class="vertical-line"></div>
       <div class="text-small">Projects</div>
     </div>
+    -->
 
     <!-- Transparent pane that blocks pointer interaction with the grid while
          the page is actively scrolling, so a hovered tile's overlay can't
@@ -228,6 +224,8 @@
         </div>
       </a>
 
+      <!-- Deactivated: Reachpoint & Lead With Light (project pages kept, removed from grid + footer arrows) -->
+      <!--
       <a href="Projects/reachpoint/">
         <div class="square" style="background-image: url('project_images/Reachpoint/grid_image_reachpoint.png');">
           <div class="overlay">
@@ -249,6 +247,7 @@
           </div>
         </div>
       </a>
+      -->
 
       <!-- Disabled projects: not currently shown in the grid, kept below for reference (not deleted). -->
       <!--
@@ -420,13 +419,18 @@
     </div>
     
 
-    <canvas id="bubbleCanvas"></canvas>
+    <!-- Playtime layer: document-positioned so its physics floor scrolls with
+         the homepage rather than being pinned to the browser viewport. -->
+    <div id="bubbleScene" class="bubble-scene" aria-hidden="true"></div>
   </section>
 
   <!-- Scripts -->
   <script src="js/grid.js"></script>
-  <script src="js/bubbles-2.js"></script>
+  <script src="js/reveal-pointer.js"></script>
+  <script src="js/grid-reveal.js"></script>
   <script src="js/toggle.js"></script>
+  <script src="js/bubbles-2.js"></script>
   <script src="js/grid-hover-fix.js"></script>
+  <script src="js/cursor-glass.js"></script>
 </body>
 </html>

@@ -1,196 +1,214 @@
-(function() {
-    
-    const canvas = document.getElementById("bubbleCanvas");
-    const ctx = canvas.getContext("2d");
+// Five text bubbles with a small, self-contained 2D rigid-body simulation.
+// Collision is solved in normalized ellipse space, so the broad ovals contact
+// at their actual visible edges instead of behaving like small circles.
+(function () {
+  const scene = document.getElementById('bubbleScene');
+  if (!scene) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  const labels = [
+    'BRAND SYSTEMS',
+    'CAMPAIGNS',
+    'CREATIVE DIRECTION',
+    'LESS, BUT BETTER',
+    'DESIGNED TO CONNECT',
+  ];
+  const FLOAT_MS = 2000;
+  const GRAVITY = 1850;       // CSS pixels per second squared
+  const AIR_DRAG = 0.995;
+  const BOUNCE = 0.12;
+  const FLOOR_FRICTION = 0.78;
+  const WALL_PADDING = 8;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let bubbles = [];
+  let active = false;
+  let falling = false;
+  let raf = 0;
+  let lastTime = 0;
+  let floatStarted = 0;
 
-    window.addEventListener("resize", () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const magnitude = (x, y) => Math.hypot(x, y);
+
+  function bounds() {
+    return { width: scene.clientWidth, height: scene.clientHeight };
+  }
+
+  function createBubbles() {
+    scene.replaceChildren();
+    const { width, height } = bounds();
+    bubbles = labels.map((label, index) => {
+      const element = document.createElement('div');
+      element.className = 'physics-bubble';
+      element.textContent = label;
+      scene.appendChild(element);
+      const rect = element.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      return {
+        element, w, h,
+        x: WALL_PADDING + Math.random() * Math.max(1, width - w - WALL_PADDING * 2),
+        y: 70 + Math.random() * Math.max(1, height * 0.58 - h),
+        vx: (Math.random() - 0.5) * 130,
+        vy: (Math.random() - 0.5) * 110,
+        driftX: (Math.random() - 0.5) * 34,
+        driftY: (Math.random() - 0.5) * 34,
+        phase: Math.random() * Math.PI * 2,
+        angle: (Math.random() - 0.5) * 4,
+        angularVelocity: (Math.random() - 0.5) * 0.45,
+        index,
+      };
     });
+  }
 
-    const mouse = { x: null, y: null, isDown: false };
-    let activeBubble = null;
+  function position(bubble) {
+    bubble.element.style.transform = `translate3d(${bubble.x}px, ${bubble.y}px, 0) rotate(${bubble.angle}deg)`;
+  }
 
-    window.addEventListener('mousedown', () => { mouse.isDown = true; });
-    window.addEventListener('mouseup', () => {
-        mouse.isDown = false;
-        if (activeBubble) {
-            activeBubble.isDragged = false;
-            activeBubble = null;
-        }
-    });
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-
-    class Bubble {
-        constructor(x, y, radius, color, imageURL = null) {
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-            this.color = color;
-            this.vx = (Math.random() - 0.5) * 0.2;
-            this.vy = (Math.random() - 0.5) * 0.2;
-            this.baselineVx = (Math.random() - 0.5) * 0.3;
-            this.baselineVy = (Math.random() - 0.5) * 0.3;
-            this.isDragged = false;
-            this.dragOffsetX = 0;
-            this.dragOffsetY = 0;
-            this.image = null;
-            this.rotation = 0;
-            this.rotationSpeed = (Math.random() - 0.5) * 0.02;
-            this.currentRotationSpeed = this.rotationSpeed;
-
-            if (imageURL) {
-                this.image = new Image();
-                this.image.src = imageURL;
-            }
-        }
-
-        draw() {
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            ctx.rotate(this.rotation);
-            ctx.beginPath();
-            ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-
-            if (this.image) {
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
-                ctx.clip();
-                ctx.drawImage(this.image, -this.radius, -this.radius, this.radius * 2, this.radius * 2);
-                ctx.restore();
-            }
-
-            ctx.restore();
-        }
-
-        update(bubbles) {
-            if (mouse.isDown && !activeBubble) {
-                const dx = mouse.x - this.x;
-                const dy = mouse.y - this.y;
-                if (Math.sqrt(dx * dx + dy * dy) < this.radius) {
-                    this.isDragged = true;
-                    activeBubble = this;
-                    this.dragOffsetX = dx;
-                    this.dragOffsetY = dy;
-                }
-            }
-
-            if (this.isDragged) {
-                const newX = mouse.x - this.dragOffsetX;
-                const newY = mouse.y - this.dragOffsetY;
-                this.vx = newX - this.x;
-                this.vy = newY - this.y;
-                this.x = newX;
-                this.y = newY;
-                this.currentRotationSpeed = (this.vx * 0.01) || this.rotationSpeed;
-            } else {
-                this.vx += this.baselineVx * 0.3;
-                this.vy += this.baselineVy * 0.3;
-                
-                this.x += this.vx;
-                this.y += this.vy;
-                
-                // Boundary checks
-                if (this.x - this.radius < 0) {
-                    this.x = this.radius;
-                    this.vx *= -1;
-                    this.currentRotationSpeed = -this.vx * 0.01;
-                } else if (this.x + this.radius > canvas.width) {
-                    this.x = canvas.width - this.radius;
-                    this.vx *= -1;
-                    this.currentRotationSpeed = -this.vx * 0.01;
-                }
-                
-                if (this.y - this.radius < 0) {
-                    this.y = this.radius;
-                    this.vy *= -1;
-                    this.currentRotationSpeed = this.vy * 0.01;
-                } else if (this.y + this.radius > canvas.height) {
-                    this.y = canvas.height - this.radius;
-                    this.vy *= -1;
-                    this.currentRotationSpeed = this.vy * 0.01;
-                }
-                
-                this.vx *= 0.98;
-                this.vy *= 0.98;
-                
-                this.currentRotationSpeed += (this.rotationSpeed - this.currentRotationSpeed) * 0.05;
-                
-                // Bubble collision
-                for (let other of bubbles) {
-                    if (other === this) continue;
-                    const dx = other.x - this.x;
-                    const dy = other.y - this.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    const minDist = this.radius + other.radius;
-                    if (dist < minDist) {
-                        const angle = Math.atan2(dy, dx);
-                        const overlap = (minDist - dist) / 2;
-                        this.x -= Math.cos(angle) * overlap;
-                        this.y -= Math.sin(angle) * overlap;
-                        other.x += Math.cos(angle) * overlap;
-                        other.y += Math.sin(angle) * overlap;
-                        
-                        const force = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-                        const collisionRotation = force * 0.01 * (Math.random() > 0.5 ? 1 : -1);
-                        this.currentRotationSpeed += collisionRotation;
-                        
-                        [this.vx, other.vx] = [other.vx, this.vx];
-                        [this.vy, other.vy] = [other.vy, this.vy];
-                    }
-                }
-            }
-            
-            this.rotation += this.currentRotationSpeed;
-            
-            if (this.rotation > 2 * Math.PI) {
-                this.rotation -= 2 * Math.PI;
-            } else if (this.rotation < 0) {
-                this.rotation += 2 * Math.PI;
-            }
-        }
+  function contain(bubble, width, height) {
+    if (bubble.x < WALL_PADDING) {
+      bubble.x = WALL_PADDING;
+      bubble.vx = Math.abs(bubble.vx) * BOUNCE;
+    } else if (bubble.x + bubble.w > width - WALL_PADDING) {
+      bubble.x = width - bubble.w - WALL_PADDING;
+      bubble.vx = -Math.abs(bubble.vx) * BOUNCE;
     }
-
-    const colors = {
-        green: '#d1d866',
-        blue: '#729ed4',
-        pink: '#f4b2ae'
-    };
-
-    const bubbles = [];
-    const radius = 65;
-
-   
-
-    // 2 blue bubbles
-    for (let i = 0; i < 8; i++) {
-        bubbles.push(new Bubble(
-            Math.random() * (canvas.width - radius * 2) + radius,
-            Math.random() * (canvas.height - radius * 2) + radius,
-            radius,
-            colors.blue,
-            null
-        ));
+    if (bubble.y < WALL_PADDING) {
+      bubble.y = WALL_PADDING;
+      bubble.vy = Math.abs(bubble.vy) * BOUNCE;
     }
-
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let b of bubbles) {
-            b.update(bubbles);
-            b.draw();
-        }
-        requestAnimationFrame(animate);
+    if (falling && bubble.y + bubble.h > height) {
+      bubble.y = height - bubble.h;
+      bubble.vy = -bubble.vy * BOUNCE;
+      bubble.vx *= FLOOR_FRICTION;
+      if (Math.abs(bubble.vy) < 24) bubble.vy = 0;
+      if (Math.abs(bubble.vx) < 2) bubble.vx = 0;
     }
+  }
 
-    animate();
-})();
+  function collide(a, b) {
+    const ax = a.x + a.w / 2;
+    const ay = a.y + a.h / 2;
+    const bx = b.x + b.w / 2;
+    const by = b.y + b.h / 2;
+    let dx = bx - ax;
+    let dy = by - ay;
+    const radiusX = (a.w + b.w) / 2;
+    const radiusY = (a.h + b.h) / 2;
+    let scaledX = dx / radiusX;
+    let scaledY = dy / radiusY;
+    let distance = magnitude(scaledX, scaledY);
+    if (distance >= 1) return;
+    if (distance < 0.001) {
+      dx = 0.01 + Math.random() * 0.01;
+      dy = 0.01;
+      scaledX = dx / radiusX;
+      scaledY = dy / radiusY;
+      distance = magnitude(scaledX, scaledY);
+    }
+    const ellipseX = scaledX / distance;
+    const ellipseY = scaledY / distance;
+    // Convert the normal from ellipse space back to screen space.
+    let nx = ellipseX * radiusX;
+    let ny = ellipseY * radiusY;
+    const normalLength = magnitude(nx, ny);
+    nx /= normalLength;
+    ny /= normalLength;
+    const overlap = 1 - distance;
+    // Separate both bodies before applying impulse: stable at rest, even when
+    // several bubbles land in the same frame.
+    a.x -= ellipseX * radiusX * overlap * 0.5;
+    a.y -= ellipseY * radiusY * overlap * 0.5;
+    b.x += ellipseX * radiusX * overlap * 0.5;
+    b.y += ellipseY * radiusY * overlap * 0.5;
+
+    const relativeVelocity = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+    if (relativeVelocity < 0) {
+      const impulse = -(1 + BOUNCE) * relativeVelocity * 0.5;
+      a.vx -= impulse * nx;
+      a.vy -= impulse * ny;
+      b.vx += impulse * nx;
+      b.vy += impulse * ny;
+    }
+    const tangentX = -ny;
+    const tangentY = nx;
+    const tangentSpeed = (b.vx - a.vx) * tangentX + (b.vy - a.vy) * tangentY;
+    const friction = clamp(tangentSpeed * 0.14, -38, 38);
+    a.vx += friction * tangentX;
+    a.vy += friction * tangentY;
+    b.vx -= friction * tangentX;
+    b.vy -= friction * tangentY;
+  }
+
+  function tick(time) {
+    if (!active) return;
+    const dt = Math.min((time - lastTime) / 1000 || 0, 1 / 30);
+    lastTime = time;
+    if (!falling && (time - floatStarted >= FLOAT_MS || reducedMotion.matches)) falling = true;
+    const { width, height } = bounds();
+
+    for (const bubble of bubbles) {
+      if (falling) {
+        bubble.vy += GRAVITY * dt;
+      } else {
+        // Each item continuously changes direction, producing unplanned drift
+        // instead of a shared orbit or a single prescribed path.
+        const wander = time / 1000 + bubble.phase;
+        bubble.vx += (Math.sin(wander * 1.7) * bubble.driftX - bubble.vx * 0.22) * dt;
+        bubble.vy += (Math.cos(wander * 1.31) * bubble.driftY - bubble.vy * 0.22) * dt;
+      }
+      bubble.vx *= AIR_DRAG;
+      bubble.vy *= AIR_DRAG;
+      bubble.x += bubble.vx * dt;
+      bubble.y += bubble.vy * dt;
+      bubble.angle += bubble.angularVelocity * dt;
+      contain(bubble, width, height);
+    }
+    // A few solver passes make a compact, stable stack rather than allowing
+    // fast arrivals to tunnel through bubbles already on the floor.
+    for (let pass = 0; pass < 4; pass++) {
+      for (let i = 0; i < bubbles.length; i++) {
+        for (let j = i + 1; j < bubbles.length; j++) collide(bubbles[i], bubbles[j]);
+      }
+      for (const bubble of bubbles) contain(bubble, width, height);
+    }
+    for (const bubble of bubbles) position(bubble);
+    raf = requestAnimationFrame(tick);
+  }
+
+  function activate() {
+    cancelAnimationFrame(raf);
+    active = true;
+    falling = false;
+    scene.classList.add('is-active');
+    createBubbles();
+    floatStarted = performance.now();
+    lastTime = floatStarted;
+    raf = requestAnimationFrame(tick);
+  }
+
+  function deactivate() {
+    active = false;
+    cancelAnimationFrame(raf);
+    scene.classList.remove('is-active');
+    scene.replaceChildren();
+  }
+
+  function handleResize() {
+    if (!active) return;
+    const { width, height } = bounds();
+    // Preserve the existing simulation (especially its falling/settled
+    // state) rather than treating a viewport resize as a new activation.
+    for (const bubble of bubbles) {
+      bubble.w = bubble.element.offsetWidth;
+      bubble.h = bubble.element.offsetHeight;
+      contain(bubble, width, height);
+      position(bubble);
+    }
+  }
+
+  window.addEventListener('bubbles:activate', activate);
+  window.addEventListener('bubbles:deactivate', deactivate);
+  window.addEventListener('resize', handleResize, { passive: true });
+  // Linear is the initial position of the reinstated toggle.
+  activate();
+}());
