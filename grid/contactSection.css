@@ -48,6 +48,25 @@
       
     }
 
+    /* Underneath the curve -- the .curve-line ellipse (cx 50 cy 20 rx 58
+       ry 20 in a 24-tall viewBox mapped onto this 30vw-tall box) peaks
+       almost at the very top at center and only reaches its lowest point,
+       around 43% of the box height, at the far left/right edges. Starting
+       the scene there keeps every bubble spawning below the curve line
+       itself everywhere across its width, rather than below the whole
+       blue block or the headline text. top/bottom (not height) are set
+       so the box fills exactly down to the very bottom of the section,
+       regardless of how tall .bottom-white's content makes the section. */
+    .contact-bubble-scene {
+      position: absolute;
+      top: 13vw;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: auto;
+      z-index: 6;
+    }
+
     .contact-info {
         position: relative;
         width: fit-content;

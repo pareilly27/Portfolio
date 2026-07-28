@@ -151,6 +151,7 @@ window.HomeImageGrid = { setDimensions };
 // are rebuilt when switching between Linear and Experimental layouts.
 const crosshair = document.getElementById('gridCrosshair');
 const focusTile = document.getElementById('gridFocusTile');
+const leadDesignerLabel = document.getElementById('leadDesignerLabel');
 const REVEAL_DELAY = 260;
 // How hard the tile/crosshair chase the cursor, per frame. 1 = rigid
 // lock (old behaviour), lower = more lag. The tile trails the pointer
@@ -175,6 +176,7 @@ function hideCrosshair() {
     crosshairTimer = null;
     if (crosshair) crosshair.classList.remove('is-visible');
     if (focusTile) focusTile.classList.remove('is-visible');
+    if (leadDesignerLabel) leadDesignerLabel.classList.remove('is-visible');
     if (focusedCell) {
         focusedCell.classList.remove('is-revealed');
         focusedCell = null;
@@ -193,6 +195,12 @@ function positionFocus() {
     if (crosshair) {
         crosshair.style.setProperty('--crosshair-x', `${followX}px`);
         crosshair.style.setProperty('--crosshair-y', `${followY}px`);
+    }
+    // Fixed horizontally (set once in CSS); only the vertical position
+    // here tracks the crosshair's horizontal line, so the label always
+    // sits just above it.
+    if (leadDesignerLabel) {
+        leadDesignerLabel.style.setProperty('--label-y', `${followY}px`);
     }
 }
 
@@ -244,6 +252,7 @@ function setGridFocus(cell) {
     }
     positionFocus();
     crosshair.classList.add('is-visible');
+    if (leadDesignerLabel) leadDesignerLabel.classList.add('is-visible');
 }
 
 gridContainer.addEventListener('pointermove', event => {

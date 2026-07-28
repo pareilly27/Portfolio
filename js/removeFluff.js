@@ -1,29 +1,28 @@
-// "Strip the Fluff" bolds the key phrases; "Put it Back" restores them.
-// Two explicit buttons rather than one toggle, so each one's effect is
-// unambiguous regardless of current state.
-//
-// Only the button whose action is currently available is highlighted:
-// .is-active draws the black border (see .strip-fluff-btn in the page's
-// stylesheet). On load that's "Strip the Fluff"; once stripped, it
-// becomes "Put it Back".
+// One toggle (same .toggle-btn component as the home page's
+// Linear/Experimental control): untoggled shows "Strip the Fluff" and
+// bolds the key phrases when clicked; toggled shows "Put it Back" and
+// restores them.
 var fluffEls = document.querySelectorAll('.fluff-text');
-var stripBtn = document.getElementById('strip-fluff-button');
-var restoreBtn = document.getElementById('put-it-back-button');
+var fluffToggle = document.getElementById('fluffToggle');
+var fluffToggleLabel = document.getElementById('fluffToggleLabel');
 
 function setFluffStripped(stripped) {
   fluffEls.forEach(function (el) {
     el.classList.toggle('removed', stripped);
   });
-  if (stripBtn) stripBtn.classList.toggle('is-active', !stripped);
-  if (restoreBtn) restoreBtn.classList.toggle('is-active', stripped);
+  if (fluffToggle) {
+    fluffToggle.classList.toggle('toggled', stripped);
+    fluffToggle.setAttribute('aria-pressed', String(stripped));
+  }
+  if (fluffToggleLabel) {
+    fluffToggleLabel.textContent = stripped ? 'Put it Back' : 'Strip the Fluff';
+  }
 }
 
-if (stripBtn) {
-  stripBtn.addEventListener('click', function () { setFluffStripped(true); });
-}
-
-if (restoreBtn) {
-  restoreBtn.addEventListener('click', function () { setFluffStripped(false); });
+if (fluffToggle) {
+  fluffToggle.addEventListener('click', function () {
+    setFluffStripped(!fluffToggle.classList.contains('toggled'));
+  });
 }
 
 // Establish the initial state explicitly rather than relying on the

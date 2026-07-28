@@ -113,10 +113,31 @@ window.RevealPointer = (function () {
     rawX = rect.left + rect.width / 2;
     rawY = rect.top + rect.height / 2;
 
+    // Sections the reveal effect should never engage over -- both sit
+    // well below the first viewport, in normal document flow, so their
+    // rects have to be read fresh on every move rather than cached like
+    // the fixed `target` above.
+    var EXCLUDED_IDS = ['grid-container', 'contact-section'];
+
+    function isInsideExcludedSection(x, y) {
+      for (var i = 0; i < EXCLUDED_IDS.length; i++) {
+        var el = document.getElementById(EXCLUDED_IDS[i]);
+        if (!el) continue;
+        var r = el.getBoundingClientRect();
+        if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return true;
+      }
+      return false;
+    }
+
     window.addEventListener('mousemove', function (e) {
       rawX = e.clientX;
       rawY = e.clientY;
-      active = true;
+      // Suppressing `active` while the pointer is over an excluded
+      // section (rather than just hiding the canvas with CSS) means the
+      // effect never actually engages there: it eases out on entry via
+      // the same currentRadius shrink used for mouseleave/tab-hidden,
+      // and eases back in on exit, same as leaving/re-entering the page.
+      active = !isInsideExcludedSection(rawX, rawY);
     }, { passive: true });
 
     window.addEventListener('mouseleave', function () {

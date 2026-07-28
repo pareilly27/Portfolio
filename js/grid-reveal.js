@@ -33,7 +33,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
   if (!gl) return; // no WebGL support -- fail quiet, no reveal effect
 
-  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  // Capped at 1 (was min(devicePixelRatio, 2)) -- on a 2x/Retina
+  // screen this shader was rendering 4x the pixels every frame,
+  // forever, for a soft/blurry effect where the difference is barely
+  // visible. This is the single biggest ongoing GPU cost on the page.
+  const DPR = 1;
 
   // ---- Tunables --------------------------------------------------------
   const CORE_RATIO = 0.25;        // fraction of radius that is solid, untouched image

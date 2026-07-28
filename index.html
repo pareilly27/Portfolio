@@ -12,6 +12,9 @@
     href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap"
     rel="stylesheet"
   />
+  <!-- Satoshi: used for the header/navbar/toggle (see .header, .navbar,
+       #button-container in grid/style.css) -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -32,12 +35,6 @@
 <body>
   <section class="full-page-container" id="full-page-container">
 
-    <div id="button-container" class="button-container">
-      <button id="toggleBtn" class="toggle-btn" aria-pressed="false">
-          <span id="toggleCircle" class="toggle-circle"></span>
-          <label id="toggleLabel" class="toggle-label">Linear</label>
-        </button>
-    </div>
     <div class="overlay">
 
       <!-- Header -->
@@ -50,15 +47,28 @@
             <li><a href="ShreyanshiSatodia.Resume.pdf" target="_blank" class="nav-regular-link">Resume</a></li>
           </ul>
         </nav>
+
+        <div id="button-container" class="button-container">
+          <button id="toggleBtn" class="toggle-btn" aria-pressed="false">
+            <span id="toggleCircle" class="toggle-circle"></span>
+            <label id="toggleLabel" class="toggle-label">Linear</label>
+          </button>
+        </div>
       </header>
 
       
 
-      <!-- Hero Text -->
+      <!-- Hero Text: one shared box/structure for both states (see
+           grid/style.css). Linear and Experimental each have their own
+           headline + subtext lines here; body.is-experimental (toggled
+           in js/toggle.js) both swaps which pair is shown and moves the
+           whole box from centred-on-screen to beneath the image grid. -->
       <div class="container">
         <div class="hero-statement">
-          <p class="text-large hero-headline">Building brands people connect with. Creating experiences they remember.</p>
-          <p class="text-small hero-subtext">Brand Designer &amp; Creative Strategist based in Dallas with seven years of experience creating identities, websites, and campaigns that balance strategy, personality, and lasting impact.</p>
+          <p class="text-large hero-headline hero-headline--linear">Building brands people connect with<br>Creating experiences they remember.</p>
+          <p class="text-large hero-headline hero-headline--experimental">Nothing is where<br>you expect it</p>
+          <p class="text-small hero-subtext hero-subtext--linear">Brand Designer &amp; Creative Strategist based in Dallas with seven years of experience creating identities, websites, and campaigns that balance strategy, personality, and lasting impact.</p>
+          <p class="text-small hero-subtext hero-subtext--experimental">Move around. Discover Projects. Click to dive deeper.</p>
           <p class="text-small hero-tagline">Curiosity starts every project. Detail finishes it.</p>
         </div>
       </div>
@@ -71,6 +81,10 @@
          inside its cell, so it can ride with the cursor instead of being
          pinned to the cell's slot (see js/grid.js). -->
     <div class="grid-focus-tile" id="gridFocusTile" aria-hidden="true"></div>
+    <!-- Experimental: fixed at the navbar's own left padding (never moves
+         horizontally), tracks the crosshair's horizontal line vertically
+         so it always sits just above it (see js/grid.js positionFocus()). -->
+    <div class="lead-designer-label" id="leadDesignerLabel" aria-hidden="true">Lead Designer</div>
 
     <!-- Deactivated: "Selected Works / Projects" text divider, replaced
          by a single rounded border around the whole grid (see
@@ -92,159 +106,117 @@
     <div class="grid-container" id="grid-container">
 
       <!-- Project Cards -->
-      <a href="Projects/milli/">
-        <div class="square" style="background-image: url('project_images/Milly/grid_image_milli.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>MILLI</h2>
-              <p class="overlay-subtitle">Brand Identity</p>
-            </div>
-          </div>
+      <a href="Projects/milli/" class="project-card">
+        <div class="square" style="background-image: url('project_images/Milly/grid_image_milli.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">MILLI</p>
+          <p class="project-desc">Brand Identity</p>
         </div>
       </a>
 
-      <a href="Projects/rock-enrollment/" class="square-wrapper">
-        <div class="square" style="background-image: url('project_images/rockEnrollment/grid_image_rock_enrollment.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>ROCK ENROLLMENT</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/rock-enrollment/" class="project-card">
+        <div class="square" style="background-image: url('project_images/rockEnrollment/grid_image_rock_enrollment.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">ROCK ENROLLMENT</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/picklemans/" class="square-wrapper">
-        <div class="square" style="background-image: url('project_images/Picklemans/grid_image_pickelmans.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>PICKLEMAN'S</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/picklemans/" class="project-card">
+        <div class="square" style="background-image: url('project_images/Picklemans/grid_image_pickelmans.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">PICKLEMAN'S</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/nccil/">
-        <div class="square" style="background-image: url('project_images/NCCIL/grid_image_nccil.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>NCCIL</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/nccil/" class="project-card">
+        <div class="square" style="background-image: url('project_images/NCCIL/grid_image_nccil.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">NCCIL</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/netflix/">
-        <div class="square" style="background-image: url('ProjectGalleries/Netflix/NETFLIX-01.webp');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>NETFLIX</h2>
-              <p class="overlay-subtitle">Visual Key Art Digital Design</p>
-            </div>
-          </div>
+      <a href="Projects/netflix/" class="project-card">
+        <div class="square" style="background-image: url('ProjectGalleries/Netflix/NETFLIX-01.webp');"></div>
+        <div class="project-caption">
+          <p class="project-name">NETFLIX</p>
+          <p class="project-desc">Visual Key Art Digital Design</p>
         </div>
       </a>
 
-      <a href="Projects/general-waters/" class="square-wrapper">
-        <div class="square" style="background-image: url('project_images/GeneralWaters/header_image_general_waters.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>GENERAL WATERS</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/general-waters/" class="project-card">
+        <div class="square" style="background-image: url('project_images/GeneralWaters/header_image_general_waters.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">GENERAL WATERS</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/what-if/">
-        <div class="square" style="background-image: url('project_images/what_if/header_image_what_if.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>WHAT IF</h2>
-              <p class="overlay-subtitle">Packaging Design</p>
-            </div>
-          </div>
+      <a href="Projects/what-if/" class="project-card">
+        <div class="square" style="background-image: url('project_images/what_if/header_image_what_if.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">WHAT IF</p>
+          <p class="project-desc">Packaging Design</p>
         </div>
       </a>
 
-      <a href="Projects/or-dallas/">
-        <div class="square" style="background-image: url('project_images/OR_Dallas/grid_image_or_dallas.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>OR DALLAS</h2>
-              <p class="overlay-subtitle">Brand &amp; Website Design</p>
-            </div>
-          </div>
+      <a href="Projects/or-dallas/" class="project-card">
+        <div class="square" style="background-image: url('project_images/OR_Dallas/grid_image_or_dallas.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">OR DALLAS</p>
+          <p class="project-desc">Brand &amp; Website Design</p>
         </div>
       </a>
 
-      <a href="Projects/hg/">
-        <div class="square" style="background-image: url('project_images/HG/header_image_HG.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>HG</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/hg/" class="project-card">
+        <div class="square" style="background-image: url('project_images/HG/header_image_HG.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">HG</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/culpepper/">
-        <div class="square" style="background-image: url('project_images/Culpepper/header_image_cullpepper.webp');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>CULPEPPER</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/culpepper/" class="project-card">
+        <div class="square" style="background-image: url('project_images/Culpepper/header_image_cullpepper.webp');"></div>
+        <div class="project-caption">
+          <p class="project-name">CULPEPPER</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/swire-water/">
-        <div class="square" style="background-image: url('project_images/SwireWater/gird_image_swire.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>SWIRE WATER</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/swire-water/" class="project-card">
+        <div class="square" style="background-image: url('project_images/SwireWater/gird_image_swire.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">SWIRE WATER</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/tbm/">
-        <div class="square" style="background-image: url('ProjectPics/TBM.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>TBM</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/tbm/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/TBM.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">TBM</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
       <!-- Deactivated: Reachpoint & Lead With Light (project pages kept, removed from grid + footer arrows) -->
       <!--
-      <a href="Projects/reachpoint/">
-        <div class="square" style="background-image: url('project_images/Reachpoint/grid_image_reachpoint.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>REACHPOINT</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/reachpoint/" class="project-card">
+        <div class="square" style="background-image: url('project_images/Reachpoint/grid_image_reachpoint.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">REACHPOINT</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/lead-with-light/">
-        <div class="square" style="background-image: url('project_images/lead_with_light/grid_image_lead_with_light.png');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>LEAD WITH LIGHT</h2>
-              <p class="overlay-subtitle">Brand Identity</p>
-            </div>
-          </div>
+      <a href="Projects/lead-with-light/" class="project-card">
+        <div class="square" style="background-image: url('project_images/lead_with_light/grid_image_lead_with_light.png');"></div>
+        <div class="project-caption">
+          <p class="project-name">LEAD WITH LIGHT</p>
+          <p class="project-desc">Brand Identity</p>
         </div>
       </a>
       -->
@@ -252,146 +224,107 @@
       <!-- Disabled projects: not currently shown in the grid, kept below for reference (not deleted). -->
       <!--
 
-      <a href="Projects/synergy/">
-        <div class="square" style="background-image: url('ProjectPics/Synergy.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>SYNERGY</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/synergy/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/Synergy.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">SYNERGY</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/west/">
-        <div class="square" style="background-image: url('ProjectPics/West One.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>WEST ONE</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/west/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/West One.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">WEST ONE</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/wells/" class="square-wrapper">
-        <div class="square" style="background-image: url('ProjectGalleries/Wells/1.webp');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>WELLS</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/wells/" class="project-card">
+        <div class="square" style="background-image: url('ProjectGalleries/Wells/1.webp');"></div>
+        <div class="project-caption">
+          <p class="project-name">WELLS</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/dirty-drinkers/">
-        <div class="square" style="background-image: url('ProjectPics/DIrtyDrinkers.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>DIRTY DRINKERS</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/dirty-drinkers/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/DIrtyDrinkers.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">DIRTY DRINKERS</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/brutiful/">
-        <div class="square" style="background-image: url('ProjectPics/Brutiful.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>BRUTIFUL</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/brutiful/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/Brutiful.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">BRUTIFUL</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/gen-water/" class="square-wrapper">
-        <div class="square" style="background-image: url('ProjectPics/genWaters.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>GENERAL WATERS</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/gen-water/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/genWaters.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">GENERAL WATERS</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/ignite/" class="square-wrapper">
-        <div class="square" style="background-image: url('ProjectGalleries/IgnitePics/1.webp');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>IGNITE</h2>
-              <p class="overlay-subtitle">Rebranding</p>
-            </div>
-          </div>
+      <a href="Projects/ignite/" class="project-card">
+        <div class="square" style="background-image: url('ProjectGalleries/IgnitePics/1.webp');"></div>
+        <div class="project-caption">
+          <p class="project-name">IGNITE</p>
+          <p class="project-desc">Rebranding</p>
         </div>
       </a>
 
-      <a href="Projects/swyft/" class="square-wrapper">
-        <div class="square" style="background-image: url('ProjectGalleries/swyft/Artboard 1@4x.webp');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>SWYFT</h2>
-              <p class="overlay-subtitle">Rebranding</p>
-            </div>
-          </div>
+      <a href="Projects/swyft/" class="project-card">
+        <div class="square" style="background-image: url('ProjectGalleries/swyft/Artboard 1@4x.webp');"></div>
+        <div class="project-caption">
+          <p class="project-name">SWYFT</p>
+          <p class="project-desc">Rebranding</p>
         </div>
       </a>
 
-      <a href="Projects/mfa/">
-        <div class="square" style="background-image: url('ProjectPics/MFA.jpg');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>MFA</h2>
-              <p class="overlay-subtitle">Re-Brand</p>
-            </div>
-          </div>
+      <a href="Projects/mfa/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/MFA.jpg');"></div>
+        <div class="project-caption">
+          <p class="project-name">MFA</p>
+          <p class="project-desc">Re-Brand</p>
         </div>
       </a>
 
-      <a href="Projects/soulful/">
-        <div class="square" style="background-image: url('ProjectPics/Soulful.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>SOULFUL</h2>
-              <p class="overlay-subtitle">UI/UX Design</p>
-            </div>
-          </div>
+      <a href="Projects/soulful/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/Soulful.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">SOULFUL</p>
+          <p class="project-desc">UI/UX Design</p>
         </div>
       </a>
 
-      <a href="Projects/350/">
-        <div class="square" style="background-image: url('ProjectPics/350.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>350</h2>
-              <p class="overlay-subtitle">Social Campaign</p>
-            </div>
-          </div>
+      <a href="Projects/350/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/350.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">350</p>
+          <p class="project-desc">Social Campaign</p>
         </div>
       </a>
 
-      <a href="Projects/prjct/">
-        <div class="square" style="background-image: url('ProjectPics/PRJCT_WNDW.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>PRJCT_WNDW</h2>
-              <p class="overlay-subtitle">For Boston's Downtown Innovation District</p>
-            </div>
-          </div>
+      <a href="Projects/prjct/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/PRJCT_WNDW.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">PRJCT_WNDW</p>
+          <p class="project-desc">For Boston's Downtown Innovation District</p>
         </div>
       </a>
 
-      <a href="Projects/switch/">
-        <div class="square" style="background-image: url('ProjectPics/SwitchGlitch.avif');">
-          <div class="overlay">
-            <div class="overlay-text">
-              <h2>SWITCH GLITCH</h2>
-              <p class="overlay-subtitle">Exhibition Design</p>
-            </div>
-          </div>
+      <a href="Projects/switch/" class="project-card">
+        <div class="square" style="background-image: url('ProjectPics/SwitchGlitch.avif');"></div>
+        <div class="project-caption">
+          <p class="project-name">SWITCH GLITCH</p>
+          <p class="project-desc">Exhibition Design</p>
         </div>
       </a>
 
@@ -416,6 +349,9 @@
           <span>(857)437-9148</span>
         </div>
       </div>
+
+      <!-- Falls in once, the first time this section scrolls into view. -->
+      <div id="contactBubbleScene" class="bubble-scene contact-bubble-scene" aria-hidden="true"></div>
     </div>
     
 

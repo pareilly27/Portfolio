@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shreyanshi Satodia</title>
 
-  <!-- Load Oswald Font -->
-  
+  <!-- Satoshi: used for the header/navbar (see .header, .navbar in
+       grid/style.css) -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="../grid/style.css">
   <link rel="stylesheet" href="../grid/contactSection.css">
@@ -63,7 +64,7 @@
       font-family: "Desire Pro";
       font-weight: 400;
       font-style: normal;
-      font-size: 117.32px;
+      font-size: 58.66px; /* half of the original 117.32px */
       line-height: 100%;
       letter-spacing: 0%;
       margin-bottom: 0.5rem;
@@ -125,7 +126,7 @@
     margin-left: -10px;
     text-decoration: none;
     color: #000;
-    font-size: 1.2vw;
+    font-size: clamp(14px, 1.2vw, 18px);
     transition: color 0.3s ease;
     padding: 0 15px;
 }
@@ -144,7 +145,7 @@
     justify-content: flex-end;
     text-decoration: none;
     color: #000;
-    font-size: 1.2vw;
+    font-size: clamp(14px, 1.2vw, 18px);
     transition: color 0.3s ease;
     white-space: nowrap;
     list-style: none;
@@ -157,7 +158,7 @@
 .nav-regular-link {
     text-decoration: none;
     color: #000000;
-    font-size: 1.2vw;
+    font-size: clamp(14px, 1.2vw, 18px);
     transition: color 0.3s ease;
     padding-top: 0.2rem;  
 
@@ -225,13 +226,9 @@
       margin-bottom: 0;
     }
 
-    .left-column .strip-fluff-btn {
-      margin-bottom: 0;
-    }
-
     .left-column p {
       margin: 0;
-      font-size: 1.2vw;
+      font-size: 0.9vw;
       font-family: 'Raleway', sans-serif; /* matches .nav-s-button */
       /* No color override — inherit from body */
     }
@@ -270,6 +267,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
 
     .image-container img {
@@ -278,6 +276,30 @@
       object-fit: contain;
       margin-top: 3rem; /* Raise image by 2 rems */
      
+    }
+
+    /* Hovering bubble scene -- extends a bit past the image on every side
+       (rather than matching it exactly) so the four bubbles read as
+       floating around the portrait instead of clipped to its edges. */
+    .about-bubble-scene {
+      position: absolute;
+      /* Horizontal inset trimmed way down from -8vw -- the quadrant
+         layout in js/bubbles-2.js was spreading the four bubbles far
+         out to the left/right of the portrait; keeping them closer in
+         horizontally (vertical reach unchanged) centers the cluster
+         around the image instead. */
+      inset: -6vw -2vw;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+      .about-bubble-scene {
+        inset: -4vw -1.5vw;
+      }
     }
 
     
@@ -320,40 +342,6 @@
     margin-bottom: 1.25rem;
 }
 
-    /* Transparent, always-black text at the same size/family as the
-       paragraphs below. The ONLY thing that changes between states is
-       the border: the button whose action is currently available gets
-       a visible one (.is-active, toggled in js/removeFluff.js), the
-       other keeps a transparent border of equal width so nothing
-       shifts as the state flips. */
-     .strip-fluff-btn {
-    display: inline-flex;
-    align-items: center;
-    width: fit-content;
-    background-color: transparent;
-    color: #000;
-    border: 1.5px solid transparent;
-    border-radius: 8px;
-    padding: 0.4rem 0.8rem;
-    cursor: pointer;
-    font-family: 'Raleway', sans-serif; /* same family as .left-column p */
-    font-weight: 400;
-    transition: border-color 0.2s ease;
-}
-
-.strip-fluff-btn.is-active {
-    border-color: #000;
-}
-
-.strip-fluff-label {
-    font-size: 1.3vh;
-    transform: scaleX(1) scaleY(1.5);
-    transform-origin: left center;
-    line-height: 1;
-}
-
-
-
     html, body {
       pointer-events: auto;
       overflow-x: hidden;
@@ -390,13 +378,13 @@
       }
 
       .left-column h2 {
-        font-size: 2.4rem;
+        font-size: 1.2rem; /* half of the original 2.4rem, matching the desktop change */
         transform: none;
         white-space: normal;
       }
 
       .left-column p {
-        font-size: 1rem;
+        font-size: 0.85rem;
       }
 
       .fluff-controls {
@@ -480,11 +468,13 @@
         <h2>The long version</h2>
         
         <div class="fluff-controls">
-          <button class="strip-fluff-btn is-active" id="strip-fluff-button">
-              <span class="strip-fluff-label">STRIP THE FLUFF</span>
-          </button>
-          <button class="strip-fluff-btn" id="put-it-back-button">
-              <span class="strip-fluff-label">PUT IT BACK</span>
+          <!-- Same toggle component as the home page's Linear/Experimental
+               control (.toggle-btn/.toggle-circle/.toggle-label, styled in
+               grid/style.css) -- untoggled = "Strip the Fluff", toggled =
+               "Put it Back" (see js/removeFluff.js). -->
+          <button class="toggle-btn" id="fluffToggle" aria-pressed="false">
+            <span class="toggle-circle"></span>
+            <label class="toggle-label" id="fluffToggleLabel">Strip the Fluff</label>
           </button>
         </div>
         
@@ -506,6 +496,9 @@
       <div class="right-column">
         <div class="image-container">
           <img src="../Screenshot 2025-04-29 at 9.08.13 PM-Photoroom.png" alt="Placeholder Image" />
+          <!-- Same bubble visuals as the home page, but hovering (no fall) --
+               see js/bubbles-2.js. -->
+          <div id="aboutBubbleScene" class="bubble-scene about-bubble-scene" aria-hidden="true"></div>
         </div>
       </div>
     </div>
@@ -549,6 +542,7 @@
   </script>
   <script src="../js/grid.js"></script>
   <script src="../js/removeFluff.js"></script>
+  <script src="../js/bubbles-2.js"></script>
   <script src="../js/cursor-glass.js"></script>
 </body>
 </html>

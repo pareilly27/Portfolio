@@ -1,3 +1,5 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400&display=swap');
+
 :root {
     --grid-columns: 12;
     --grid-size-base: 10;
@@ -6,19 +8,20 @@
     --hero-height: max(min(40vh, 520px), calc(var(--hero-width) * 0.45));
 }
 
-/* Absolute, not fixed: the toggle belongs to the hero section, so it
-   scrolls away with the page rather than following the viewport. All
+/* Lives inside .header (position: relative), centered on the header's
+   own box -- this is what keeps it vertically centered with the nav
+   text at any viewport size, and in the navbar on standard view. All
    placement lives here -- .toggle-btn below must not add its own
    top/left/transform, or it fights this and the result depends on box
    widths. */
 #button-container {
     position: absolute;
-    top: 5vh;
+    top: 50%;
     left: 50%;
     z-index: 150;
     display: block;
     pointer-events: auto;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
 }
 
 
@@ -57,12 +60,20 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    overflow: hidden;
+    /* Was hidden -- with the headline now two explicit lines instead of
+       one, any edge-case overage (very small hero box, long line) would
+       get silently clipped instead of just showing in full. Visible is
+       the safe default for a text box with no background to mask. */
+    overflow: visible;
 }
 
-/* Experimental uses the image grid without the central hero statement. */
+/* Keep the Experimental text container centered within the overlay. */
 body.is-experimental .container {
-    visibility: hidden;
+    top: 50%;
+    bottom: auto;
+    height: var(--hero-height);
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* Hero statement: three stacked, centre-aligned tiers -- bold headline,
@@ -84,10 +95,13 @@ body.is-experimental .container {
 }
 
 /* Overrides .container .text-large's display size: that was tuned for a
-   one-word line ("Design"), far too large for a full sentence. */
+   one-word line ("Design"), far too large for a full sentence -- and
+   now that the headline is two explicit lines (not one auto-wrapping
+   one), the size has to be small enough that the longer of the two
+   lines never exceeds max-width on its own, at any hero-box size. */
 .container .hero-headline {
-    font-size: clamp(22px, 5cqw, 54px);
-    line-height: 1.12;
+    font-size: clamp(14px, 3cqw, 32px);
+    line-height: 1.2;
     max-width: 92%;
 }
 
@@ -102,6 +116,32 @@ body.is-experimental .container {
     font-style: italic;
     line-height: 1.4;
     max-width: 92%;
+}
+
+/* Linear/Experimental content swap -- both sets of lines live in the
+   same .hero-statement at all times; only one set is shown, toggled by
+   body.is-experimental. The Experimental headline is the only visual
+   difference beyond the copy itself: grey instead of the default color.
+   The tagline is Linear-only (Experimental was only asked for a
+   headline + subtext, so it stays a two-tier statement). */
+.hero-headline--experimental,
+.hero-subtext--experimental {
+    display: none;
+}
+
+body.is-experimental .hero-headline--linear,
+body.is-experimental .hero-subtext--linear,
+body.is-experimental .hero-tagline {
+    display: none;
+}
+
+body.is-experimental .hero-headline--experimental,
+body.is-experimental .hero-subtext--experimental {
+    display: block;
+}
+
+.hero-headline--experimental {
+    color: #d4d4d4;
 }
 
 
@@ -189,6 +229,10 @@ body.is-experimental .container {
   font-size: clamp(40px, 14cqw, 140px);
 }
 
+.container .text-large.hero-headline--linear {
+    font-size: 100px;
+}
+
 .middle-row.text-large {
     font-size: clamp(38px, 13.6cqw, 140px);
 }
@@ -209,31 +253,45 @@ body.is-experimental .container {
     color: white;
     border: none;
     cursor: pointer;
-    border-radius: 3vh;
-    padding: 1.2vh 5vw;
-    font-size: 2.5vh;
+    border-radius: 18px;
+    /* Height is the fixed base (unchanged from before); width is
+       derived from it using the 140:25 (width:height) ratio, so the
+       bar keeps that exact proportion instead of a hardcoded width. */
+    height: 36px;
+    width: calc(36px * 140 / 25);
+    /* Horizontal padding clears the circle's own inset + diameter, so
+       there's equal breathing room around the circle on whichever end
+       it's currently sitting at. */
+    padding: 6px 48px;
+    /* Same clamp as the rest of the navbar (.nav-links / .nav-s-button /
+       .nav-regular-link / .lead-designer-label), so nav text reads as
+       one consistent size everywhere instead of the toggle sitting at a
+       fixed 14px while everything around it scales up to 18px. */
+    font-size: clamp(14px, 1.2vw, 18px);
+    white-space: nowrap;
     display: flex;
     align-items: center;
-    gap: 1vw;
-    min-height: 3.1vh;
-    
-    
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .toggle-circle {
     position: absolute;
-    top: 50%;
-    left: 0.5vw;
-    transform: translateY(-50%);
-    width: 3vh;
-    height: 3vh;
+    top: 6px;
+    left: 6px;
+    width: 24px;
+    height: 24px;
     background: #7B97C5;
     border-radius: 50%;
     transition: left 0.3s ease;
 }
 
 .toggle-btn.toggled .toggle-circle {
-    left: calc(100% - 0.5vw - 3.1vh);
+    left: calc(100% - 6px - 24px);
+}
+
+.toggle-label {
+    text-transform: uppercase;
 }
 
 .toggle-text {
@@ -420,6 +478,33 @@ body.is-experimental .grid-crosshair.is-visible {
     opacity: 1;
 }
 
+/* Experimental "Lead Designer" label -- horizontally fixed at the exact
+   same left offset as "Shreyanshi Satodia" in the navbar (header's own
+   0.1vw padding + the navbar's 1.5% left padding), so it never moves
+   sideways. Vertically it tracks the crosshair's horizontal line (see
+   js/grid.js positionFocus(), which sets --label-y alongside
+   --crosshair-y) and sits just above it. z-index is below the focus
+   tile (105) so the tile paints over the label if they land in the same
+   spot, but above the crosshair lines (104) themselves. */
+.lead-designer-label {
+    position: fixed;
+    top: var(--label-y, -100px);
+    left: calc(1.5% + 0.1vw);
+    transform: translate(0, calc(-100% - 10px));
+    font-family: 'Satoshi', sans-serif; /* matches the rest of the navbar */
+    font-size: clamp(14px, 1.2vw, 18px);
+    color: #000;
+    white-space: nowrap;
+    z-index: 103;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+}
+
+body.is-experimental .lead-designer-label.is-visible {
+    opacity: 1;
+}
+
 /* Bubble ---------------------------------------------------------------
    This is deliberately absolute (rather than fixed): once the bubbles
    settle, their floor is the bottom of this first-viewport scene and the
@@ -449,15 +534,17 @@ body.is-experimental .grid-crosshair.is-visible {
     padding: 0 1.25rem;
     border: 1px solid rgba(0, 0, 0, 0.78);
     border-radius: 14px;
+    /* Even lighter than before -- barely-there tint and blur, so
+       whatever is behind the bubble stays clearly readable through it. */
     background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.18) 48%, rgba(255, 255, 255, 0.34)),
-        rgba(255, 255, 255, 0.22);
+        linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04) 48%, rgba(255, 255, 255, 0.09)),
+        rgba(255, 255, 255, 0.05);
     box-shadow:
         0 14px 30px rgba(0, 0, 0, 0.20),
         inset 1px 1px 1px rgba(255, 255, 255, 0.78),
         inset -1px -1px 1px rgba(0, 0, 0, 0.12);
-    backdrop-filter: blur(15px) saturate(155%) contrast(108%);
-    -webkit-backdrop-filter: blur(15px) saturate(155%) contrast(108%);
+    backdrop-filter: blur(2px) saturate(108%) contrast(101%);
+    -webkit-backdrop-filter: blur(2px) saturate(108%) contrast(101%);
     color: #0c0c0c;
     font-family: 'Raleway', sans-serif;
     font-size: clamp(0.62rem, 0.9vw, 0.82rem);
@@ -491,7 +578,8 @@ body.is-experimental .grid-crosshair.is-visible {
 /* Navbar */
 
 .header {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 400;
     position: relative;
     width: 100%;
     top: 0;
@@ -500,6 +588,14 @@ body.is-experimental .grid-crosshair.is-visible {
     padding: 0.1rem 0.1vw;
     background-color: transparent;
     pointer-events: auto;
+}
+
+.navbar,
+.navbar *,
+#button-container,
+#button-container * {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 400;
 }
 
 .navbar {
@@ -563,21 +659,6 @@ body.is-experimental .grid-crosshair.is-visible {
     color: #000;
 }   
 
-.square .overlay-text {
-    color: #fff;
-}
-
-.square .overlay-text h2 {
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
-    font-weight: 700;
-    color: #fff;
-}
-
-.square .overlay-text .overlay-subtitle {
-    font-size: clamp(1rem, 2vw, 1.5rem);
-    color: #fff;
-}
-
 /* Fonts */
 
 @font-face {
@@ -617,6 +698,36 @@ body.is-experimental .grid-crosshair.is-visible {
     :root {
         --hero-width: 90vw;
         --hero-height: min(50vh, 480px);
+    }
+
+    /* Smaller than the shared desktop clamp()s in .container
+       .hero-headline / .hero-subtext / .hero-tagline above (14px / 12px
+       / 10px floors) -- a modest reduction, not a drastic one. Scoped to
+       this media query only, so standard view's sizing is unaffected. */
+    .container .hero-headline {
+        font-size: clamp(6px, 1.5cqw, 10px);
+    }
+
+    /* .container .text-large.hero-headline--linear (fixed 100px, above)
+       is more specific than .container .hero-headline just above, so it
+       still wins on mobile unless matched here with the same selector.
+       Same specificity + later in the file (this media query) = this
+       wins on mobile; the fixed 100px rule still governs on desktop,
+       where this block doesn't apply at all. */
+    .container .text-large.hero-headline--linear {
+        font-size: clamp(20px, 17.5cqw, 100px);
+    }
+
+    .container .text-large.hero-headline--experimental {
+        font-size: clamp(20px, 17.5cqw, 100px);
+    }
+
+    .container .hero-subtext {
+        font-size: clamp(8px, 4.5cqw, 40px);
+    }
+
+    .container .hero-tagline {
+        font-size: clamp(15px, 5cqw, 30px);
     }
 
     .top-row, .bottom-row {
@@ -659,24 +770,15 @@ body.is-experimental .grid-crosshair.is-visible {
         margin-bottom: 0.5rem;
     }
     
-    /* Toggle button - lower it when navbar is centered (offset the fixed
-       container, so the button keeps its own positioning clean) */
+    /* Toggle button - on mobile the navbar wraps to two rows, so the
+       toggle drops below the (now taller) header instead of sitting
+       centered inside it. Sizing stays the same fixed-pixel bar/circle
+       as standard view -- only the position changes here. */
     #button-container {
-        top: 12vh;
-    }
-
-    .toggle-btn {
-        width: 40vw;
-        justify-content: center;
-    }
-    
-    .toggle-circle {
-        width: 2.5vh;
-        height: 2.5vh;
-    }
-    
-    .toggle-btn.toggled .toggle-circle {
-        left: calc(100% - 0.5vw - 2.6vh);
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 16px;
     }
     
     /* Selected works divider */
@@ -705,16 +807,22 @@ body.is-experimental .grid-crosshair.is-visible {
     width: 100%;
     box-sizing: border-box;
     z-index: 10;
+    /* The pixel-reveal effect is suppressed at the source now (see the
+       #grid-container exclusion check in js/reveal-pointer.js), so
+       nothing needs to be covered here -- transparent is safe again. */
     background: transparent;
     pointer-events: auto;
-    /* Replaces the old "Selected Works / Projects" text divider: one
-       rounded border wraps the whole grid instead. box-sizing:border-box
-       (above) means the 1px border sits flush against the box's own
-       edges rather than adding to width -- and since this element is
-       width:100% with no side margin, those edges land exactly at the
-       viewport edges, same as the reference. */
-    border: 1px solid #000;
-    border-radius: 32px;
+    /* Replaces the old "Selected Works / Projects" text divider: a
+       rounded border wraps the top and sides of the grid, but not the
+       bottom -- box-sizing:border-box (above) means the border sits
+       flush against the box's own edges rather than adding to width,
+       and since this element is width:100% with no side margin, those
+       edges land exactly at the viewport edges, same as the reference. */
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom: none;
+    border-radius: 32px 32px 0 0;
 }
 
 /* Sits above the whole grid as an invisible glass pane. While the page is
@@ -752,27 +860,41 @@ body.is-experimental .grid-crosshair.is-visible {
     border-radius: 6px;
 }
 
-.square .overlay {
-    position: absolute;
-    top: -500;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.square:hover .overlay {
-    opacity: 1;
-}
-
 .grid-container a {
     text-decoration: none;
+}
+
+/* Project caption -- replaces the old hover-reveal overlay: a small
+   always-visible label sits under each square instead, same width as
+   the square, name on top and description beneath, both left-aligned. */
+.project-card {
+    display: block;
+}
+
+.project-caption {
+    background: #fff;
+    color: #000;
+    text-align: left;
+    padding: 0.6rem 0.8rem 0.7rem;
+    margin-top: 1rem;
+    box-sizing: border-box;
+    border: 1px solid #000;
+}
+
+.project-name {
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: clamp(0.85rem, 1.1vw, 1.15rem);
+    letter-spacing: 0.02em;
+}
+
+.project-desc {
+    margin: 0.2rem 0 0;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: clamp(0.75rem, 0.95vw, 0.95rem);
+    color: #333;
 }
 
 .selected-text-container {
