@@ -19,11 +19,57 @@
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const magnitude = (x, y) => Math.hypot(x, y);
 
+  // Contact section's curve line -- fixed relationship taken straight
+  // from grid/contactSection.css: the SVG box is 30vw tall with
+  // viewBox "0 -0.4 100 24" and an ellipse (cx 50, cy 20, rx 58,
+  // ry 20); .contact-bubble-scene sits 13vw below that same top edge.
+  // If either file changes these numbers, update both together.
+  // Computing off these fixed constants (rather than reading the
+  // SVG/scene boxes back with getBoundingClientRect at spawn time)
+  // means there's no dependency on exactly when/how those elements
+  // have laid out -- the curve's shape is just math, wherever the
+  // section ends up landing on the page.
+  const CONTACT_CURVE_HEIGHT_VW = 30;
+  const CONTACT_CURVE_VIEWBOX_MIN_Y = -0.4;
+  const CONTACT_CURVE_VIEWBOX_HEIGHT = 24;
+  const CONTACT_CURVE_ELLIPSE = { cx: 50, cy: 20, rx: 58, ry: 20 };
+  // .contact-bubble-scene now starts at the very top of the section
+  // (top: 0 in contactSection.css) so the whole curve falls inside its
+  // overflow:hidden box -- see the long note there. Kept as a named
+  // constant because the curve-to-scene offset is what this maths is
+  // actually about; if that CSS top ever changes, change this too.
+  const CONTACT_SCENE_TOP_VW = 0;
+
+  // xFrac: 0..1 across the full width of the contact section (the SVG,
+  // the scene, and the curve's own viewBox x-axis all share that same
+  // width). Returns a y in px, local to .contact-bubble-scene's own
+  // box -- negative means above the scene's top edge, matching how
+  // bubble.y already works.
+  function contactCurveLocalY(xFrac) {
+    const vwPx = window.innerWidth / 100;
+    const xv = clamp(xFrac, 0, 1) * 100;
+    const e = CONTACT_CURVE_ELLIPSE;
+    const t = e.rx > 0 ? (xv - e.cx) / e.rx : 0;
+    const inside = Math.max(0, 1 - t * t);
+    // Upper arc only -- the only half of the ellipse the viewBox
+    // actually shows (see the identical note in contactSection.css).
+    const yv = e.cy - e.ry * Math.sqrt(inside);
+    const yFracInBox = (yv - CONTACT_CURVE_VIEWBOX_MIN_Y) / CONTACT_CURVE_VIEWBOX_HEIGHT;
+    const curveVw = yFracInBox * CONTACT_CURVE_HEIGHT_VW;
+    return (curveVw - CONTACT_SCENE_TOP_VW) * vwPx;
+  }
+
   // Builds one independent bubble simulation bound to `scene`.
   // Returns { activate, deactivate }, or null if the scene isn't on the page.
   function createBubbleScene(scene, labels, options) {
     if (!scene) return null;
     const mode = (options && options.mode) || 'fall';
+    // A label is either a plain string or { text, href }. Entries with
+    // an href render as real anchors so they're clickable (and
+    // keyboard-reachable) rather than inert decorative divs.
+    const items = labels.map(function (label) {
+      return typeof label === 'string' ? { text: label, href: null } : label;
+    });
 
     let bubbles = [];
     let active = false;
@@ -40,15 +86,78 @@
       // Hover mode lays bubbles out in a grid of quadrants across the
       // scene first, so with N labels no two ever start overlapping --
       // then each one gets a random offset within its own cell.
-      const cols = mode === 'hover' ? Math.ceil(Math.sqrt(labels.length)) : 1;
-      const rows = mode === 'hover' ? Math.ceil(labels.length / cols) : 1;
+      const cols = mode === 'hover' ? Math.ceil(Math.sqrt(items.length)) : 1;
+      const rows = mode === 'hover' ? Math.ceil(items.length / cols) : 1;
       const cellW = width / cols;
       const cellH = height / rows;
 
-      bubbles = labels.map((label, index) => {
-        const element = document.createElement('div');
+      // Fall mode normally spawns across the scene's full width, from a
+      // fixed distance above it. When a spawnTarget is given (contact
+      // section: the contact-info text), x is confined to that
+      // element's own span instead of the full width -- bubbles only
+      // ever drop from directly above it. When useContactCurve is set,
+      // the drop height at each bubble's x is read off the curve's
+      // fixed geometry (contactCurveLocalY, above) instead of an
+      // arbitrary offset -- so bubbles genuinely originate from the
+      // curve line itself, not just "somewhere above the section."
+      let spawnMinX = WALL_PADDING;
+      let spawnMaxX = Math.max(spawnMinX + 1, width - WALL_PADDING);
+      if (mode !== 'hover' && options && options.spawnTarget) {
+        const sceneRect = scene.getBoundingClientRect();
+        const targetRect = options.spawnTarget.getBoundingClientRect();
+        if (targetRect.width > 0) {
+          const min = Math.max(spawnMinX, targetRect.left - sceneRect.left);
+          const max = Math.min(spawnMaxX, targetRect.right - sceneRect.left);
+          if (max - min > 20) {
+            spawnMinX = min;
+            spawnMaxX = max;
+          }
+        }
+      }
+
+      const useCurve = mode !== 'hover' && !!(options && options.useContactCurve);
+
+      // Precomputed spawn points sitting ON the curve, evenly sampled
+      // across the allowed x range and then shuffled, so each bubble
+      // gets a distinct point rather than several landing on the same
+      // spot by chance. Sampling (rather than one random x per bubble)
+      // is what guarantees the set visibly spans the curve's arc.
+      const curvePoints = [];
+      if (useCurve) {
+        const n = items.length;
+        for (let i = 0; i < n; i++) {
+          // Inset from the very ends of the range so no bubble spawns
+          // half-off the edge of the text it is meant to fall over.
+          const f = n === 1 ? 0.5 : (i + 0.5) / n;
+          const px = spawnMinX + f * (spawnMaxX - spawnMinX);
+          curvePoints.push({ x: px, y: contactCurveLocalY(px / width) });
+        }
+        for (let i = curvePoints.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const tmp = curvePoints[i];
+          curvePoints[i] = curvePoints[j];
+          curvePoints[j] = tmp;
+        }
+      }
+
+      bubbles = items.map((item, index) => {
+        // Anchor when the item has a destination, plain div otherwise.
+        // .bubble-scene sets pointer-events:none so the whole layer
+        // stays click-through; the anchor re-enables it for itself only,
+        // so only the pill is clickable, not the empty space around it.
+        const element = document.createElement(item.href ? 'a' : 'div');
         element.className = 'physics-bubble';
-        element.textContent = label;
+        if (item.href) {
+          element.href = item.href;
+          element.classList.add('physics-bubble--link');
+          if (/^https?:/i.test(item.href)) {
+            element.target = '_blank';
+            element.rel = 'noopener noreferrer';
+          }
+        } else {
+          element.setAttribute('aria-hidden', 'true');
+        }
+        element.textContent = item.text;
         scene.appendChild(element);
         const rect = element.getBoundingClientRect();
         const w = rect.width;
@@ -74,13 +183,28 @@
           };
         }
 
+        // Curve points are centres; convert to a left edge, then clamp
+        // so a wide bubble near the end of the range can't start
+        // half-off the scene and get snapped sideways by contain().
+        const spawnX = useCurve
+          ? clamp(curvePoints[index % curvePoints.length].x - w / 2,
+                  WALL_PADDING,
+                  Math.max(WALL_PADDING, width - w - WALL_PADDING))
+          : spawnMinX + Math.random() * Math.max(1, (spawnMaxX - w) - spawnMinX);
+        // Curve mode: start immediately UNDERNEATH the curve at this
+        // bubble's own x, so the line the bubbles emerge from traces the
+        // curve rather than sitting flat. The old code subtracted a
+        // large random + per-index offset here, which pushed every
+        // bubble far enough above the curve that the relationship was
+        // invisible; the stagger is now small enough to keep them
+        // reading as coming off the line.
+        const y = useCurve
+          ? curvePoints[index % curvePoints.length].y + 2 + Math.random() * 10 + index * 14
+          : -h - Math.random() * 220 - index * 80;
         return {
           element, w, h,
-          x: WALL_PADDING + Math.random() * Math.max(1, width - w - WALL_PADDING * 2),
-          // Start above the scene's own top edge, staggered per bubble, so
-          // each one visibly drops in from off-screen rather than
-          // appearing mid-air.
-          y: -h - Math.random() * 220 - index * 80,
+          x: spawnX,
+          y: y,
           vx: 0,
           vy: 0,
           angle: (Math.random() - 0.5) * 4,
@@ -275,11 +399,12 @@
 
   // ---- Hero scene: shown in the "Linear" (non-experimental) state ----
   const heroBubbles = createBubbleScene(document.getElementById('bubbleScene'), [
-    'BRAND SYSTEMS',
-    'CAMPAIGNS',
+    'ART DIRECTION',
     'CREATIVE DIRECTION',
-    'LESS, BUT BETTER',
-    'DESIGNED TO CONNECT',
+    'VISUAL IDENTITY',
+    'PACKAGING DESIGN',
+    'EDITORIAL DESIGN',
+    'UI / UX',
   ]);
   if (heroBubbles) {
     window.addEventListener('bubbles:activate', heroBubbles.activate);
@@ -291,10 +416,13 @@
   // ---- Contact scene: falls in once, the first time it scrolls into view ----
   const contactScene = document.getElementById('contactBubbleScene');
   const contactBubbles = createBubbleScene(contactScene, [
-    'EMAIL',
-    'PH. 857.437.9148',
-    'LINKEDIN',
-  ]);
+    { text: 'EMAIL', href: 'mailto:ssatodia97@gmail.com' },
+    { text: 'PH. 857.437.9148', href: 'tel:+18574379148' },
+    { text: 'LINKEDIN', href: 'https://www.linkedin.com/in/shreyanshi-satodia-396b9318a/' },
+  ], {
+    spawnTarget: document.getElementById('contactInfo'),
+    useContactCurve: true,
+  });
   if (contactBubbles) {
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
@@ -313,10 +441,11 @@
   // ---- About page scene: hovers around the portrait, no falling, active
   // for as long as the page is open ----
   const aboutBubbles = createBubbleScene(document.getElementById('aboutBubbleScene'), [
-    'CAMPAIGNS',
-    'DESIGNED TO CONNECT',
-    'CREATIVE DIRECTION',
-    'BRAND SYSTEMS',
+    'Curiosity First',
+    'Systems Thinking',
+    'Less, But Better',
+    'Built to Last',
+    'Concept to Launch',
   ], { mode: 'hover' });
   if (aboutBubbles) aboutBubbles.activate();
 }());

@@ -8,7 +8,7 @@ const toggleLabel = document.getElementById('toggleLabel');
 // gets clipped: the grid then covers every pixel of the screen, and
 // the hover reveal keeps working all the way down, including in that
 // partial row.
-const EXPERIMENTAL_COLUMNS = 5;
+const EXPERIMENTAL_COLUMNS = 6; // was 5 -- slightly smaller cells
 
 function experimentalRows() {
     const cellHeight = (window.innerWidth / EXPERIMENTAL_COLUMNS) * 5 / 7;
@@ -20,6 +20,7 @@ function experimentalRows() {
 function setPlaytime(enabled) {
     toggleBtn.classList.toggle('toggled', enabled);
     document.body.classList.toggle('is-experimental', enabled);
+    document.documentElement.classList.toggle('is-experimental', enabled);
     if (!enabled) {
         document.getElementById('gridCrosshair')?.classList.remove('is-visible');
         document.getElementById('gridFocusTile')?.classList.remove('is-visible');

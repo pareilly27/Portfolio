@@ -13,6 +13,18 @@ html.glass-cursor-active * {
   cursor: none !important;
 }
 
+/* Exception: the Linear/Experimental and Strip the Fluff toggles show a
+   real pixel-art hand instead of the glass circle. The blanket rule
+   above is `!important`, so this needs `!important` too -- and a higher
+   specificity (0,2,0 / 0,2,1 vs 0,1,1) to win. js/cursor-glass.js has
+   the matching half of this: it treats .toggle-btn as a hide-zone, so
+   the glass circle is suppressed there and the hand REPLACES it rather
+   than both being drawn at once. Path is relative to this file. */
+html.glass-cursor-active .toggle-btn,
+html.glass-cursor-active .toggle-btn * {
+  cursor: url('../project_images/pixilated_hand_cursor.png') 14 10, pointer !important;
+}
+
 .glass-cursor {
   position: fixed;
   top: 0;

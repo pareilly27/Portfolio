@@ -2,6 +2,15 @@
 
 .contact-section {
       position: relative;
+      /* Explicit z-index (not auto) so this becomes a stacking context
+         of its own, sitting above the ambient .grid. Two things this
+         fixes: the grid is a non-positioned block box, and in CSS paint
+         order those render ABOVE any negative-z-index child stacking
+         context -- which is what was letting the grid cover the
+         GET IN TOUCH text. Forming a context here also traps any
+         negative-z descendant inside this section, so it can never
+         escape behind the grid again. */
+      z-index: 20;
       height: 100%;
       width: 100%;
       overflow: hidden;
@@ -22,7 +31,12 @@
     height: 30vw;
     position: relative;
     clip-path: ellipse(61% 100% at 50% 100%);
-    z-index: -2;
+    /* Was -2. This box has no background of its own -- it only carries
+       the GET IN TOUCH text -- so the negative value bought nothing and
+       pushed that text into the paint layer beneath the grid. 0 keeps
+       the exact same order relative to its siblings here
+       (.curve-line 2, .contact-bubble-scene 6, .bottom-white 13). */
+    z-index: 0;
     margin-bottom: 3%;
   }
 
@@ -48,23 +62,37 @@
       
     }
 
-    /* Underneath the curve -- the .curve-line ellipse (cx 50 cy 20 rx 58
-       ry 20 in a 24-tall viewBox mapped onto this 30vw-tall box) peaks
-       almost at the very top at center and only reaches its lowest point,
-       around 43% of the box height, at the far left/right edges. Starting
-       the scene there keeps every bubble spawning below the curve line
-       itself everywhere across its width, rather than below the whole
-       blue block or the headline text. top/bottom (not height) are set
-       so the box fills exactly down to the very bottom of the section,
-       regardless of how tall .bottom-white's content makes the section. */
+    /* Spans the WHOLE section, starting at its very top -- deliberately
+       not offset down to the curve. .bubble-scene sets overflow:hidden,
+       so any bubble positioned above this box's top edge is clipped and
+       simply invisible until it crosses that edge. With the box starting
+       partway down (it used to start at 13vw, right about where the
+       curve bottoms out), bubbles spawned up on the curve only appeared
+       once they reached that edge -- which reads as every bubble falling
+       from one flat horizontal line at the curve's lowest point, instead
+       of from the curve itself. Starting at 0 puts the entire curve
+       inside the box, so a bubble placed just under the curve is visible
+       immediately, at the height the curve actually sits at for its own
+       x. js/bubbles-2.js mirrors this as CONTACT_SCENE_TOP_VW -- change
+       both together. top/bottom (not height) are set so the box still
+       fills exactly down to the bottom of the section, regardless of how
+       tall .bottom-white's content makes it. */
     .contact-bubble-scene {
       position: absolute;
-      top: 13vw;
+      top: 0;
       left: 0;
       right: 0;
       bottom: 0;
       height: auto;
-      z-index: 6;
+      /* Above .bottom-white / .contact-info (both 13). At the old value
+         of 6 the text block painted over the bubbles AND, because
+         .contact-section is pointer-events:auto, took every click that
+         landed on one -- so the EMAIL and LINKEDIN anchors could never
+         actually be hit. This also matches the intent that the bubbles
+         fall OVER the contact copy. The scene layer itself is
+         pointer-events:none (see .bubble-scene), so only the pills
+         themselves are clickable, not the empty space around them. */
+      z-index: 20;
     }
 
     .contact-info {
@@ -73,11 +101,15 @@
         margin-left: auto;
         margin-right: 8rem;
         bottom: 5vw;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        line-height: 1.35;
         text-align: left;
         color: #333;
         height: auto;
         z-index: 13;
+        /* One line on desktop -- the mobile query below switches this
+           back to wrapping, where the viewport is too narrow for it. */
+        white-space: nowrap;
       }
 
     .contact-info span {
@@ -97,5 +129,7 @@
     @media (max-width: 768px) {
         .contact-info {
             font-size: clamp(14px, 4vw, 1.5rem);
+            white-space: normal;
+            max-width: 80vw;
         }
     }

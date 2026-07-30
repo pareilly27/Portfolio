@@ -10,6 +10,10 @@ function setFluffStripped(stripped) {
   fluffEls.forEach(function (el) {
     el.classList.toggle('removed', stripped);
   });
+  // Container-level hook: the non-fluff words are bare text nodes with
+  // no element to target, so the greying is applied to the paragraphs
+  // and the fluff spans are pulled back to black over it.
+  document.body.classList.toggle('is-fluff-stripped', stripped);
   if (fluffToggle) {
     fluffToggle.classList.toggle('toggled', stripped);
     fluffToggle.setAttribute('aria-pressed', String(stripped));

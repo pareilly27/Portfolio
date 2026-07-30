@@ -33,8 +33,14 @@ document.addEventListener('DOMContentLoaded', function () {
   // genuinely viewport-fixed everywhere.
   document.documentElement.appendChild(el);
 
-  const HOVER_SELECTOR = 'a, button, input, textarea, select, [role="button"], .square, .toggle-btn';
+  const HOVER_SELECTOR = 'a, button, input, textarea, select, [role="button"], .square';
   const HIDE_SELECTOR = '#grid, #grid-reveal-canvas, .cell';
+  // The toggles show a native pixel-art hand cursor instead (see
+  // css/cursor-glass.css). Hide the glass circle over them so the hand
+  // replaces it, rather than both appearing at once. Unlike
+  // HIDE_SELECTOR this applies in Experimental mode too -- the toggle
+  // is present and usable in both states.
+  const NATIVE_CURSOR_SELECTOR = '.toggle-btn';
   const POSITION_EASE = 0.35; // higher = tighter tracking, lower = more trail
   const SIZE_EASE = 0.2;
   const BASE_SIZE = 26;  // px
@@ -69,8 +75,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Linear uses the WebGL cursor reveal and hides the secondary cursor.
     // Experimental has full-cell image reveals, so the glass cursor remains
     // visible above those images and the locator lines.
-    const nowSuppressed = !document.body.classList.contains('is-experimental')
-      && !!(target && target.closest && target.closest(HIDE_SELECTOR));
+    const overNativeCursor = !!(target && target.closest && target.closest(NATIVE_CURSOR_SELECTOR));
+    const nowSuppressed = overNativeCursor
+      || (!document.body.classList.contains('is-experimental')
+        && !!(target && target.closest && target.closest(HIDE_SELECTOR)));
     const hovered = !nowSuppressed && target && target.closest && target.closest(HOVER_SELECTOR);
 
     if (nowSuppressed !== suppressed || !wasInWindow) {

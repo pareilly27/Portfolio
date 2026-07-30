@@ -76,6 +76,18 @@ body.is-experimental .container {
     transform: translate(-50%, -50%);
 }
 
+/* Lock page scroll while Experimental mode is active. Deliberately NOT
+   position:fixed -- without capturing/restoring window.scrollY in JS,
+   fixed snaps the page's box back to the viewport top the instant the
+   class is added, making everything (including the hero text) appear
+   to jump. Plain overflow:hidden freezes scrolling exactly where the
+   page already was, with no jump. Applied to both html and body (JS
+   toggles the class on both) since either can be the root scroller. */
+html.is-experimental,
+body.is-experimental {
+    overflow: hidden;
+}
+
 /* Hero statement: three stacked, centre-aligned tiers -- bold headline,
    supporting paragraph, then a smaller bold-italic line. Sized in cqw
    (container query units) like the hero text it replaces, so it scales
@@ -140,8 +152,29 @@ body.is-experimental .hero-subtext--experimental {
     display: block;
 }
 
+/* .hero-statement's gap (1.6cqh) is shared with the Linear layout's
+   headline-to-subtext spacing -- adding extra space here via margin
+   instead of touching that gap keeps Linear untouched. */
+body.is-experimental .hero-subtext--experimental {
+    margin-top: 1.4cqh;
+}
+
 .hero-headline--experimental {
     color: #d4d4d4;
+}
+
+/* .container .hero-headline (2 classes) sets line-height: 1.2 -- a
+   single-class .hero-headline--experimental rule loses to it on
+   specificity regardless of source order, which is why this needs the
+   same "2 classes off .container" shape to actually win. Tighter
+   spacing for the experimental two-line headline specifically; the
+   linear headline's 1.2 is untouched. */
+.container .hero-headline.hero-headline--experimental {
+    /* 0.8 -> 0.7: at the experimental headline's display size the gap
+       between the two lines still read as loose. Sub-1 line-height is
+       safe here because this string is two short, explicitly broken
+       lines with no descender/ascender collisions to worry about. */
+    line-height: 0.7;
 }
 
 
@@ -242,6 +275,67 @@ body.is-experimental .hero-subtext--experimental {
 }
 
 
+/* Liquid glass surface ------------------------------------------------
+   One definition shared by the falling pills (.physics-bubble) and the
+   two toggles (.toggle-btn -- Linear/Experimental on the home page,
+   Strip the Fluff on About Me), so the material can never drift apart
+   between them. Only the surface lives here; size, typography and
+   layout stay on each component.
+
+   Three stacked background layers, because a single gradient reads
+   flat. Painted front-to-back:
+     1. a tight specular band hugging the BOTTOM edge (0deg runs
+        bottom-to-top), so the brightest line sits under the text,
+     2. a dome lit from the lower half, falling off toward both rounded
+        caps -- this is what stops the pill reading as a flat strip,
+     3. the base ramp, light-grey at the top clearing to white at the
+        bottom.
+   All in alpha so the blurred background still shows through.
+
+   Outer shadow: a tight contact shadow plus two wider, softer casts, so
+   the pill sits ON the page rather than being pasted to it.
+   Inner shadow: soft shading along the top, a bright bevel along the
+   bottom, and shading pulled in from each cap (the negative spread
+   keeps those confined to the ends instead of washing across the
+   middle). That top-dark/bottom-light pairing is the whole
+   three-dimensional read -- it reads as lit from below. */
+.physics-bubble,
+.toggle-btn {
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.32) 12%,
+            rgba(255, 255, 255, 0.00) 30%
+        ),
+        radial-gradient(
+            125% 150% at 50% 82%,
+            rgba(255, 255, 255, 0.32) 0%,
+            rgba(255, 255, 255, 0.02) 48%,
+            rgba(80, 80, 80, 0.34) 100%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(188, 188, 188, 0.18) 0%,
+            rgba(226, 226, 226, 0.10) 30%,
+            rgba(255, 255, 255, 0.10) 62%,
+            rgba(255, 255, 255, 0.34) 100%
+        );
+    backdrop-filter: blur(3px) saturate(125%);
+    -webkit-backdrop-filter: blur(3px) saturate(125%);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.12),
+        0 5px 12px rgba(0, 0, 0, 0.15),
+        0 14px 28px rgba(0, 0, 0, 0.11),
+        inset 0 -2px 1px rgba(255, 255, 255, 0.98),
+        inset 0 3px 7px rgba(0, 0, 0, 0.06),
+        inset 6px 0 11px -5px rgba(0, 0, 0, 0.24),
+        inset -6px 0 11px -5px rgba(0, 0, 0, 0.24);
+    color: #141414;
+}
+
 /* Toggle */
 
 .toggle-btn {
@@ -249,16 +343,30 @@ body.is-experimental .hero-subtext--experimental {
     /* relative (not static) purely so .toggle-circle can position against
        it; placement itself belongs to #button-container. */
     position: relative;
-    background: #000;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 18px;
+    /* Surface (background / border / radius / shadow / text colour)
+       comes from the shared liquid-glass rule above. Was a solid black
+       bar with white text. */
+    /* Pixel-art hand, hotspot on the fingertip (14,10 within the 48x48
+       sprite), with `pointer` as the fallback if the image can't load
+       or the browser rejects the size. URL is relative to THIS file, so
+       the single rule resolves correctly from both index.html and
+       aboutme/index.html. Also applied to descendants below, since the
+       label/circle spans would otherwise revert to the default arrow. */
+    cursor: url('../project_images/pixilated_hand_cursor.png') 14 10, pointer;
     /* Height is the fixed base (unchanged from before); width is
        derived from it using the 140:25 (width:height) ratio, so the
        bar keeps that exact proportion instead of a hardcoded width. */
     height: 36px;
-    width: calc(36px * 140 / 25);
+    /* min-width, not width: the 140:25 proportion is preserved as the
+       FLOOR, but the button may grow past it. With a hard width the
+       horizontal padding (48px each side, sized to clear the knob) was
+       the only space the label had -- and labels longer than that
+       ("Strip the Fluff", "Put it Back", "EXPERIMENTAL") overflowed a
+       centred, nowrap flex item equally in both directions, sliding
+       straight under the knob. Growing instead keeps the label inside
+       the padding box, so it can never reach the knob. */
+    min-width: calc(36px * 140 / 25);
+    width: auto;
     /* Horizontal padding clears the circle's own inset + diameter, so
        there's equal breathing room around the circle on whichever end
        it's currently sitting at. */
@@ -283,11 +391,26 @@ body.is-experimental .hero-subtext--experimental {
     height: 24px;
     background: #7B97C5;
     border-radius: 50%;
+    /* The knob used to sit on a flat black bar, where it needed no
+       separation. On glass it has to read as resting ON the surface:
+       a small cast shadow lifts it off, and the inset pair gives the
+       knob itself the same lit-from-below curvature as the pill. */
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.28),
+        0 3px 6px rgba(0, 0, 0, 0.18),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.45),
+        inset 0 1px 2px rgba(0, 0, 0, 0.12);
     transition: left 0.3s ease;
 }
 
 .toggle-btn.toggled .toggle-circle {
     left: calc(100% - 6px - 24px);
+}
+
+.toggle-btn *,
+.toggle-btn:hover,
+.toggle-btn:hover * {
+    cursor: url('../project_images/pixilated_hand_cursor.png') 14 10, pointer;
 }
 
 .toggle-label {
@@ -425,6 +548,27 @@ body.is-experimental .grid-focus-tile.is-visible {
     transition-duration: 0s;
 }
 
+/* Project name, pinned directly beneath the focused image. A child of
+   the tile rather than a sibling, so it rides the tile's existing fixed
+   transform instead of needing its own per-frame position update. */
+.grid-focus-name {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, 8px);
+    /* Typographically identical to .lead-designer-label -- same family,
+       same clamp, same weight, no extra tracking. The size already
+       matched; the 0.02em letter-spacing that used to be here was what
+       made it read larger, because project names are all-caps and
+       tracking is far more noticeable on caps than on mixed case. */
+    font-family: 'Satoshi', sans-serif;
+    font-size: clamp(10px, 0.93vw, 14px);
+    font-weight: 400;
+    color: #000;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
 /* Experimental grid locator: the two lines meet at the exact centre of the
    image currently under the pointer, and continue all the way to the viewport
    edges so the selected tile reads as part of a measured coordinate system. */
@@ -492,7 +636,13 @@ body.is-experimental .grid-crosshair.is-visible {
     left: calc(1.5% + 0.1vw);
     transform: translate(0, calc(-100% - 10px));
     font-family: 'Satoshi', sans-serif; /* matches the rest of the navbar */
-    font-size: clamp(14px, 1.2vw, 18px);
+    /* 4px below the navbar clamp -- both ends of the navbar's
+       clamp(14px, 1.2vw, 18px) stepped down to 10px/14px, with the
+       preferred vw scaled by the same 14/18 ratio so it still tracks
+       the navbar's growth curve rather than diverging mid-range.
+       Deliberately no longer inherits the shared navbar size: this
+       label is now a longer string and reads as secondary to it. */
+    font-size: clamp(10px, 0.93vw, 14px);
     color: #000;
     white-space: nowrap;
     z-index: 103;
@@ -525,45 +675,67 @@ body.is-experimental .lead-designer-label.is-visible {
     visibility: visible;
 }
 
+/* Frosted glass pill: the reference's shape and soft lift, but genuinely
+   see-through rather than painted solid white. Two things do the work --
+   a translucent (not opaque) white gradient, so whatever is behind
+   shows through as tint, and backdrop-filter, which blurs and slightly
+   over-saturates that background so it reads as thick glass instead of
+   a plain transparency. The bright inset top edge and darker inset
+   bottom edge give the pane thickness; the hairline border keeps the
+   silhouette from dissolving on light backgrounds.
+   Note: backdrop-filter is the expensive part of this element (it blurs
+   everything behind every bubble, every frame) -- keep the radius
+   modest. */
 .physics-bubble {
     position: absolute;
     display: grid;
     place-items: center;
     min-width: 142px;
     height: 42px;
-    padding: 0 1.25rem;
-    border: 1px solid rgba(0, 0, 0, 0.78);
-    border-radius: 14px;
-    /* Even lighter than before -- barely-there tint and blur, so
-       whatever is behind the bubble stays clearly readable through it. */
-    background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04) 48%, rgba(255, 255, 255, 0.09)),
-        rgba(255, 255, 255, 0.05);
-    box-shadow:
-        0 14px 30px rgba(0, 0, 0, 0.20),
-        inset 1px 1px 1px rgba(255, 255, 255, 0.78),
-        inset -1px -1px 1px rgba(0, 0, 0, 0.12);
-    backdrop-filter: blur(2px) saturate(108%) contrast(101%);
-    -webkit-backdrop-filter: blur(2px) saturate(108%) contrast(101%);
-    color: #0c0c0c;
+    padding: 0 1.5rem;
+    /* Surface comes from the shared liquid-glass rule further up. */
     font-family: 'Raleway', sans-serif;
     font-size: clamp(0.62rem, 0.9vw, 0.82rem);
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1.1;
-    letter-spacing: 0.045em;
+    letter-spacing: 0.055em;
     text-align: center;
     text-wrap: balance;
+    white-space: nowrap;
     will-change: transform;
 }
 
-.physics-bubble::after {
-    content: '';
-    position: absolute;
-    inset: 3px 9% auto;
-    height: 44%;
-    border-radius: inherit;
-    background: linear-gradient(180deg, rgba(255,255,255,0.62), rgba(255,255,255,0.06) 82%, transparent);
-    pointer-events: none;
+/* Clickable variant (EMAIL / PH / LINKEDIN in the contact section).
+   .bubble-scene is pointer-events:none so the layer never blocks the
+   page; this re-enables hits on the pill itself only. */
+.physics-bubble--link {
+    pointer-events: auto;
+    cursor: pointer;
+    text-decoration: none;
+    color: #141414;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Same bevel as the base state, with only the OUTER casts lifted --
+   keeping the inner highlight/shading identical means the pill appears
+   to rise off the page rather than change material on hover. */
+.physics-bubble--link:hover {
+    box-shadow:
+        0 2px 3px rgba(0, 0, 0, 0.11),
+        0 8px 18px rgba(0, 0, 0, 0.15),
+        0 20px 38px rgba(0, 0, 0, 0.12),
+        inset 0 -2px 1px rgba(255, 255, 255, 0.98),
+        inset 0 3px 7px rgba(0, 0, 0, 0.06),
+        inset 6px 0 11px -5px rgba(0, 0, 0, 0.24),
+        inset -6px 0 11px -5px rgba(0, 0, 0, 0.24);
+}
+
+/* The physics engine owns `transform` on these elements (it writes a
+   translate3d + rotate every frame), so a hover transform would be
+   overwritten instantly -- the hover cue is the shadow above instead. */
+.physics-bubble--link:focus-visible {
+    outline: 2px solid #7B97C5;
+    outline-offset: 3px;
 }
 
 @media (max-width: 640px) {
@@ -741,7 +913,7 @@ body.is-experimental .lead-designer-label.is-visible {
     /* Project grid - single column */
     .grid-container {
         grid-template-columns: 1fr;
-        gap: 4vw;
+        gap: 2vw;
         padding: 4vw;
     }
     
@@ -799,7 +971,8 @@ body.is-experimental .lead-designer-label.is-visible {
     display: grid;
     /* 7.5% outer + 40% item + 5% gap + 40% item + 7.5% outer = 100% */
     grid-template-columns: repeat(2, 1fr);
-    gap: 5vw;
+    row-gap: 2.5vw;
+    column-gap: 5vw;
     padding: 3vw 7.5vw;
     position: relative;
     margin-top: 100vh;
@@ -872,13 +1045,12 @@ body.is-experimental .lead-designer-label.is-visible {
 }
 
 .project-caption {
-    background: #fff;
+    background: transparent;
     color: #000;
     text-align: left;
-    padding: 0.6rem 0.8rem 0.7rem;
-    margin-top: 1rem;
+    padding: 0.6rem 0.8rem 0;
+    margin-top: 0.4rem;
     box-sizing: border-box;
-    border: 1px solid #000;
 }
 
 .project-name {

@@ -226,11 +226,19 @@
       margin-bottom: 0;
     }
 
-    .left-column p {
+    .left-column p,
+    .left-column ul,
+    .left-column li {
       margin: 0;
       font-size: 0.9vw;
-      font-family: 'Raleway', sans-serif; /* matches .nav-s-button */
-      /* No color override — inherit from body */
+      /* Regular Satoshi everywhere in the About copy, in BOTH fluff
+         states -- the weight is never changed by the toggle now (see
+         .fluff-text.removed below), so there is a single typographic
+         treatment for this text at all times. */
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 400;
+      color: #000;
+      transition: color 0.3s ease;
     }
 
     .left-column ul {
@@ -330,15 +338,35 @@
     transition: color 0.3s ease;
 }
 
-    .fluff-text.removed {
-        font-weight: bold;
+    /* Strip the Fluff inverts the emphasis: the fluff spans go BLACK
+       and the surrounding copy recedes to light grey. Weight is never
+       touched (see the single-weight rule above).
+
+       This needs a container-level hook as well as the span class,
+       because the non-fluff words are bare text nodes inside <p> with
+       no element of their own to target. So the paragraph is greyed
+       wholesale and the fluff spans are pulled back to black on top of
+       it. js/removeFluff.js toggles body.is-fluff-stripped. */
+    body.is-fluff-stripped .left-column p,
+    body.is-fluff-stripped .left-column ul,
+    body.is-fluff-stripped .left-column li {
+        color: #bfbfbf;
+    }
+
+    body.is-fluff-stripped .fluff-text.removed {
+        color: #000;
     }
 
     .fluff-controls {
     display: flex;
     align-items: center;
     gap: 2rem;
-    margin-top: 1rem;
+    /* Was 1rem. .left-column is a flex column with its own gap: 1.6rem,
+       so this margin stacked ON TOP of that gap (flex gaps don't
+       collapse with margins the way block margins do) -- 2.6rem total
+       between "The long version" and this button. Zero here leaves the
+       column's own 1.6rem rhythm as the only spacing. */
+    margin-top: 0;
     margin-bottom: 1.25rem;
 }
 
@@ -383,7 +411,9 @@
         white-space: normal;
       }
 
-      .left-column p {
+      .left-column p,
+      .left-column ul,
+      .left-column li {
         font-size: 0.85rem;
       }
 
@@ -479,15 +509,15 @@
         </div>
         
         <p>
-  I am <span class="fluff-text">Shreyanshi Satodia</span>, a creative <span class="fluff-text">designer and strategist</span> with <span class="fluff-text">seven years</span> of experience <span class="fluff-text">creating brands</span> and <span class="fluff-text">digital experiences</span> with award-winning work <span class="fluff-text">across hospitality, SaaS, entertainment, nonprofit,</span> and <span class="fluff-text">F&amp;B.</span> I enjoy taking projects <span class="fluff-text">from concept to launch</span>, turning ideas into systems that feel thoughtful, cohesive, and built to last.
+  I am <span class="fluff-text">Shreyanshi Satodia</span>, a creative <span class="fluff-text">designer and strategist</span> with <span class="fluff-text">seven years</span><br>of experience <span class="fluff-text">creating brands</span> and <span class="fluff-text">digital experiences</span> with award-winning<br>work <span class="fluff-text">across hospitality, SaaS, entertainment, nonprofit,</span> and <span class="fluff-text">F&amp;B.</span> I enjoy<br>taking projects <span class="fluff-text">from concept to launch</span>, turning ideas into systems that feel<br>thoughtful, cohesive, and built to last.
 </p>
 
 <p>
-  <span class="fluff-text">I have learned that the first idea is rarely the best one.</span> It's just polite enough to introduce the rest. That's why <span class="fluff-text">I like the messy middle,</span> the stage where questions outnumber answers and everything still has room to change. It's also <span class="fluff-text">where</span> the strongest <span class="fluff-text">ideas</span> usually <span class="fluff-text">show up.</span>
+  <span class="fluff-text">I have learned that the first idea is rarely the best one.</span> It's just polite enough<br>to introduce the rest. That's why <span class="fluff-text">I like the messy middle,</span> the stage where<br>questions outnumber answers and everything still has room to change. It's<br>also <span class="fluff-text">where</span> the strongest <span class="fluff-text">ideas</span> usually <span class="fluff-text">show up.</span>
 </p>
 
 <p>
-  I have a <span class="fluff-text">habit of rearranging things</span> until they make sense. <span class="fluff-text">Design turned out to be a pretty good place to channel that.</span> Whether I am building an <span class="fluff-text">identity</span>, designing a <span class="fluff-text">website,</span> or developing a <span class="fluff-text">campaign,</span> I am always looking for the one <span class="fluff-text">idea that ties</span> everything together. <span class="fluff-text">The fun part is figuring it out. The design just gets all the credit.</span>
+  I have a <span class="fluff-text">habit of rearranging things</span> until they make sense. <span class="fluff-text">Design turned out<br>to be a pretty good place to channel that.</span> Whether I am building an <span class="fluff-text">identity</span>,<br>designing a <span class="fluff-text">website,</span> or developing a <span class="fluff-text">campaign,</span> I am always looking for the<br>one <span class="fluff-text">idea that ties</span> everything together. <span class="fluff-text">The fun part is figuring it out. The<br>design just gets all the credit.</span>
 </p>
 
       </div>
@@ -511,15 +541,14 @@
       </div>
       <div class="bottom-white">
 
-        <div class="contact-info">
-          <span class="greeting">SAY HI!</span>
-          <span>ssatodia97@gmail.com</span>
-          <span>(857)437-9148</span>
-        </div>
+        <div class="contact-info" id="contactInfo">Ready to figure something out together?</div>
 
       </div>
-      
-      
+
+      <!-- Same falling scene as the home page: js/bubbles-2.js picks it
+           up by id, so it inherits the identical curve-anchored spawn
+           logic and only spawns above #contactInfo. -->
+      <div id="contactBubbleScene" class="bubble-scene contact-bubble-scene"></div>
     </div>
   </section>
 

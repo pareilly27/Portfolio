@@ -77,10 +77,22 @@ function projectGridImages() {
     return Array.from(document.querySelectorAll('#grid-container .square'))
         .map(square => {
             const match = /url\((['"]?)(.*?)\1\)/.exec(square.style.backgroundImage);
-            // A custom property is consumed by grid/style.css, so a relative
-            // URL would be resolved from /grid/. Make project-card paths
-            // document-relative before handing them to that stylesheet.
-            return match ? new URL(match[2], document.baseURI).href : null;
+            if (!match) return null;
+            // Carry the card's name and destination along with the image:
+            // Experimental shows the name under the focused tile and
+            // navigates to the project on click, and this is the only
+            // place the cell/card relationship is still known.
+            const card = square.closest('.project-card');
+            const nameEl = card ? card.querySelector('.project-name') : null;
+            return {
+                // A custom property is consumed by grid/style.css, so a
+                // relative URL would be resolved from /grid/. Make
+                // project-card paths document-relative before handing
+                // them to that stylesheet.
+                src: new URL(match[2], document.baseURI).href,
+                name: nameEl ? nameEl.textContent.trim() : '',
+                href: card ? card.href : '',
+            };
         })
         .filter(Boolean);
 }
@@ -106,8 +118,15 @@ function createGrid(rows, columns, imageSet = 'linear') {
         // both created a stride sharing a factor with 12 and silently
         // dropped projects: 8 of 12 shown at 5x4, then 10 of 12.)
         const imageIndex = i % sources.length;
-        const source = sources[imageIndex];
+        // Linear passes plain path strings; Experimental passes
+        // { src, name, href } objects (see projectGridImages).
+        const entry = sources[imageIndex];
+        const source = typeof entry === 'string' ? entry : entry.src;
         cell.style.setProperty('--bg-image', `url('${source}')`);
+        if (entry && typeof entry !== 'string') {
+            cell.dataset.projectName = entry.name;
+            cell.dataset.projectHref = entry.href;
+        }
         
         let shadows = [];
         if (row !== 0) shadows.push('inset 0 0.2px 0 0 #9d9d9d');
@@ -151,6 +170,10 @@ window.HomeImageGrid = { setDimensions };
 // are rebuilt when switching between Linear and Experimental layouts.
 const crosshair = document.getElementById('gridCrosshair');
 const focusTile = document.getElementById('gridFocusTile');
+// Lives INSIDE #gridFocusTile, so it inherits the tile's fixed position
+// automatically and always sits directly under the image without any
+// separate per-frame positioning of its own.
+const focusName = document.getElementById('gridFocusName');
 const leadDesignerLabel = document.getElementById('leadDesignerLabel');
 const REVEAL_DELAY = 260;
 // How hard the tile/crosshair chase the cursor, per frame. 1 = rigid
@@ -244,6 +267,8 @@ function setGridFocus(cell) {
         focusTile.classList.add('is-visible');
     }
 
+    if (focusName) focusName.textContent = cell.dataset.projectName || '';
+
     if (followX < -900) {
         // First appearance: start at the pointer instead of sliding in
         // from the off-screen initial value.
@@ -273,6 +298,17 @@ gridContainer.addEventListener('pointermove', event => {
         if (!document.body.classList.contains('is-experimental') || trackedCell !== cell) return;
         setGridFocus(cell);
     }, REVEAL_DELAY);
+});
+
+// Clicking the grid in Experimental opens whichever project's image is
+// currently shown. The visible image is the focus tile (pointer-events:
+// none, floating at the cursor), so the click actually lands on the cell
+// underneath -- focusedCell is the reliable source of the destination,
+// not event.target.
+gridContainer.addEventListener('click', () => {
+    if (!document.body.classList.contains('is-experimental')) return;
+    const href = focusedCell && focusedCell.dataset.projectHref;
+    if (href) window.location.href = href;
 });
 
 gridContainer.addEventListener('pointerleave', () => {

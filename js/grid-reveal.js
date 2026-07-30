@@ -68,6 +68,15 @@ document.addEventListener('DOMContentLoaded', function () {
   // rigidly tied to the current cursor position.
   const TRAIL_SCALE = 0.5;    // buffer resolution vs canvas (0.5 = half, cheaper + smoother)
   const TRAIL_HALFLIFE = 0.55; // seconds for a disturbed spot to fade halfway back
+  // Pure exponential decay stalls in an 8-bit feedback texture: once a
+  // texel's per-frame delta drops below ~half a quantization step
+  // (1/255), the GPU rounds the write back to the same 8-bit value
+  // every frame and the spot never reaches zero -- exactly the
+  // "leftover pixels that never go away" bug. A small constant
+  // subtraction (below, in TRAIL_FRAG_SRC) guarantees a decrease big
+  // enough to clear that step every frame, so faint tails always finish
+  // fading instead of stalling just above the cull threshold.
+  const TRAIL_LINEAR_FADE = 0.5; // per second
   const TRAIL_BRUSH = 0.85;   // stamp radius as a fraction of the reveal radius
   const TRAIL_BREAKUP = 1.1;  // 0 = trail fades as one uniform sheet; higher = the
                               // tail dissolves into patches/grains as it ages
@@ -105,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
     'uniform vec2 uCursorFB;',  // cursor in trail-buffer pixel coords
     'uniform float uBrush;',    // stamp radius, trail px
     'uniform float uDecay;',    // per-frame multiplier (time-corrected)
+    'uniform float uLinearFade;',// flat per-frame subtraction -- breaks 8-bit stall
     'uniform float uActive;',   // 0 while the cursor is away -> decay only
     'uniform float uBreakup;',  // spatial variation in decay rate
     'uniform float uTailBias;', // extra decay once a spot is already faint
@@ -130,6 +140,9 @@ document.addEventListener('DOMContentLoaded', function () {
     '  rate *= mix(uTailBias, 1.0, clamp(prev, 0.0, 1.0));',
     '',
     '  prev = pow(uDecay, max(rate, 0.05)) * prev;',
+    '  // Guarantees the write changes by more than one 8-bit step, so it',
+    '  // can never round back to the same stored value forever.',
+    '  prev = max(prev - uLinearFade, 0.0);',
     '  float stamp = 0.0;',
     '  if (uActive > 0.5 && uBrush > 0.5) {',
     '    float d = length(gl_FragCoord.xy - uCursorFB);',
@@ -462,6 +475,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const tuActive = gl.getUniformLocation(trailProgram, 'uActive');
   const tuBreakup = gl.getUniformLocation(trailProgram, 'uBreakup');
   const tuTailBias = gl.getUniformLocation(trailProgram, 'uTailBias');
+  const tuLinearFade = gl.getUniformLocation(trailProgram, 'uLinearFade');
   const trailPosAttr = gl.getAttribLocation(trailProgram, 'aPosition');
 
   // Ping-pong pair: read one, write the other, swap. A single texture
@@ -738,6 +752,7 @@ document.addEventListener('DOMContentLoaded', function () {
       trailH - state.y * DPR * TRAIL_SCALE);
     gl.uniform1f(tuBrush, state.radius * DPR * TRAIL_SCALE * TRAIL_BRUSH);
     gl.uniform1f(tuDecay, decay);
+    gl.uniform1f(tuLinearFade, TRAIL_LINEAR_FADE * dt);
     gl.uniform1f(tuActive, state.radius > 0.5 ? 1 : 0);
     gl.uniform1f(tuBreakup, TRAIL_BREAKUP);
     gl.uniform1f(tuTailBias, TRAIL_TAIL_BIAS);

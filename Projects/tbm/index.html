@@ -1,32 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Total Benefit Management</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/workPageStyles.css">
-    <style>
-      .grid {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: -1;
-      }
-
-      :root {
-        --grid-rows: 58;
-      }
-    </style>
+  <title>Total Benefit Management</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../../css/workPage__NEW.css">
+  <style>
+    /* ===== Section spacing — adjust top/bottom padding here only ===== */
+    /* No header image for this project, so gallery-1 starts flush at the
+       top of the page (same as the HG page). */
+    #gallery-1 { --gallery-top-spacing: 0rem; --gallery-bottom-spacing: 10rem; }
+    #gallery-2 { --gallery-top-spacing: 0rem; --gallery-bottom-spacing: 10rem; }
+    #scroll-section-1 { --scroll-section-top-spacing: 0rem; --scroll-section-bottom-spacing: 0rem; }
+    #gallery-3 { --gallery-top-spacing: 10rem; --gallery-bottom-spacing: 10rem; }
+    #gallery-4 { --gallery-top-spacing: 0rem; --gallery-bottom-spacing: 5rem; border-bottom: 1px solid #000; }
+    /* Header/nav text color override for this page only -- the first
+       gallery image is dark behind the overlay navbar. */
+    .nav-s-button,
+    .nav-regular-link,
+    .nav-links a:hover,
+    .nav-regular-link:hover {
+      color: #fff;
+    }
+  </style>
   <link rel="stylesheet" href="../../css/cursor-glass.css">
 </head>
 <body>
 
-  <section class="full-page-container">
-  <header class="header">
+  <header class="header header--overlay">
     <nav class="navbar">
       <a href="../../index.html" class="nav-s-button">Shreyanshi Satodia</a>
       <ul class="nav-links">
@@ -37,48 +40,42 @@
     </nav>
   </header>
 
-  <div class="content">
-    <!-- Left Column -->
-    <div class="left-column">
-      <h1>Total Benefit Management</h1>
-      <p class="description">The brand identity for TBM, a leading payroll, PEO, and HR management company, was designed to reflect their commitment to providing high-level human connection, flexibility, and expertise. The visual design leverages a professional, modern aesthetic with a sophisticated color palette, clean lines, and consistent typography to convey trustworthiness and efficiency. The cohesive brand materials communicate TBM's focus on cross-trained, highly qualified teams, and their tailored approach to solving complex HR challenges, all while exuding professionalism and accessibility.</p>
-      <!-- <a href="https://www.picklemans.com" target="_blank"><button>Visit Website</button></a> -->
-    </div>
+  <div class="gallery" id="gallery-1">
+    <img src="../../project_images/TBM/gallery_image_tbm_1.webp" alt="Total Benefit Management design" loading="eager">
+  </div>
 
-    <!-- Right Column -->
-    <div class="right-column">
-      <h2>Scope:</h2>
-      <ul>
-        <li class="bottom-list-item">Branding & Strategy</li>
-      </ul>
-      <h2>Role:</h2>
-      <ul>
-        <li>Design Lead for Total Benefit Management</li>
-      </ul>
+  <div class="gallery" id="gallery-2">
+    <img src="../../project_images/TBM/gallery_image_tbm_2.webp" alt="Total Benefit Management design" loading="lazy">
+  </div>
+
+  <!-- Sits between gallery image 2 and 3, as specified. -->
+  <div class="scroll-section" id="scroll-section-1">
+    <div class="scroll-section__viewport">
+      <div class="scroll-section__track">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_1.webp" alt="Total Benefit Management website preview 1" loading="lazy">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_2.webp" alt="Total Benefit Management website preview 2" loading="lazy">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_3.webp" alt="Total Benefit Management website preview 3" loading="lazy">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_4.webp" alt="Total Benefit Management website preview 4" loading="lazy">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_5.webp" alt="Total Benefit Management website preview 5" loading="lazy">
+      </div>
     </div>
   </div>
 
-  <img src="../../ProjectGalleries/TBM/1.webp" width="3840" height="2160" loading="eager" decoding="sync" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/2.webp" width="3840" height="2160" loading="eager" decoding="sync" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/3.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/4.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/5.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/6.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/7.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/8.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/9.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/10.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="TBM design">
-  <img src="../../ProjectGalleries/TBM/11.webp" width="3840" height="2160" loading="lazy" decoding="async" alt="TBM design">
+  <div class="gallery" id="gallery-3">
+    <img src="../../project_images/TBM/gallery_image_tbm_3.webp" alt="Total Benefit Management design" loading="lazy">
+  </div>
+
+  <div class="gallery" id="gallery-4">
+    <img src="../../project_images/TBM/gallery_image_tbm_4.webp" alt="Total Benefit Management design" loading="lazy">
+  </div>
+
+  <script src="../../js/scroll-section.js"></script>
 
   <!-- Footer Bar -->
   <div class="footer-bar">
-    <a href="../swyft/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> Swyft</a>
-    <a href="../mfa/" class="arrow-link right-arrow">MFA <span class="arrow-symbol">&#8250;</span></a>
+    <a href="../swire-water/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> Swire Water</a>
+    <a href="../milli/" class="arrow-link right-arrow">Milli <span class="arrow-symbol">&#8250;</span></a>
   </div>
-
-  <div class="grid" id="grid"></div>
-
-  </section>
 
   <!-- Transition Script -->
   <script>
@@ -110,7 +107,6 @@
       }
     });
   </script>
-  <script src="../../js/grid-projects.js"></script>
 
   <script src="../../js/cursor-glass.js"></script>
 </body>
