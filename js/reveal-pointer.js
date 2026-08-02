@@ -47,11 +47,18 @@ window.RevealPointer = (function () {
   // buffer keeps fading for a while after the last movement, so we must
   // keep drawing through that decay or the trail freezes mid-fade
   // instead of dissolving.
-  const IDLE_FRAMES = 30;
-  let idleFrames = 0;
+  // Measured in TIME, not frames. The trail's fade rate is wall-clock
+  // based (TRAIL_HALFLIFE in grid-reveal.js), so a frame count parks
+  // twice as early on a 120Hz display as on a 60Hz one -- which froze
+  // the trail mid-fade. Budget below is derived from the shader
+  // constants: the slowest-decaying texel (TRAIL_BREAKUP low end) needs
+  // ~1230ms to fall under the cull threshold, plus ~250ms for the
+  // radius to ease out (config.shrinkMs) while it is still stamping.
+  // 1800ms leaves comfortable margin over that ~1480ms worst case.
+  const IDLE_MS = 1800;
+  let idleMs = 0;
   let running = false;
   let onScreen = true;      // set by the IntersectionObserver in init()
-  let lastNotifiedRadius = -1;
 
   function clamp(v, min, max) {
     return Math.max(min, Math.min(max, v));
@@ -91,7 +98,7 @@ window.RevealPointer = (function () {
   // Restart the loop after it has parked. Safe to call on every input --
   // the `running` flag keeps only one rAF chain alive at a time.
   function wake() {
-    idleFrames = 0;
+    idleMs = 0;
     if (!running && onScreen && !document.hidden) {
       running = true;
       lastTime = null;
@@ -132,18 +139,31 @@ window.RevealPointer = (function () {
 
     // Something still to do? Pointer moved this frame, the radius is
     // still easing, or we are inside the post-movement decay tail.
-    const moved = (rawX !== prevRawX || rawY !== prevRawY);
-    const radiusSettling = Math.abs(currentRadius - lastNotifiedRadius) > 0.01;
-    if (moved || radiusSettling) idleFrames = 0;
-    else idleFrames++;
+    // Gate on whether the effect is VISIBLE, not on whether the pointer
+    // moved. The shape morphs continuously on its own (SHAPE_DRIFT in
+    // grid-reveal.js drives the boundary wobble from uTime), so while
+    // the reveal is on screen it must keep rendering even with the
+    // cursor perfectly still -- that idle motion is intentional, and
+    // gating on pointer movement froze it mid-animation.
+    //
+    // The idle budget therefore only starts once the effect has
+    // switched off (radius eased to 0 because the pointer left, moved
+    // over an excluded section, or the tab lost focus). From there it
+    // just needs to outlast the trail's remaining fade.
+    //
+    // dt is real elapsed ms, so this holds at any refresh rate. Clamped
+    // because a backgrounded tab can hand back a huge dt, which would
+    // otherwise blow the whole budget in a single frame.
+    const effectVisible = currentRadius > 0.5;
+    if (effectVisible) idleMs = 0;
+    else idleMs += Math.min(dt, 100);
 
     notify();
-    lastNotifiedRadius = currentRadius;
 
-    // Park once the trail has had time to finish fading. Nothing is
-    // moving and nothing is decaying, so further frames would redraw an
-    // identical picture.
-    if (idleFrames >= IDLE_FRAMES || !onScreen || document.hidden) {
+    // Park only once the trail has genuinely finished fading. Parking
+    // earlier leaves the last frame of a half-faded trail frozen on
+    // screen until the next mouse move.
+    if (idleMs >= IDLE_MS || !onScreen || document.hidden) {
       running = false;
       return;
     }
