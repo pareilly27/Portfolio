@@ -97,7 +97,10 @@ document.addEventListener('DOMContentLoaded', function () {
     updateVisibility();
   }
 
-  window.addEventListener('mousemove', onMove, { passive: true });
+  window.addEventListener('mousemove', function (e) {
+    onMove(e);
+    wake();
+  }, { passive: true });
 
   // mouseleave on <html> (unlike mouseout) doesn't bubble and only
   // fires when the pointer genuinely leaves the document -- not on
@@ -110,25 +113,58 @@ document.addEventListener('DOMContentLoaded', function () {
   // window" and hiding it while the mouse was still over the page.
   document.documentElement.addEventListener('mouseleave', hide);
 
-  window.addEventListener('mousedown', function () { pressed = true; });
-  window.addEventListener('mouseup', function () { pressed = false; });
+  window.addEventListener('mousedown', function () { pressed = true; wake(); });
+  window.addEventListener('mouseup', function () { pressed = false; wake(); });
 
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) hide();
   });
 
+  // Last values actually written to the element, so we can skip
+  // redundant style writes. width/height are the expensive pair: each
+  // change invalidates layout for this element, whereas transform is
+  // compositor-only. The old code wrote all three every single frame,
+  // forever, even while the cursor sat perfectly still.
+  var lastW = -1;
+  var running = false;
+
   function tick() {
     x += (targetX - x) * POSITION_EASE;
     y += (targetY - y) * POSITION_EASE;
 
-    const targetSize = pressed ? BASE_SIZE * PRESS_SIZE_MULT : BASE_SIZE;
+    var targetSize = pressed ? BASE_SIZE * PRESS_SIZE_MULT : BASE_SIZE;
     size += (targetSize - size) * SIZE_EASE;
 
-    const half = size / 2;
-    el.style.width = size + 'px';
-    el.style.height = size + 'px';
+    // Snap the tail of each ease so "close enough" becomes "settled"
+    // and the loop can actually reach a resting state.
+    if (Math.abs(targetX - x) < 0.05) x = targetX;
+    if (Math.abs(targetY - y) < 0.05) y = targetY;
+    if (Math.abs(targetSize - size) < 0.05) size = targetSize;
+
+    var half = size / 2;
+    // Only touch width/height when the rounded pixel value changes.
+    var wpx = Math.round(size * 100) / 100;
+    if (wpx !== lastW) {
+      el.style.width = wpx + 'px';
+      el.style.height = wpx + 'px';
+      lastW = wpx;
+    }
     el.style.transform = 'translate3d(' + (x - half) + 'px, ' + (y - half) + 'px, 0)';
+
+    // Park when the cursor has caught up and the size has settled.
+    // Any subsequent input calls wake() and restarts the chain.
+    if (x === targetX && y === targetY && size === targetSize) {
+      running = false;
+      return;
+    }
     requestAnimationFrame(tick);
   }
-  requestAnimationFrame(tick);
+
+  function wake() {
+    if (running) return;
+    running = true;
+    requestAnimationFrame(tick);
+  }
+
+  wake();
 });

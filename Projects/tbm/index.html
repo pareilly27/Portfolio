@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="../../css/workPage__NEW.css">
+  <link rel="preload" as="image" href="../../project_images/TBM/gallery_image_tbm_1.webp" fetchpriority="high">
   <style>
     /* ===== Section spacing — adjust top/bottom padding here only ===== */
     /* No header image for this project, so gallery-1 starts flush at the
@@ -41,32 +42,32 @@
   </header>
 
   <div class="gallery" id="gallery-1">
-    <img src="../../project_images/TBM/gallery_image_tbm_1.webp" alt="Total Benefit Management design" loading="eager">
+    <img src="../../project_images/TBM/gallery_image_tbm_1.webp" alt="Total Benefit Management design" fetchpriority="high">
   </div>
 
   <div class="gallery" id="gallery-2">
-    <img src="../../project_images/TBM/gallery_image_tbm_2.webp" alt="Total Benefit Management design" loading="lazy">
+    <img src="../../project_images/TBM/gallery_image_tbm_2.webp" alt="Total Benefit Management design" fetchpriority="low">
   </div>
 
   <!-- Sits between gallery image 2 and 3, as specified. -->
   <div class="scroll-section" id="scroll-section-1">
     <div class="scroll-section__viewport">
       <div class="scroll-section__track">
-        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_1.webp" alt="Total Benefit Management website preview 1" loading="lazy">
-        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_2.webp" alt="Total Benefit Management website preview 2" loading="lazy">
-        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_3.webp" alt="Total Benefit Management website preview 3" loading="lazy">
-        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_4.webp" alt="Total Benefit Management website preview 4" loading="lazy">
-        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_5.webp" alt="Total Benefit Management website preview 5" loading="lazy">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_1.webp" alt="Total Benefit Management website preview 1" fetchpriority="low">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_2.webp" alt="Total Benefit Management website preview 2" fetchpriority="low">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_3.webp" alt="Total Benefit Management website preview 3" fetchpriority="low">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_4.webp" alt="Total Benefit Management website preview 4" fetchpriority="low">
+        <img src="../../project_images/TBM/scroll_images/scroll_image_tbm_5.webp" alt="Total Benefit Management website preview 5" fetchpriority="low">
       </div>
     </div>
   </div>
 
   <div class="gallery" id="gallery-3">
-    <img src="../../project_images/TBM/gallery_image_tbm_3.webp" alt="Total Benefit Management design" loading="lazy">
+    <img src="../../project_images/TBM/gallery_image_tbm_3.webp" alt="Total Benefit Management design" fetchpriority="low">
   </div>
 
   <div class="gallery" id="gallery-4">
-    <img src="../../project_images/TBM/gallery_image_tbm_4.webp" alt="Total Benefit Management design" loading="lazy">
+    <img src="../../project_images/TBM/gallery_image_tbm_4.webp" alt="Total Benefit Management design" fetchpriority="low">
   </div>
 
   <script src="../../js/scroll-section.js"></script>

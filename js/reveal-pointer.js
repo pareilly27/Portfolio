@@ -36,6 +36,23 @@ window.RevealPointer = (function () {
   let velX = 0, velY = 0;
   const subscribers = [];
 
+  // --- Idle parking ---------------------------------------------------
+  // This loop used to call notify() every frame forever, and the WebGL
+  // renderer in grid-reveal.js runs two full-screen shader passes on
+  // every notification. So the effect re-rendered at 60fps permanently,
+  // even with the pointer parked and the grid scrolled out of sight.
+  //
+  // Now the loop parks itself once nothing is changing. It restarts on
+  // the next real input. IDLE_FRAMES is the tail: the memory/trail
+  // buffer keeps fading for a while after the last movement, so we must
+  // keep drawing through that decay or the trail freezes mid-fade
+  // instead of dissolving.
+  const IDLE_FRAMES = 30;
+  let idleFrames = 0;
+  let running = false;
+  let onScreen = true;      // set by the IntersectionObserver in init()
+  let lastNotifiedRadius = -1;
+
   function clamp(v, min, max) {
     return Math.max(min, Math.min(max, v));
   }
@@ -71,6 +88,17 @@ window.RevealPointer = (function () {
     prevTime = time;
   }
 
+  // Restart the loop after it has parked. Safe to call on every input --
+  // the `running` flag keeps only one rAF chain alive at a time.
+  function wake() {
+    idleFrames = 0;
+    if (!running && onScreen && !document.hidden) {
+      running = true;
+      lastTime = null;
+      requestAnimationFrame(tick);
+    }
+  }
+
   function notify() {
     const nx = clamp((rawX - rect.left) / rect.width, 0, 1);
     const ny = clamp((rawY - rect.top) / rect.height, 0, 1);
@@ -102,7 +130,23 @@ window.RevealPointer = (function () {
     currentRadius += (targetRadius - currentRadius) * Math.min(rate * 3, 1);
     if (Math.abs(targetRadius - currentRadius) < 0.5) currentRadius = targetRadius;
 
+    // Something still to do? Pointer moved this frame, the radius is
+    // still easing, or we are inside the post-movement decay tail.
+    const moved = (rawX !== prevRawX || rawY !== prevRawY);
+    const radiusSettling = Math.abs(currentRadius - lastNotifiedRadius) > 0.01;
+    if (moved || radiusSettling) idleFrames = 0;
+    else idleFrames++;
+
     notify();
+    lastNotifiedRadius = currentRadius;
+
+    // Park once the trail has had time to finish fading. Nothing is
+    // moving and nothing is decaying, so further frames would redraw an
+    // identical picture.
+    if (idleFrames >= IDLE_FRAMES || !onScreen || document.hidden) {
+      running = false;
+      return;
+    }
     requestAnimationFrame(tick);
   }
 
@@ -129,30 +173,80 @@ window.RevealPointer = (function () {
       return false;
     }
 
+    // Has the pointer ever actually reported a position? Until it has,
+    // rawX/rawY are just the target's centre (a guess), so they must not
+    // be used to decide `active`.
+    var hasPointer = false;
+
+    // Re-evaluate whether the pointer currently sits over an excluded
+    // section. Deliberately NOT tied to mousemove alone: the excluded
+    // sections are in normal document flow, so SCROLLING moves them
+    // under a stationary cursor. Recomputing only on mousemove meant
+    // the effect stayed lit after the grid container scrolled beneath
+    // an unmoving pointer, until the user happened to jiggle the mouse.
+    function refreshActive() {
+      if (!hasPointer) return;
+      // Suppressing `active` (rather than just hiding the canvas with
+      // CSS) means the effect never actually engages there: it eases out
+      // via the same currentRadius shrink used for mouseleave/tab-hidden,
+      // and eases back in on exit.
+      var next = !isInsideExcludedSection(rawX, rawY);
+      if (next !== active) {
+        active = next;
+        wake();   // ease the radius toward its new target, then park
+      }
+    }
+
     window.addEventListener('mousemove', function (e) {
       rawX = e.clientX;
       rawY = e.clientY;
-      // Suppressing `active` while the pointer is over an excluded
-      // section (rather than just hiding the canvas with CSS) means the
-      // effect never actually engages there: it eases out on entry via
-      // the same currentRadius shrink used for mouseleave/tab-hidden,
-      // and eases back in on exit, same as leaving/re-entering the page.
-      active = !isInsideExcludedSection(rawX, rawY);
+      hasPointer = true;
+      wake();
+      refreshActive();
     }, { passive: true });
 
     window.addEventListener('mouseleave', function () {
       active = false;
+      wake();   // let the radius ease back down to 0, then park
     });
 
     document.addEventListener('visibilitychange', function () {
-      if (document.hidden) active = false;
+      if (document.hidden) {
+        active = false;
+      } else {
+        wake();
+      }
     });
 
-    window.addEventListener('resize', updateRect, { passive: true });
-    window.addEventListener('scroll', updateRect, { passive: true });
+    // Stop entirely while the grid is off-screen. Once the page is
+    // scrolled to the project grid or contact section the effect is
+    // behind content nobody is looking at, so every frame spent on it
+    // is wasted. rootMargin keeps it alive slightly beyond the edges so
+    // it is already running by the time the grid scrolls back in.
+    if (typeof IntersectionObserver === 'function' && target) {
+      new IntersectionObserver(function (entries) {
+        onScreen = entries[0].isIntersecting;
+        if (onScreen) wake();
+      }, { rootMargin: '200px' }).observe(target);
+    }
+
+    window.addEventListener('resize', function () {
+      updateRect();
+      refreshActive();   // layout moved -> the pointer may now be over an excluded section
+      wake();
+    }, { passive: true });
+    window.addEventListener('scroll', function () {
+      updateRect();
+      // The whole point: scrolling can bring #grid-container under a
+      // stationary cursor, and that must kill the effect immediately
+      // rather than waiting for the next mouse movement.
+      refreshActive();
+      wake();   // the target's rect moved, so the mapping changed
+    }, { passive: true });
 
     lastTime = null;
     prevTime = null;
+    running = true;
     requestAnimationFrame(tick);
   }
 

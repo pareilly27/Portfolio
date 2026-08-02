@@ -16,7 +16,7 @@
    widths. */
 #button-container {
     position: absolute;
-    top: 50%;
+    top: 75%;
     left: 50%;
     z-index: 150;
     display: block;
@@ -157,6 +157,11 @@ body.is-experimental .hero-subtext--experimental {
    instead of touching that gap keeps Linear untouched. */
 body.is-experimental .hero-subtext--experimental {
     margin-top: 1.4cqh;
+    
+}
+
+body.is-experimental .container .hero-subtext--experimental {
+    font-size: clamp(16px,1cqw, 24px);
 }
 
 .hero-headline--experimental {
@@ -174,7 +179,7 @@ body.is-experimental .hero-subtext--experimental {
        between the two lines still read as loose. Sub-1 line-height is
        safe here because this string is two short, explicitly broken
        lines with no descender/ascender collisions to worry about. */
-    line-height: 0.7;
+    line-height: 1;
 }
 
 

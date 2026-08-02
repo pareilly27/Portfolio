@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="../../css/workPage__NEW.css">
+  <link rel="preload" as="image" href="../../project_images/Culpepper/header_image_cullpepper.webp" fetchpriority="high">
   <style>
     /* ===== Section spacing — adjust top/bottom padding here only ===== */
     #gallery-1 { --gallery-top-spacing: 4.5rem; --gallery-bottom-spacing: 0; }
@@ -29,22 +30,22 @@
   </header>
 
   <div class="header-image">
-    <img src="../../project_images/Culpepper/header_image_cullpepper.webp" alt="Culpepper header">
+    <img src="../../project_images/Culpepper/header_image_cullpepper.webp" alt="Culpepper header" fetchpriority="high">
   </div>
 
   <div class="gallery" id="gallery-1">
-    <img src="../../project_images/Culpepper/gallery_image_culpepper_1.webp" alt="Culpepper design" loading="lazy">
+    <img src="../../project_images/Culpepper/gallery_image_culpepper_1.webp" alt="Culpepper design" fetchpriority="low">
   </div>
 
   <div class="tv-frame" id="tv-frame-1">
-    <img class="tv-frame__base" src="../../project_images/Culpepper/tv_frame_cutout.png" alt="" loading="lazy">
+    <img class="tv-frame__base" src="../../project_images/Culpepper/tv_frame_cutout.png" alt="" fetchpriority="low">
     <div class="tv-frame__screen">
       <video src="../../project_images/Culpepper/tv_frame_content.mp4" autoplay muted loop playsinline></video>
     </div>
   </div>
 
   <div class="gallery" id="gallery-2">
-    <img src="../../project_images/Culpepper/gallery_image_culpepper_2.webp" alt="Culpepper design" loading="lazy">
+    <img src="../../project_images/Culpepper/gallery_image_culpepper_2.webp" alt="Culpepper design" fetchpriority="low">
   </div>
 
   <!-- Footer Bar -->

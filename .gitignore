@@ -1,3 +1,5 @@
 .DS_Store
 *.bak
 project_images/_originals/
+# XnConvert leftovers -- intermediate outputs, never part of the site
+*_result.webp

@@ -205,7 +205,13 @@
 
    
     .left-column {
-      padding: 6.5vw 0.5vw 0 6vw; /* right padding trimmed further -> minimal gap to the right column */
+      /* Left padding is the original 6vw PLUS the 6.5rem indent that
+         used to sit on .left-column p -- moved up here so the heading
+         and toggle button line up with the paragraphs instead of
+         hanging out to their left. calc() rather than a single value
+         because the two halves scale differently: 6vw tracks the
+         viewport, 6.5rem is fixed. */
+      padding: 6.5vw 0.5vw 0 calc(6vw + 6.5rem); /* right padding trimmed further -> minimal gap to the right column */
       display: flex;
       flex-direction: column;
       /* Was space-between, which stretched the h2/button/paragraphs

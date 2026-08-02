@@ -7,10 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="../../css/workPage__NEW.css">
+  <link rel="preload" as="image" href="../../project_images/what_if/header_image_what_if.png" fetchpriority="high">
   <style>
     /* ===== Section spacing — adjust top/bottom padding here only ===== */
     #header-image-1 { --header-image-top-spacing: ; --header-image-bottom-spacing: 0; }
-    #gallery-1 { --gallery-top-spacing: 5rem; --gallery-bottom-spacing: 5rem; border-bottom: 1px solid #000; }
+    #gallery-1 { --gallery-top-spacing: 0rem; --gallery-bottom-spacing: 5rem; border-bottom: 1px solid #000; }
   </style>
   <link rel="stylesheet" href="../../css/cursor-glass.css">
 </head>
@@ -27,12 +28,10 @@
     </nav>
   </header>
 
-  <div class="header-image" id="header-image-1">
-    <img src="../../project_images/what_if/header_image_what_if.png" alt="What If header">
-  </div>
+  
 
   <div class="gallery" id="gallery-1">
-    <img src="../../project_images/what_if/gallery_image_what_if_1.png" alt="What If design" loading="lazy">
+    <img src="../../project_images/what_if/gallery_image_what_if_1.png" alt="What If design" fetchpriority="low">
   </div>
 
   <!-- Footer Bar -->
