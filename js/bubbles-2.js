@@ -405,6 +405,9 @@
     'PACKAGING DESIGN',
     'EDITORIAL DESIGN',
     'UI / UX',
+    'CAMPAIGNS',
+    'BRAND SYSTEMS',
+    'DESIGNED TO CONNECT',
   ]);
   if (heroBubbles) {
     window.addEventListener('bubbles:activate', heroBubbles.activate);
