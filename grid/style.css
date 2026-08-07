@@ -330,14 +330,16 @@ body.is-experimental .container .hero-subtext--experimental {
         );
     backdrop-filter: blur(3px) saturate(125%);
     -webkit-backdrop-filter: blur(3px) saturate(125%);
+    /* No outer drop shadow -- the three casts that used to sit under
+       these have been removed entirely, so the pill sits flat on the
+       page. What remains is all INSET: the bright bottom bevel, a much
+       lighter top shading (0.06 -> 0.025, well under half), and the
+       cap shading that keeps the rounded ends from looking flat. */
     box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.12),
-        0 5px 12px rgba(0, 0, 0, 0.15),
-        0 14px 28px rgba(0, 0, 0, 0.11),
         inset 0 -2px 1px rgba(255, 255, 255, 0.98),
-        inset 0 3px 7px rgba(0, 0, 0, 0.06),
-        inset 6px 0 11px -5px rgba(0, 0, 0, 0.24),
-        inset -6px 0 11px -5px rgba(0, 0, 0, 0.24);
+        inset 0 3px 7px rgba(0, 0, 0, 0.0),
+        inset 6px 0 11px -5px rgba(0, 0, 0, 0),
+        inset -6px 0 11px -5px rgba(0, 0, 0, 0);
     color: #141414;
 }
 
@@ -401,10 +403,8 @@ body.is-experimental .container .hero-subtext--experimental {
        a small cast shadow lifts it off, and the inset pair gives the
        knob itself the same lit-from-below curvature as the pill. */
     box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.28),
-        0 3px 6px rgba(0, 0, 0, 0.18),
         inset 0 -1px 1px rgba(255, 255, 255, 0.45),
-        inset 0 1px 2px rgba(0, 0, 0, 0.12);
+        inset 0 1px 2px rgba(0, 0, 0, 0.05);
     transition: left 0.3s ease;
 }
 
@@ -726,13 +726,11 @@ body.is-experimental .lead-designer-label.is-visible {
    to rise off the page rather than change material on hover. */
 .physics-bubble--link:hover {
     box-shadow:
-        0 2px 3px rgba(0, 0, 0, 0.11),
-        0 8px 18px rgba(0, 0, 0, 0.15),
-        0 20px 38px rgba(0, 0, 0, 0.12),
-        inset 0 -2px 1px rgba(255, 255, 255, 0.98),
-        inset 0 3px 7px rgba(0, 0, 0, 0.06),
+        inset 0 -2px 1px rgba(255, 255, 255, 1),
+        inset 0 3px 7px rgba(0, 0, 0, 0.025),
         inset 6px 0 11px -5px rgba(0, 0, 0, 0.24),
         inset -6px 0 11px -5px rgba(0, 0, 0, 0.24);
+    border-color: rgba(0, 0, 0, 0.30);
 }
 
 /* The physics engine owns `transform` on these elements (it writes a
