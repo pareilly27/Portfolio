@@ -29,8 +29,8 @@ function setPlaytime(enabled) {
     toggleLabel.textContent = enabled ? 'Experimental' : 'Linear';
     if (window.HomeImageGrid) {
         window.HomeImageGrid.setDimensions(
-            enabled ? EXPERIMENTAL_COLUMNS : 12,
-            enabled ? experimentalRows() : 5,
+            enabled ? EXPERIMENTAL_COLUMNS : 9,
+            enabled ? experimentalRows() : 4,
             enabled ? 'experimental' : 'linear'
         );
     }

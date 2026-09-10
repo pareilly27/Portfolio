@@ -1,6 +1,6 @@
 // One toggle (same .toggle-btn component as the home page's
 // Linear/Experimental control): untoggled shows "Strip the Fluff" and
-// bolds the key phrases when clicked; toggled shows "Put it Back" and
+// bolds the key phrases when clicked; toggled shows "Bring it back" and
 // restores them.
 var fluffEls = document.querySelectorAll('.fluff-text');
 var fluffToggle = document.getElementById('fluffToggle');
@@ -19,7 +19,7 @@ function setFluffStripped(stripped) {
     fluffToggle.setAttribute('aria-pressed', String(stripped));
   }
   if (fluffToggleLabel) {
-    fluffToggleLabel.textContent = stripped ? 'Put it Back' : 'Strip the Fluff';
+    fluffToggleLabel.textContent = stripped ? 'Bring it back' : 'Strip the Fluff';
   }
 }
 

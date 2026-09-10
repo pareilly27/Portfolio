@@ -129,10 +129,10 @@ function createGrid(rows, columns, imageSet = 'linear') {
         }
         
         let shadows = [];
-        if (row !== 0) shadows.push('inset 0 0.2px 0 0 #9d9d9d');
-        if (col !== 0) shadows.push('inset 0.2px 0 0 0 #9d9d9d');
-        if (col !== columns - 1) shadows.push('inset -0.2px 0 0 0 #9d9d9d');
-        if (row !== rows - 1) shadows.push('inset 0 -0.2px 0 0 #9d9d9d');
+        if (row !== 0) shadows.push('inset 0 0.2px 0 0 #a4a4a4');
+        if (col !== 0) shadows.push('inset 0.2px 0 0 0 #a4a4a4');
+        if (col !== columns - 1) shadows.push('inset -0.2px 0 0 0 #a4a4a4');
+        if (row !== rows - 1) shadows.push('inset 0 -0.2px 0 0 #a4a4a4');
 
         cell.style.boxShadow = shadows.join(', ') || 'none';
         gridContainer.appendChild(cell);

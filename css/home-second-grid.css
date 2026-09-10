@@ -1,0 +1,242 @@
+@font-face {
+    font-family: 'Degular';
+    src: url('../fonts/DegularDemo-Semibold.otf') format('opentype');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+
+/* Experimental mode is confined to the fixed interactive hero grid. */
+body.is-experimental .grid-container {
+    display: none;
+}
+
+/* Home Grid 2 is a real, image-free cell grid inside the project container. */
+.grid-container {
+    --scroll-grid-line: rgba(164, 164, 164, 0.45);
+    --scroll-grid-row: calc(100vh / var(--grid-rows));
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+    isolation: isolate;
+    overflow: visible;
+    clip-path: inset(var(--project-grid-cutoff, 0px) 0 0);
+}
+
+.project-grid-visual {
+    position: absolute;
+    top: var(--project-grid-cutoff, 0px);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 32px 32px 0 0;
+    background: #fff;
+}
+
+.project-grid-cells {
+    position: absolute;
+    top: calc(-1 * var(--project-grid-cutoff, 0px));
+    right: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), 1fr);
+    grid-auto-rows: var(--scroll-grid-row);
+}
+
+.project-grid-cell {
+    min-width: 0;
+    box-shadow:
+        inset -0.5px 0 0 var(--scroll-grid-line),
+        inset 0 0.5px 0 var(--scroll-grid-line);
+}
+
+.grid-container > .project-card,
+.grid-container > :not(.project-grid-visual) {
+    position: relative;
+    z-index: 1;
+}
+
+.overlay { position: fixed; z-index: 5; }
+.header { position: fixed; z-index: 100; }
+
+
+/* Home hero copy requested in this section. */
+body:not(.is-experimental) .container {
+    width: min(94vw, 1500px);
+}
+body:not(.is-experimental) .container .text-large.hero-headline--linear {
+    font-family: 'Degular', sans-serif;
+    font-size: 128px;
+    line-height: .98;
+    font-weight: 600;
+    transform: none;
+}
+body:not(.is-experimental) .container .hero-subtext--linear {
+    font-family: 'Satoshi', sans-serif;
+    font-size: clamp(16px, 1.25vw, 24px);
+    line-height: 1.45;
+    font-weight: 400;
+    transform: none;
+}
+
+/* Match the supplied wide curve and soft upper shadow. */
+.project-grid-visual {
+    border-radius: 48px 48px 0 0;
+    box-shadow:
+        inset 0 0.5px 0 var(--scroll-grid-line),
+        0 -8px 16px -10px rgba(0, 0, 0, .34);
+}
+
+/* Six opaque white rows, each shared by two projects. The real Grid 2
+   remains beneath them and is visible only in the intentional row gaps. */
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--scroll-grid-row) * .2);
+    padding: calc(var(--scroll-grid-row) * .6) 0 0;
+}
+.project-row {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 5vw;
+    height: calc(var(--scroll-grid-row) * 2.8);
+    margin-right: calc(100vw / var(--grid-columns) + 0.5px);
+    margin-left: calc(100vw / var(--grid-columns));
+    padding: 24px;
+    box-sizing: border-box;
+    border: 0;
+    background: #fff;
+    box-shadow: inset 0 0.5px 0 var(--scroll-grid-line);
+}
+.project-row::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 1px;
+    pointer-events: none;
+    box-shadow: inset 0 0.5px 0 var(--scroll-grid-line);
+}
+.project-row .project-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+.project-row .square {
+    flex: 1;
+    min-height: 0;
+    aspect-ratio: auto;
+}
+.project-row .project-caption {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 16px 0 8px;
+}
+.project-row .project-name {
+    font-family: 'Degular', sans-serif;
+    font-size: 36px;
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+.project-row .project-desc {
+    margin: 10px 0 0;
+    font-family: 'Satoshi', sans-serif;
+    font-size: clamp(15px, 1.05vw, 20px);
+    line-height: 1.4;
+    font-weight: 400;
+    color: #000;
+}
+@media (max-width: 900px) {
+    body:not(.is-experimental) .container .text-large.hero-headline--linear {
+        font-size: clamp(54px, 10vw, 92px);
+    }
+    .project-row .project-name { font-size: 30px; }
+}
+@media (max-width: 600px) {
+    body:not(.is-experimental) .container .text-large.hero-headline--linear {
+        font-size: clamp(38px, 10vw, 54px);
+    }
+    body:not(.is-experimental) .container .hero-subtext--linear br { display: none; }
+    .project-row {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        height: auto;
+        min-height: calc(var(--scroll-grid-row) * 5.6);
+        padding: 24px;
+    }
+    .project-row .square { flex: none; aspect-ratio: 3 / 2; }
+}
+
+
+/* Native sticky viewport: the section supplies scroll distance while the
+   bordered grid and its clipping boundary remain fixed below the header. */
+.grid-container {
+    position: relative;
+    display: block;
+    gap: 0;
+    padding: 0;
+    background: transparent;
+    isolation: auto;
+    overflow: visible;
+    clip-path: none;
+}
+
+.grid-container > .project-grid-sticky-viewport {
+    position: sticky;
+    top: var(--project-grid-sticky-top, 0px);
+    width: 100%;
+    height: var(--project-grid-viewport-height, 100vh);
+    overflow: hidden;
+    border-radius: 48px 48px 0 0;
+    background: #fff;
+    box-shadow: 0 -8px 16px -10px rgba(0, 0, 0, .34);
+}
+
+.project-grid-sticky-viewport .project-grid-visual {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    border-radius: inherit;
+    background: #fff;
+    box-shadow:
+        inset 0 0.5px 0 var(--scroll-grid-line),
+        inset 0.5px 0 0 var(--scroll-grid-line),
+        inset -0.5px 0 0 var(--scroll-grid-line);
+}
+
+.project-grid-sticky-viewport .project-grid-cells {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), 1fr);
+    grid-auto-rows: var(--scroll-grid-row);
+    will-change: transform;
+}
+
+.project-grid-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: calc(var(--scroll-grid-row) * .6) 0 0;
+    will-change: transform;
+}
+
+.project-grid-content > .project-row + .project-row {
+    margin-top: calc(var(--scroll-grid-row) * 0.2);
+}

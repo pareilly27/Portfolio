@@ -35,12 +35,12 @@
 
 
 .overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 100;
+    z-index: 5;
     pointer-events: none;
     display: flex;
     justify-content: space-between;
@@ -465,7 +465,7 @@ body.is-experimental .grid.active-view {
 
 .cell {
     
-    box-shadow: inset 0 0 0 0.5px #5c5b5b;
+    box-shadow: inset 0 0 0 0.5px #666565;
     position: relative;
     overflow: hidden;
 }
@@ -978,7 +978,7 @@ body.is-experimental .lead-designer-label.is-visible {
     column-gap: 5vw;
     padding: 3vw 7.5vw;
     position: relative;
-    margin-top: 100vh;
+    margin-top: 95vh;
     left: 0;
     width: 100%;
     box-sizing: border-box;

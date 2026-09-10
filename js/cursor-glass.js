@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const HOVER_SELECTOR = 'a, button, input, textarea, select, [role="button"], .square';
   const HIDE_SELECTOR = '#grid, #grid-reveal-canvas, .cell';
+  const isAboutPage = !!document.querySelector('.about-page');
   // The toggles show a native pixel-art hand cursor instead (see
   // css/cursor-glass.css). Hide the glass circle over them so the hand
   // replaces it, rather than both appearing at once. Unlike
@@ -77,7 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // visible above those images and the locator lines.
     const overNativeCursor = !!(target && target.closest && target.closest(NATIVE_CURSOR_SELECTOR));
     const nowSuppressed = overNativeCursor
-      || (!document.body.classList.contains('is-experimental')
+      || (!isAboutPage
+        && !document.body.classList.contains('is-experimental')
         && !!(target && target.closest && target.closest(HIDE_SELECTOR)));
     const hovered = !nowSuppressed && target && target.closest && target.closest(HOVER_SELECTOR);
 
@@ -101,6 +103,22 @@ document.addEventListener('DOMContentLoaded', function () {
     onMove(e);
     wake();
   }, { passive: true });
+
+  // On the About page, the fixed hero grid can be replaced beneath a
+  // stationary pointer by the scrolling Fluff section. Re-evaluate the
+  // element under the pointer during scroll so the grid hide-state does
+  // not remain stale until the mouse moves again.
+  if (isAboutPage) {
+    window.addEventListener('scroll', function () {
+      if (!inWindow) return;
+      onMove({
+        clientX: targetX,
+        clientY: targetY,
+        target: document.elementFromPoint(targetX, targetY)
+      });
+      wake();
+    }, { passive: true });
+  }
 
   // mouseleave on <html> (unlike mouseout) doesn't bubble and only
   // fires when the pointer genuinely leaves the document -- not on

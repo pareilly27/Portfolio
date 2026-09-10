@@ -11,10 +11,11 @@
          negative-z descendant inside this section, so it can never
          escape behind the grid again. */
       z-index: 20;
-      height: 100%;
+      height: auto;
       width: 100%;
-      overflow: hidden;
+      overflow: visible;   /* was 100%/hidden -- now a block inside the scrolling grid content */
       pointer-events: auto;
+      margin-top: 15vh;
     }
 
     .curve-line {
@@ -22,13 +23,15 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 30vw;
+        height: var(--contact-top-space, 15vw);
         z-index: 2;
-        
     }
 
     .top-blue {
-    height: 30vw;
+    /* In-flow spacer that sets the top region height (title + curve sit
+       absolutely over it). This is what determines the gap between the
+       title and the subtext -- lower --contact-top-space to tighten. */
+    height: var(--contact-top-space, 15vw);
     position: relative;
     clip-path: ellipse(61% 100% at 50% 100%);
     /* Was -2. This box has no background of its own -- it only carries
@@ -40,16 +43,23 @@
     margin-bottom: 3%;
   }
 
+  /* Title: font-size is set by js/contact-title-fit.js to fill the full
+     width at natural letter spacing (no stretch). PINNED AT THE TOP --
+     top edge fixed, so growing the font extends it DOWNWARD, not up.
+     It sits inside .top-blue, whose clip-path hides whatever falls above
+     the curved line. Nudge --title-top for the pin position. */
   .center-text {
       position: absolute;
-      bottom: 15%;
-      right: 10%;
-      transform: scaleX(0.8) scaleY(1.5);
-      font-size: max(40px, 17vw);
-      font-weight: 600;
-      text-align: center;
+      top: var(--title-top, 2.5vw);
+      left: 0;
       width: 100%;
+      text-align: center;
       white-space: nowrap;
+      line-height: 0.78;     /* tight, so the cap-top sits near `top` */
+      font-family: 'Degular', 'Satoshi', sans-serif;
+      font-weight: 600;
+      color: #000;
+      pointer-events: none;
     }
 
     .bottom-white {
@@ -133,3 +143,80 @@
             max-width: 80vw;
         }
     }
+
+/* Requested footer content and typography. The existing curve and its
+   surrounding geometry remain unchanged. */
+.contact-section .center-text {
+    font-family: 'Degular', 'Satoshi', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.contact-section .bottom-white {
+    box-sizing: border-box;
+    padding: 0 6vw 32px;
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 400;
+    color: #000;
+}
+
+.contact-intro {
+    margin: 0 auto 50px;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 30px;
+    line-height: 1.4;
+    font-weight: 400;
+    text-align: center;
+}
+
+.contact-footer-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 64px;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.contact-details p {
+    margin: 0;
+}
+
+.contact-section a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.contact-section a:hover,
+.contact-section a:focus-visible {
+    text-decoration: underline;
+}
+
+.contact-link-columns {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: 5vw;
+}
+
+.contact-link-column {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .contact-section .bottom-white {
+        padding-right: 6vw;
+        padding-left: 6vw;
+    }
+
+    .contact-intro {
+        margin-bottom: 32px;
+        font-size: clamp(20px, 5vw, 30px);
+    }
+
+    .contact-footer-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 40px;
+    }
+}

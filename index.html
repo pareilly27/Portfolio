@@ -7,7 +7,7 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="grid/style.css" />
-  <link rel="stylesheet" href="grid/contactSection.css" />
+  <link rel="stylesheet" href="grid/contactSection.css?v=contact-shared-2" />
   <link
     href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap"
     rel="stylesheet"
@@ -18,7 +18,8 @@
 
   <style>
     :root {
-      --grid-rows: 5;
+      --grid-columns: 9;
+      --grid-rows: 4;
     }
 
     .grid {
@@ -30,14 +31,12 @@
     }
   </style>
   <link rel="stylesheet" href="css/cursor-glass.css">
+  <link rel="stylesheet" href="css/home-second-grid.css?v=experimental-grid-hidden-1">
 </head>
 
 <body>
   <section class="full-page-container" id="full-page-container">
 
-    <div class="overlay">
-
-      <!-- Header -->
       <header class="header">
         <nav class="navbar">
           <a href="index.html" class="nav-s-button">Shreyanshi Satodia</a>
@@ -56,6 +55,11 @@
         </div>
       </header>
 
+    <div class="overlay">
+
+      <!-- Header -->
+
+
       
 
       <!-- Hero Text: one shared box/structure for both states (see
@@ -65,9 +69,9 @@
            whole box from centred-on-screen to beneath the image grid. -->
       <div class="container">
         <div class="hero-statement">
-          <p class="text-large hero-headline hero-headline--linear">Designing with purpose,<br>building with intention.</p>
+          <p class="text-large hero-headline hero-headline--linear">Making ideas real,<br>building what lasts</p>
           <p class="text-large hero-headline hero-headline--experimental">Nothing is where<br>you expect it</p>
-          <p class="text-small hero-subtext hero-subtext--linear">Brand Designer &amp; Creative Strategist based in Dallas with seven years of experience creating<br>identities, websites, and campaigns that balance strategy, personality, and lasting impact.</p>
+          <p class="text-small hero-subtext hero-subtext--linear">Senior Designer and Creative Strategist creating brands, websites, and digital experiences<br>that transform thoughtful ideas int experiences people trust, remember, and return to.</p>
           <p class="text-small hero-subtext hero-subtext--experimental">Move around. Discover Projects. Click to dive deeper.</p>
         </div>
       </div>
@@ -105,90 +109,102 @@
     <div class="grid-container" id="grid-container">
 
       <!-- Project Cards -->
-      <a href="Projects/milli/" class="project-card">
+      <div class="project-row">
+<a href="Projects/milli/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_milli.webp');"></div>
         <div class="project-caption">
-          <p class="project-name">MILLI DALLAS</p>
+          <p class="project-name">MILLI</p>
+          <p class="project-desc">Built a nightlife identity and campaign system for a Dallas bar, helping drive 38% higher social engagement across launch content.</p>
         </div>
       </a>
-
-      <a href="Projects/rock-enrollment/" class="project-card">
+<a href="Projects/rock-enrollment/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_rock_enrollment.webp');"></div>
         <div class="project-caption">
           <p class="project-name">ROCK ENROLLMENT</p>
+          <p class="project-desc">Simplified a complex employee-benefits platform through a new brand and digital experience, supporting a 25% increase in user engagement.</p>
         </div>
       </a>
-
-      <a href="Projects/picklemans/" class="project-card">
+      </div>
+      <div class="project-row">
+<a href="Projects/picklemans/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_picklemans.webp');"></div>
         <div class="project-caption">
-          <p class="project-name">PICKLEMAN'S</p>
+          <p class="project-name">PICKLEMANS</p>
+          <p class="project-desc">Turned pitch creative into a 3+ year partnership, then built a scalable campaign system across 30+ locations that supported franchise growth and a 25.6% revenue lift.</p>
         </div>
       </a>
-
-      <a href="Projects/nccil/" class="project-card">
+<a href="Projects/nccil/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_nccil.webp');"></div>
         <div class="project-caption">
-          <p class="project-name">NATIONAL CENTER FOR CHILDREN&rsquo;S ILLUSTRATED ART</p>
+          <p class="project-name">NCCIL</p>
+          <p class="project-desc">Created an interactive identity for a children&#x27;s museum built around participation and play, contributing to a 31.4% increase in workshop registrations.</p>
         </div>
       </a>
-
-      <a href="Projects/netflix/" class="project-card">
+      </div>
+      <div class="project-row">
+<a href="Projects/netflix/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_netflix.webp');"></div>
         <div class="project-caption">
           <p class="project-name">NETFLIX</p>
+          <p class="project-desc">Created launch campaigns for 5 international Netflix titles, generating 2.8M+ digital impressions across multiple global markets.</p>
         </div>
       </a>
-
-      <a href="Projects/general-waters/" class="project-card">
+<a href="Projects/general-waters/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_general_waters.webp');"></div>
         <div class="project-caption">
-          <p class="project-name">GENERAL WATER TECHNOLOGY</p>
+          <p class="project-name">GENERAL WATERS</p>
+          <p class="project-desc">Turned a technical water-services offering into a clearer identity and website, helping generate 28% more qualified inquiries.</p>
         </div>
       </a>
-
-      <a href="Projects/what-if/" class="project-card">
+      </div>
+      <div class="project-row">
+<a href="Projects/what-if/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_what_if.webp');"></div>
         <div class="project-caption">
-          <p class="project-name">WHAT IF HERB COOLERS</p>
+          <p class="project-name">WHAT IF</p>
+          <p class="project-desc">Created a playful packaging system built around one simple question, designed to scale across new flavors, products, and campaigns.</p>
         </div>
       </a>
-
-      <a href="Projects/or-dallas/" class="project-card">
+<a href="Projects/or-dallas/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_or_dallas.webp');"></div>
         <div class="project-caption">
-          <p class="project-name">OUR REDEEMER LUTHERAN SCHOOL</p>
+          <p class="project-name">OR DALLAS</p>
+          <p class="project-desc">Redesigned a school website around trust, clarity, and belonging, helping drive 32% more admissions inquiries through a simpler enrollment journey.</p>
         </div>
       </a>
-
-      <a href="Projects/hg/" class="project-card">
+      </div>
+      <div class="project-row">
+<a href="Projects/hg/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_hg.webp');"></div>
         <div class="project-caption">
-          <p class="project-name">Hg SPLY CO.</p>
+          <p class="project-name">HQ SPY CO</p>
+          <p class="project-desc">Built a flexible campaign system across 4 restaurant locations, helping seasonal launches generate 46% higher engagement.</p>
         </div>
       </a>
-
-      <a href="Projects/culpepper/" class="project-card">
+<a href="Projects/culpepper/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_culpepper.webp');"></div>
         <div class="project-caption">
           <p class="project-name">CULPEPPER</p>
+          <p class="project-desc">Extended a distinctive hospitality identity across 3+ locations, bringing menus, merchandise, signage, campaigns, and digital together into one system.</p>
         </div>
       </a>
-
-      <a href="Projects/swire-water/" class="project-card">
+      </div>
+      <div class="project-row">
+<a href="Projects/swire-water/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_swire_water.webp');"></div>
         <div class="project-caption">
-          <p class="project-name">SWIRE WATER</p>
+          <p class="project-name">SMAE WATER</p>
+          <p class="project-desc">Brought multiple water-treatment brands together under one cohesive digital platform, helping reduce bounce rate by 29.6%.</p>
         </div>
       </a>
-
-      <a href="Projects/tbm/" class="project-card">
+<a href="Projects/tbm/" class="project-card">
         <div class="square" style="background-image: url('project_images/grid/grid_image_tbm.webp');"></div>
         <div class="project-caption">
-          <p class="project-name">TOTAL BENEFIT MANAGEMENT</p>
+          <p class="project-name">TBM</p>
+          <p class="project-desc">Turned a complex payroll and services offering into a clearer website experience, increasing lead submissions by 27%.</p>
         </div>
       </a>
-
+      </div>
       <!-- Deactivated: Reachpoint & Lead With Light (project pages kept, removed from grid + footer arrows) -->
       <!--
       <a href="Projects/reachpoint/" class="project-card">
@@ -302,25 +318,44 @@
 
       -->
 
-    </div>
-
-    <!-- Contact -->
+    <!-- Contact (moved inside #grid-container so it scrolls with the grid) -->
      <div class="contact-section" id="contact-section">
       <svg class="curve-line" viewBox="0 -0.4 100 24" preserveAspectRatio="none">
         <ellipse cx="50" cy="20" rx="58" ry="20" fill="none" stroke="#000" stroke-width="0.04" />
       </svg>
 
+      <!-- Title: plain text, font-size fit to the full width by
+           js/contact-title-fit.js (natural letterforms, no stretch).
+           Lives inside .top-blue so its clip-path hides anything above
+           the curved line. Pinned at the top; grows downward. -->
       <div class="top-blue">
-        <div class="center-text" style="word-spacing: 4px;">GET IN TOUCH</div>
+        <div class="center-text" id="contactTitle" style="word-spacing: 4px;">GET IN TOUCH</div>
       </div>
 
       <div class="bottom-white">
-        <div class="contact-info" id="contactInfo">Ready to figure something out together?</div>
-      </div>
+        <p class="contact-intro">If something here sparked an idea, started a conversation,<br>or simply made you curious, I’d love to hear from you.</p>
 
-      <!-- Falls in once, the first time this section scrolls into view. -->
-      <div id="contactBubbleScene" class="bubble-scene contact-bubble-scene"></div>
+        <div class="contact-footer-bottom">
+          <div class="contact-details">
+            <p>Email: <a href="mailto:ssatodia97@gmail.com">ssatodia97@gmail.com</a></p>
+            <p>Available for: freelance projects &amp; full-time.</p>
+          </div>
+
+          <div class="contact-link-columns">
+            <nav class="contact-link-column" aria-label="Footer navigation">
+              <a href="#grid-container">Work</a>
+              <a href="aboutme/">About me</a>
+              <a href="#contact-section">Contact</a>
+            </nav>
+            <nav class="contact-link-column" aria-label="Social links">
+              <a href="https://www.linkedin.com/in/shreyanshi-satodia-396b9318a/">Linkedin</a>
+              <a href="https://www.behance.net/">Behance</a>
+            </nav>
+          </div>
+        </div>
+      </div>
     </div>
+    </div><!-- /#grid-container -->
     
 
     <!-- Playtime layer: document-positioned so its physics floor scrolls with
@@ -331,10 +366,12 @@
   <!-- Scripts -->
   <script src="js/grid.js"></script>
   <script src="js/reveal-pointer.js"></script>
-  <script src="js/grid-reveal.js"></script>
-  <script src="js/toggle.js"></script>
+  <script src="js/grid-reveal.js?v=particle-physical-pinch-5-restored"></script>
+  <script src="js/toggle.js?v=grid-9x4"></script>
   <script src="js/bubbles-2.js"></script>
   <script src="js/grid-hover-fix.js"></script>
   <script src="js/cursor-glass.js"></script>
+  <script src="js/home-second-grid.js?v=smooth-scroll-1"></script>
+  <script src="js/contact-title-fit.js?v=1"></script>
 </body>
 </html>

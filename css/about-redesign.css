@@ -1,0 +1,511 @@
+@font-face {
+    font-family: 'Degular';
+    src: url('../fonts/DegularDemo-Semibold.otf') format('opentype');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+
+:root {
+    --grid-columns: 9;
+    --grid-rows: 4;
+    --about-grid-column: calc(100vw / 9);
+    --about-grid-row: 25vh;
+    --about-grid-third: calc(var(--about-grid-row) / 3);
+    --about-grid-line: rgba(164, 164, 164, 0.45);
+}
+
+html,
+body {
+    margin: 0;
+    overflow-x: clip;
+    background: #fff;
+    color: #000;
+    font-family: 'Satoshi', sans-serif;
+}
+
+body #grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+body #grid.active-view {
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+body #grid .cell {
+    box-shadow:
+        inset -0.5px 0 0 var(--about-grid-line),
+        inset 0 -0.5px 0 var(--about-grid-line);
+}
+
+body > .header {
+    position: fixed;
+    z-index: 100;
+}
+
+.about-page {
+    position: relative;
+    z-index: 1;
+}
+
+.about-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(18, minmax(0, 1fr));
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 72px;
+    box-sizing: border-box;
+}
+
+.about-hero-copy {
+    grid-column: 3 / 12;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    margin-right: 0;
+    padding: 28px 0;
+    transform: translateY(-80px);
+}
+
+.about-hero-title {
+    position: static;
+    inset: auto;
+    width: auto;
+    margin: 0;
+    font-family: 'Degular', 'Satoshi', sans-serif;
+    font-size: 80px;
+    line-height: 0.98;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: #000;
+    text-align: left;
+    white-space: normal;
+    transform: none;
+    user-select: auto;
+}
+
+.about-hero-subtext {
+    margin: 28px 0 0;
+    font-family: 'Satoshi', sans-serif;
+    font-size: clamp(18px, 1.35vw, 26px);
+    line-height: 1.45;
+    font-weight: 400;
+}
+
+.about-hero-media {
+    grid-column: 12 / 19;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: 28px 0 0;
+}
+
+.about-hero-media .image-container {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.about-hero-media .image-container img {
+    display: block;
+    width: 100%;
+    height: min(88vh, 940px);
+    margin: 0;
+    object-fit: contain;
+    object-position: left bottom;
+    transform: translateX(-16.5%);
+}
+
+.about-scroll-grid {
+    position: relative;
+    z-index: 10;
+    margin-top: calc(-1 * var(--about-grid-third));
+    overflow: hidden;
+    border-radius: 48px 48px 0 0;
+    background-color: #fff;
+    background-image:
+        linear-gradient(to right, var(--about-grid-line) 0.5px, transparent 0.5px),
+        linear-gradient(to bottom, var(--about-grid-line) 0.5px, transparent 0.5px);
+    background-position: 0 0, 0 var(--about-grid-third);
+    background-size: var(--about-grid-column) 100%, 100% var(--about-grid-row);
+    box-shadow: 0 -8px 16px -10px rgba(0, 0, 0, 0.34);
+}
+
+.about-scroll-grid::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: inset 0 0.5px 0 var(--about-grid-line);
+}
+
+.about-scroll-grid > * {
+    position: relative;
+    z-index: 1;
+}
+
+.about-scroll-grid-spacer {
+    height: var(--about-grid-third);
+}
+
+.fluff-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: calc(var(--about-grid-column) * 7);
+    height: calc(var(--about-grid-row) * var(--fluff-grid-rows, 2));
+    margin: 0 auto;
+    padding: clamp(32px, 5vh, 42px) calc(var(--about-grid-column) * 0.7) clamp(24px, 3.5vh, 32px);
+    overflow: hidden;
+    box-sizing: border-box;
+    background: #fff;
+    box-shadow:
+        inset 0 0.5px 0 var(--about-grid-line),
+        inset 0 -0.5px 0 var(--about-grid-line),
+        inset 0.5px 0 0 var(--about-grid-line),
+        inset -0.5px 0 0 var(--about-grid-line);
+}
+
+.fluff-section .fluff-controls {
+    display: flex;
+    align-items: center;
+    margin: 0 0 clamp(24px, 3.5vh, 31px);
+}
+
+.fluff-section .toggle-btn {
+    min-width: 0;
+    width: auto;
+    height: 42px;
+    padding: 5px 46px;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.fluff-section .toggle-circle {
+    width: 28px;
+    height: 28px;
+}
+
+.fluff-copy {
+    display: grid;
+    gap: 12px;
+}
+
+.fluff-copy p,
+.fluff-copy .fluff-text {
+    margin: 0;
+    font-family: 'Satoshi', sans-serif;
+    font-size: clamp(18px, 2.65vh, 24px);
+    line-height: 1.35;
+    font-weight: 400;
+    color: #000;
+}
+
+body.is-fluff-stripped .fluff-copy p,
+body.is-fluff-stripped .fluff-copy .fluff-text {
+    color: #000;
+}
+
+body.is-fluff-stripped .fluff-copy .fluff-text.removed {
+    font-weight: 400;
+    -webkit-text-stroke: 0.75px currentColor;
+    text-shadow:
+        0.2px 0 currentColor,
+        -0.2px 0 currentColor;
+}
+
+.approach-section {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 48px;
+    width: 100%;
+    height: calc(var(--about-grid-row) * 2);
+    padding: var(--about-grid-third) var(--about-grid-column);
+    box-sizing: border-box;
+    background: transparent;
+}
+
+.approach-section::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--about-grid-third) * 2);
+    right: 0;
+    bottom: var(--about-grid-third);
+    left: 0;
+    z-index: 0;
+    background: #fff;
+    box-shadow:
+        inset 0 0.5px 0 var(--about-grid-line),
+        inset 0 -0.5px 0 var(--about-grid-line);
+}
+
+.approach-section > * {
+    position: relative;
+    z-index: 1;
+}
+
+.approach-label {
+    margin: 0 0 24px;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 24px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.approach-title {
+    margin: 0 0 20px;
+    font-family: 'Degular', 'Satoshi', sans-serif;
+    font-size: 66px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: #000;
+    white-space: normal;
+    transform: none;
+}
+
+.services-section {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: calc(var(--about-grid-column) * 7);
+    height: calc(var(--about-grid-row) * 2);
+    margin: 0 auto;
+    background: #fff;
+}
+
+.service-panel {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+    padding: 28px;
+    box-sizing: border-box;
+    background: #fff;
+    box-shadow:
+        inset -0.5px 0 0 var(--about-grid-line),
+        inset 0 0.5px 0 var(--about-grid-line),
+        inset 0 -0.5px 0 var(--about-grid-line);
+}
+
+/* Hover-only panel image: fills the box without distortion (cover),
+   centred vertically so any overflow is cut from top and bottom.
+   Hidden by default, fades in to 50% opacity on hover. */
+.service-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.service-panel:hover .service-image {
+    opacity: 0.5;
+}
+
+/* Keep the text above the image. */
+.service-panel > .service-number,
+.service-panel > div {
+    position: relative;
+    z-index: 1;
+}
+
+.service-panel:first-child {
+    box-shadow:
+        inset 0.5px 0 0 var(--about-grid-line),
+        inset -0.5px 0 0 var(--about-grid-line),
+        inset 0 0.5px 0 var(--about-grid-line),
+        inset 0 -0.5px 0 var(--about-grid-line);
+}
+
+.service-number {
+    margin: 0;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 40px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.service-heading {
+    margin: 0;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 24px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.service-description {
+    margin: 8px 0 0;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 400;
+}
+
+@media (max-width: 900px) {
+    .about-hero {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding: 110px 6vw 40px;
+    }
+
+    .about-hero-title {
+        font-size: clamp(52px, 10vw, 80px);
+    }
+
+    .about-hero-subtext br,
+    .approach-title br {
+        display: none;
+    }
+
+    .about-hero-media {
+        flex: 1;
+        padding: 24px 0 0;
+    }
+
+    .about-hero-media .image-container img {
+        height: min(48vh, 580px);
+    }
+
+    .fluff-section,
+    .services-section {
+        width: calc(var(--about-grid-column) * 7);
+        height: auto;
+        min-height: calc(var(--about-grid-row) * 3);
+    }
+
+    .fluff-copy p,
+    .fluff-copy .fluff-text,
+    .service-description {
+        font-size: 20px;
+    }
+
+    .approach-section {
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-right: 6vw;
+        padding-left: 6vw;
+    }
+
+    .approach-title {
+        font-size: clamp(44px, 8vw, 66px);
+    }
+
+    .services-section {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .service-panel {
+        min-height: 50vh;
+        box-shadow: inset 0 0.5px 0 var(--about-grid-line);
+    }
+
+    .service-panel:first-child {
+        box-shadow: inset 0 0.5px 0 var(--about-grid-line);
+    }
+}
+
+/* About Grid 2 mirrors the home project-grid structure: a normal-height
+   scroll track, a native sticky viewport, a real grid-cell layer, and a
+   separate content layer clipped by that viewport. */
+.about-scroll-grid {
+    position: relative;
+    display: block;
+    overflow: visible;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.about-scroll-grid::before {
+    content: none;
+}
+
+.about-scroll-grid > .about-grid-sticky-viewport {
+    position: sticky;
+    top: var(--about-grid-sticky-top, 0px);
+    z-index: 1;
+    width: 100%;
+    height: var(--about-grid-viewport-height, 100vh);
+    overflow: hidden;
+    border-radius: 48px 48px 0 0;
+    background: #fff;
+    box-shadow: 0 -8px 16px -10px rgba(0, 0, 0, 0.34);
+}
+
+.about-grid-visual {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-right: 0.5px solid var(--about-grid-line);
+    border-left: 0.5px solid var(--about-grid-line);
+    border-radius: inherit;
+    background: #fff;
+    box-shadow: inset 0 0.5px 0 var(--about-grid-line);
+}
+
+.about-grid-cells {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    grid-template-rows: var(--about-grid-third);
+    grid-auto-rows: var(--about-grid-row);
+    will-change: transform;
+}
+
+.about-grid-cell {
+    min-width: 0;
+    box-shadow:
+        inset -0.5px 0 0 var(--about-grid-line),
+        inset 0 -0.5px 0 var(--about-grid-line);
+}
+
+.about-grid-content {
+    position: relative;
+    z-index: 1;
+    will-change: transform;
+}
+
+/* Match the home-page layering: the landing hero never moves, while Grid 2
+   enters from below and covers it as part of the document scroll. */
+.about-hero {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+}
+
+.about-scroll-grid {
+    margin-top: calc(100vh - var(--about-grid-third));
+}
