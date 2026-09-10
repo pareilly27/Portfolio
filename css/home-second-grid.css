@@ -77,6 +77,13 @@ body:not(.is-experimental) .container .text-large.hero-headline--linear {
     font-weight: 600;
     transform: none;
 }
+
+/* Experimental headline ("Nothing is where you expect it") in the same
+   font as the linear headline. */
+.container .text-large.hero-headline--experimental {
+    font-family: 'Degular', sans-serif;
+    font-weight: 600;
+}
 body:not(.is-experimental) .container .hero-subtext--linear {
     font-family: 'Satoshi', sans-serif;
     font-size: clamp(16px, 1.25vw, 24px);
