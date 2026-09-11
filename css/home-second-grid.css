@@ -144,9 +144,14 @@ body:not(.is-experimental) .container .hero-subtext--linear {
     aspect-ratio: auto;
 }
 .project-row .project-caption {
-    flex: 0 0 auto;
+    /* Fixed height (fits the longest 3-line description) so the IMAGE
+       area is identical on every card, matching Culpepper's size,
+       instead of shrinking when a caption runs longer. */
+    flex: 0 0 160px;
     margin: 0;
     padding: 16px 0 8px;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 .project-row .project-name {
     font-family: 'Degular', sans-serif;

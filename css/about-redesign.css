@@ -161,10 +161,14 @@ body > .header {
     height: var(--about-grid-third);
 }
 
+/* Full-width band wrapping the fluff box. Height = the box's content
+   height, so its top & bottom lines pin to the box edges and run full
+   width -- the outer columns line up with the box exactly, at whatever
+   height the content needs. */
 .fluff-section {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;   /* centre the copy -> equal space top & bottom */
     width: calc(var(--about-grid-column) * 7);
     height: calc(var(--about-grid-row) * var(--fluff-grid-rows, 2));
     margin: 0 auto;

@@ -103,4 +103,35 @@
   new ResizeObserver(scheduleLayout).observe(content);
   new ResizeObserver(scheduleLayout).observe(header);
   update();
+
+  // The contact section is transformed up inside the sticky track, so its
+  // #contact-section anchor points mid-track (white space, grid scrolled
+  // away). Any "Contact" link should instead take the user to the very
+  // bottom of the page, where the footer is fully in view with the grid
+  // behind it.
+  function goToFooterBottom() {
+    scheduleLayout();
+    const max = Math.max(
+      document.documentElement.scrollHeight,
+      document.body.scrollHeight
+    ) - innerHeight;
+    scrollTo({ top: max, behavior: 'smooth' });
+  }
+
+  function scrollToFooter(e) {
+    e.preventDefault();
+    // Experimental mode locks page scrolling (overflow:hidden) and has no
+    // footer in view. Drop to Linear first, let its grid rebuild, then go
+    // to the bottom where the footer lives.
+    if (document.body.classList.contains('is-experimental') &&
+        typeof window.setPlaytime === 'function') {
+      window.setPlaytime(false);
+      setTimeout(goToFooterBottom, 120);
+    } else {
+      requestAnimationFrame(goToFooterBottom);
+    }
+  }
+  document.querySelectorAll('a[href*="#contact-section"]').forEach(function (a) {
+    a.addEventListener('click', scrollToFooter);
+  });
 })();
