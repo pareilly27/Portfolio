@@ -220,7 +220,10 @@ body > .header {
     color: #000;
 }
 
-body.is-fluff-stripped .fluff-copy p,
+body.is-fluff-stripped .fluff-copy p {
+    color: #d5d4d4;
+}
+
 body.is-fluff-stripped .fluff-copy .fluff-text {
     color: #000;
 }
