@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Lead With Light</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../../css/workPage__NEW.css?v=pinned-hero-2">
+  <link rel="preload" as="image" href="../../project_images/lead_with_light/lwl_hero_base.webp?v=2" fetchpriority="high">
+  <link rel="preload" as="image" href="../../project_images/lead_with_light/lwl_hero_screen.webp" fetchpriority="high">
+  <style>
+    /* ===== Section spacing — adjust top/bottom padding here only ===== */
+    #gallery-1 { --gallery-top-spacing: 0rem; --gallery-bottom-spacing: 2rem; border-bottom: 1px solid #000; }
+
+    /* ===== Hero geometry =====
+       Both layers are positioned as percentages of the hero artwork
+       (lwl_hero_base.webp, 3517x2039 before export).
+
+       Screen: the tablet's screen was cut out of the artwork at
+       x 220-2288, y 257-1819 (rounded corners, r56), which is
+       6.255% / 12.604% / 58.829% / 76.655%. The numbers below bleed that
+       box out by 0.6% on each side so the pinned loop always runs under
+       the bezel instead of stopping a hair short of it.
+
+       Phones: measured off the approved mockup -- the overlay's artwork
+       lands at 56.50% / 29.64% and spans 41.56% of the hero width. */
+    #lwl-hero {
+      --pinned-screen-left: 5.902%;
+      --pinned-screen-top: 12.144%;
+      --pinned-screen-width: 59.535%;
+      --pinned-screen-height: 77.575%;
+
+      --pinned-layer-left: 56.50%;
+      --pinned-layer-top: 29.64%;
+      --pinned-layer-width: 41.56%;
+
+      /* Fit the whole hero in the first screen: never taller than the
+         viewport, so width is capped at (viewport height x artwork
+         aspect) and the hero centres. The artwork's own white / lime
+         backdrop is continued edge-to-edge by the wrapper below, so the
+         shrunk hero still looks full-bleed. */
+      width: min(100%, calc(100svh * 3517 / 2039));
+      margin: 0 auto;
+    }
+    /* White above, lime below -- the split sits at 46.24% of the
+       artwork's height, which is where the artwork's own lime begins. */
+    #lwl-hero-wrap {
+      background: linear-gradient(to bottom, #fff 0, #fff var(--lwl-split, 46.24%), #d7e155 var(--lwl-split, 46.24%), #d7e155 100%);
+    }
+  </style>
+  <link rel="stylesheet" href="../../css/cursor-glass.css">
+  <link rel="icon" href="../../favicon.ico?v=sn2" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png?v=sn2">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png?v=sn2">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=sn2">
+</head>
+<body>
+
+  <header class="header header--overlay">
+    <nav class="navbar">
+      <a href="../../index.html" class="nav-s-button">Shreyanshi Satodia</a>
+      <ul class="nav-links">
+        <li><a href="../../aboutme/" class="nav-regular-link">About Me</a></li>
+        <li><a href="../../index.html#grid-container" class="nav-regular-link">Work</a></li>
+        <li><a href="../../index.html#contact-section" class="nav-regular-link">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="header-image" id="lwl-hero-wrap">
+    <div class="pinned-hero" id="lwl-hero">
+      <img class="pinned-hero__screen" src="../../project_images/lead_with_light/lwl_hero_screen.webp" alt="" aria-hidden="true" fetchpriority="high">
+      <img class="pinned-hero__base" src="../../project_images/lead_with_light/lwl_hero_base.webp?v=2" alt="Lead With Light site shown on a tablet" fetchpriority="high">
+      <img class="pinned-hero__layer" src="../../project_images/lead_with_light/lwl_hero_phones.webp" alt="" aria-hidden="true" fetchpriority="high">
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery-1">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_1_result.webp" alt="Lead With Light design" fetchpriority="low">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_2_result.webp" alt="Lead With Light design" fetchpriority="low">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_3_result.webp" alt="Lead With Light design" fetchpriority="low">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_4_result.webp" alt="Lead With Light design" fetchpriority="low">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_5_result.webp" alt="Lead With Light design" fetchpriority="low">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_6_result.webp" alt="Lead With Light design" fetchpriority="low">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_7_result.webp" alt="Lead With Light design" fetchpriority="low">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_8_result.webp" alt="Lead With Light design" fetchpriority="low">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_9_result.webp" alt="Lead With Light design" fetchpriority="low">
+    <img src="../../project_images/lead_with_light/gallery_img_lead_with_light_10_result.webp" alt="Lead With Light design" fetchpriority="low">
+  </div>
+
+<!-- Footer Bar -->
+  <div class="footer-bar">
+    <a href="../swire-water/" class="arrow-link left-arrow"><span class="arrow-symbol">&#8249;</span> Swire Water</a>
+    <a href="../milli/" class="arrow-link right-arrow">Milli <span class="arrow-symbol">&#8250;</span></a>
+  </div>
+
+  <!-- Transition Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('a.arrow-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isPrev = link.classList.contains('left-arrow');
+          const href = link.href;
+          sessionStorage.setItem('slideDir', isPrev ? 'left' : 'right');
+          document.body.classList.add(isPrev ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(function() {
+            window.location = href;
+          }, 300);
+        });
+      });
+
+      const dir = sessionStorage.getItem('slideDir');
+      if (dir) {
+        if (dir === 'left') {
+          document.body.classList.add('slide-in-from-left');
+        } else {
+          document.body.classList.add('slide-in-from-right');
+        }
+        requestAnimationFrame(() => {
+          document.body.classList.add('slide-in-active');
+          sessionStorage.removeItem('slideDir');
+        });
+      }
+    });
+  </script>
+
+  <script src="../../js/cursor-glass.js"></script>
+</body>
+</html>

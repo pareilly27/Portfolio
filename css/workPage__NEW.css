@@ -241,6 +241,63 @@ body.slide-in-active {
   object-fit: cover;
 }
 
+/* ===== Pinned Hero — a full-bleed hero whose device screen has been punched
+   out of the artwork, so a looping image can be pinned behind it, with any
+   number of extra layers stacked on top.
+
+   <div class="pinned-hero">
+     <img class="pinned-hero__screen" src="...">   content that sits IN the screen
+     <img class="pinned-hero__base"   src="...">   the hero artwork, screen cut to alpha 0
+     <img class="pinned-hero__layer"  src="...">   anything composited above it
+   </div>
+
+   Same trick as .tv-frame / .laptop-frame, scaled up: the base stacks ON TOP
+   (z-index 2) so its bezel masks the pinned content, and the screen box is
+   bled slightly past the true cutout edges so no page-white sliver can show
+   between the content's crop and the rounded corners.
+
+   Only .pinned-hero__base is in flow -- its own aspect ratio sets the box
+   height (width:100%, height:auto). Every other layer is absolutely
+   positioned in PERCENTAGES of that box, so the composition scales with the
+   viewport and the layers can never drift apart at any width.
+
+   The child selectors are written as `.pinned-hero .pinned-hero__x` on
+   purpose: a plain `.pinned-hero__x` (0,1,0) loses to `.header-image img`
+   (0,1,1), which would force width:100%/height:auto back onto the
+   absolutely-positioned layers whenever the hero sits inside a
+   .header-image wrapper. */
+.pinned-hero {
+  position: relative;
+  width: 100%;
+}
+
+.pinned-hero .pinned-hero__base {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pinned-hero .pinned-hero__screen {
+  position: absolute;
+  z-index: 1;
+  left: var(--pinned-screen-left, 0%);
+  top: var(--pinned-screen-top, 0%);
+  width: var(--pinned-screen-width, 100%);
+  height: var(--pinned-screen-height, 100%);
+  object-fit: cover;
+}
+
+.pinned-hero .pinned-hero__layer {
+  position: absolute;
+  z-index: 3;
+  left: var(--pinned-layer-left, 0%);
+  top: var(--pinned-layer-top, 0%);
+  width: var(--pinned-layer-width, 100%);
+  height: auto;
+}
+
 /* ===== Header Image — full-bleed hero image, header overlays on top ===== */
 
 /* Padding, not margin, on purpose: .header--overlay is position:absolute
